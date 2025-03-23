@@ -7,7 +7,7 @@
 
 <!-- Copyright Start -->
 <details markdown='1'>
-   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+   <summary>Copyright (C) 2020 - 2025 Exforge exforge@x386.org</summary>
 
 ---
 
