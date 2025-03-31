@@ -1,0 +1,1469 @@
+<!-- HTML Header Start -->
+<!DOCTYPE html>
+<html><head>
+<title>x386.org: Debian and Ubuntu Documentation</title>
+<meta charset="UTF-8">
+ 
+ 
+ 
+ 
+ 
+ 
+<style>
+/* base.css */
+body {
+  box-sizing: border-box;
+  min-width: 200px;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 40px;
+  border: 1px solid transparent;
+}
+
+body blockquote {
+  background-color: initial;
+}
+
+body code {
+  color: inherit;
+}
+
+body code > div {
+  background: none;
+}
+
+body.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+body p,
+body blockquote,
+body ul,
+body ol,
+body dl,
+body table,
+body pre {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+/* github-markdown.css */
+body {
+  color-scheme: dark;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  margin: 0;
+  color: #c9d1d9;
+  background-color: #0d1117;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+  font-size: 16px;
+  line-height: 1.5;
+  word-wrap: break-word
+}
+body .octicon {
+  display: inline-block;
+  fill: currentColor;
+  vertical-align: text-bottom
+}
+body h1:hover .anchor .octicon-link:before,
+body h2:hover .anchor .octicon-link:before,
+body h3:hover .anchor .octicon-link:before,
+body h4:hover .anchor .octicon-link:before,
+body h5:hover .anchor .octicon-link:before,
+body h6:hover .anchor .octicon-link:before {
+  width: 16px;
+  height: 16px;
+  content: ' ';
+  display: inline-block;
+  background-color: currentColor;
+  -webkit-mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>");
+  mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>")
+}
+body details,
+body figcaption,
+body figure {
+  display: block
+}
+body summary {
+  display: list-item
+}
+body a {
+  background-color: transparent;
+  color: #58a6ff;
+  text-decoration: none
+}
+body a:active,
+body a:hover {
+  outline-width: 0
+}
+body abbr[title] {
+  border-bottom: none;
+  -webkit-text-decoration: underline dotted;
+  text-decoration: underline dotted
+}
+body b,
+body strong {
+  font-weight: 600
+}
+body dfn {
+  font-style: italic
+}
+body h1 {
+  margin: .67em 0;
+  font-weight: 600;
+  padding-bottom: .3em;
+  font-size: 1.8em;
+  border-bottom: 1px solid #21262d
+}
+body mark {
+  background-color: #ff0;
+  color: #c9d1d9
+}
+body small {
+  font-size: 90%
+}
+body sub,
+body sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline
+}
+body sub {
+  bottom: -.25em
+}
+body sup {
+  top: -.5em
+}
+body img {
+  border-style: none;
+  max-width: 100%;
+  box-sizing: content-box;
+  background-color: #0d1117
+}
+body code,
+body kbd,
+body pre,
+body samp {
+  font-family: monospace,monospace;
+  font-size: 1em
+}
+body figure {
+  margin: 1em 40px
+}
+body hr {
+  box-sizing: content-box;
+  overflow: hidden;
+  background: 0 0;
+  border-bottom: 1px solid #21262d;
+  height: .25em;
+  padding: 0;
+  margin: 24px 0;
+  background-color: #30363d;
+  border: 0
+}
+body [type=reset],
+body [type=submit],
+body html [type=button] {
+  -webkit-appearance: button
+}
+body [type=button]::-moz-focus-inner,
+body [type=reset]::-moz-focus-inner,
+body [type=submit]::-moz-focus-inner {
+  border-style: none;
+  padding: 0
+}
+body [type=button]:-moz-focusring,
+body [type=reset]:-moz-focusring,
+body [type=submit]:-moz-focusring {
+  outline: 1px dotted ButtonText
+}
+body [type=checkbox],
+body [type=radio] {
+  box-sizing: border-box;
+  padding: 0
+}
+body [type=number]::-webkit-inner-spin-button,
+body [type=number]::-webkit-outer-spin-button {
+  height: auto
+}
+body [type=search] {
+  -webkit-appearance: textfield;
+  outline-offset: -2px
+}
+body [type=search]::-webkit-search-cancel-button,
+body [type=search]::-webkit-search-decoration {
+  -webkit-appearance: none
+}
+body ::-webkit-input-placeholder {
+  color: inherit;
+  opacity: .54
+}
+body ::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  font: inherit
+}
+body a:hover {
+  text-decoration: underline
+}
+body hr::before {
+  display: table;
+  content: ""
+}
+body hr::after {
+  display: table;
+  clear: both;
+  content: ""
+}
+body table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow: auto
+}
+body td,
+body th {
+  padding: 0
+}
+body details summary {
+  cursor: pointer
+}
+body details:not([open]) > :not(summary) {
+  display: none!important
+}
+body kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font: 11px ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
+  line-height: 10px;
+  color: #c9d1d9;
+  vertical-align: middle;
+  background-color: #161b22;
+  border: solid 1px rgba(110,118,129,.4);
+  border-bottom-color: rgba(110,118,129,.4);
+  border-radius: 6px;
+  box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
+}
+
+details > summary {
+  font-weight: 600;
+  font-size: 1.4em;
+  padding-top: .1em;
+}
+
+
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6 {
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  line-height: 1.25
+}
+body h2 {
+  font-weight: 600;
+  font-size: 1.6em;
+  border-top: 1px solid #21262d;
+  padding-top: .2em;
+}
+body h3 {
+  font-weight: 600;
+  font-size: 1.4em;
+  border-top: 1px solid #21262d;
+  padding-top: .2em;
+}
+body h4 {
+  font-weight: 600;
+  font-size: 1.2em;
+  border-top: 1px solid #21262d;
+  padding-top: .2em;
+}
+body h5 {
+  font-weight: 600;
+  font-size: 1.0em;
+  border-top: 1px solid #21262d;
+  padding-top: .2em;
+}
+body h6 {
+  font-weight: 600;
+  font-size: 1em;
+  color: #8b949e
+}
+body p {
+  margin-top: 0;
+  margin-bottom: 10px
+}
+body blockquote {
+  margin: 0;
+  padding: 0 1em;
+  color: #8b949e;
+  border-left: .25em solid #30363d
+}
+body ol,
+body ul {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 2em
+}
+body ol ol,
+body ul ol {
+  list-style-type: lower-roman
+}
+body ol ol ol,
+body ol ul ol,
+body ul ol ol,
+body ul ul ol {
+  list-style-type: lower-alpha
+}
+body dd {
+  margin-left: 0
+}
+body code,
+body tt {
+  font-family: ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
+  font-size: 12px
+}
+body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family: ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
+  font-size: 12px;
+  word-wrap: normal
+}
+body :-ms-input-placeholder {
+  color: #484f58;
+  opacity: 1
+}
+body ::-ms-input-placeholder {
+  color: #484f58;
+  opacity: 1
+}
+body ::placeholder {
+  color: #484f58;
+  opacity: 1
+}
+body .pl-c {
+  color: #8b949e
+}
+body .pl-c1,
+body .pl-s .pl-v {
+  color: #79c0ff
+}
+body .pl-e,
+body .pl-en {
+  color: #d2a8ff
+}
+body .pl-s .pl-s1,
+body .pl-smi {
+  color: #c9d1d9
+}
+body .pl-ent {
+  color: #7ee787
+}
+body .pl-k {
+  color: #ff7b72
+}
+body .pl-pds,
+body .pl-s,
+body .pl-s .pl-pse .pl-s1,
+body .pl-sr,
+body .pl-sr .pl-cce,
+body .pl-sr .pl-sra,
+body .pl-sr .pl-sre {
+  color: #a5d6ff
+}
+body .pl-smw,
+body .pl-v {
+  color: #ffa657
+}
+body .pl-bu {
+  color: #f85149
+}
+body .pl-ii {
+  color: #f0f6fc;
+  background-color: #8e1519
+}
+body .pl-c2 {
+  color: #f0f6fc;
+  background-color: #b62324
+}
+body .pl-sr .pl-cce {
+  font-weight: 700;
+  color: #7ee787
+}
+body .pl-ml {
+  color: #f2cc60
+}
+body .pl-mh,
+body .pl-mh .pl-en,
+body .pl-ms {
+  font-weight: 700;
+  color: #1f6feb
+}
+body .pl-mi {
+  font-style: italic;
+  color: #c9d1d9
+}
+body .pl-mb {
+  font-weight: 700;
+  color: #c9d1d9
+}
+body .pl-md {
+  color: #ffdcd7;
+  background-color: #67060c
+}
+body .pl-mi1 {
+  color: #aff5b4;
+  background-color: #033a16
+}
+body .pl-mc {
+  color: #ffdfb6;
+  background-color: #5a1e02
+}
+body .pl-mi2 {
+  color: #c9d1d9;
+  background-color: #1158c7
+}
+body .pl-mdr {
+  font-weight: 700;
+  color: #d2a8ff
+}
+body .pl-ba {
+  color: #8b949e
+}
+body .pl-sg {
+  color: #484f58
+}
+body .pl-corl {
+  text-decoration: underline;
+  color: #a5d6ff
+}
+body [data-catalyst] {
+  display: block
+}
+body g-emoji {
+  font-family: "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  font-size: 1em;
+  font-style: normal!important;
+  font-weight: 400;
+  line-height: 1;
+  vertical-align: -.075em
+}
+body g-emoji img {
+  width: 1em;
+  height: 1em
+}
+body::before {
+  display: table;
+  content: ""
+}
+body::after {
+  display: table;
+  clear: both;
+  content: ""
+}
+body > :first-child {
+  margin-top: 0!important
+}
+body > :last-child {
+  margin-bottom: 0!important
+}
+body a:not([href]) {
+  color: inherit;
+  text-decoration: none
+}
+body .absent {
+  color: #f85149
+}
+body .anchor {
+  float: left;
+  padding-right: 4px;
+  margin-left: -20px;
+  line-height: 1
+}
+body .anchor:focus {
+  outline: 0
+}
+body blockquote,
+body details,
+body dl,
+body ol,
+body p,
+body pre,
+body table,
+body ul {
+  margin-top: 0;
+  margin-bottom: 16px
+}
+body blockquote > :first-child {
+  margin-top: 0
+}
+body blockquote > :last-child {
+  margin-bottom: 0
+}
+body sup > a::before {
+  content: "["
+}
+body sup > a::after {
+  content: "]"
+}
+body h1 .octicon-link,
+body h2 .octicon-link,
+body h3 .octicon-link,
+body h4 .octicon-link,
+body h5 .octicon-link,
+body h6 .octicon-link {
+  color: #c9d1d9;
+  vertical-align: middle;
+  visibility: hidden
+}
+body h1:hover .anchor,
+body h2:hover .anchor,
+body h3:hover .anchor,
+body h4:hover .anchor,
+body h5:hover .anchor,
+body h6:hover .anchor {
+  text-decoration: none
+}
+body h1:hover .anchor .octicon-link,
+body h2:hover .anchor .octicon-link,
+body h3:hover .anchor .octicon-link,
+body h4:hover .anchor .octicon-link,
+body h5:hover .anchor .octicon-link,
+body h6:hover .anchor .octicon-link {
+  visibility: visible
+}
+body h1 code,
+body h1 tt,
+body h2 code,
+body h2 tt,
+body h3 code,
+body h3 tt,
+body h4 code,
+body h4 tt,
+body h5 code,
+body h5 tt,
+body h6 code,
+body h6 tt {
+  padding: 0 .2em;
+  font-size: inherit
+}
+body ol.no-list,
+body ul.no-list {
+  padding: 0;
+  list-style-type: none
+}
+body ol[type="1"] {
+  list-style-type: decimal
+}
+body ol[type=a] {
+  list-style-type: lower-alpha
+}
+body ol[type=i] {
+  list-style-type: lower-roman
+}
+body div > ol:not([type]) {
+  list-style-type: decimal
+}
+body ol ol,
+body ol ul,
+body ul ol,
+body ul ul {
+  margin-top: 0;
+  margin-bottom: 0
+}
+body li > p {
+  margin-top: 16px
+}
+body li + li {
+  margin-top: .25em
+}
+body dl {
+  padding: 0
+}
+body dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: 600
+}
+body dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px
+}
+body table th {
+  font-weight: 600
+}
+body table td,
+body table th {
+  padding: 6px 13px;
+  border: 1px solid #30363d
+}
+body table tr {
+  background-color: #0d1117;
+  border-top: 1px solid #21262d
+}
+body table tr:nth-child(2n) {
+  background-color: #161b22
+}
+body table img {
+  background-color: transparent
+}
+body img[align=right] {
+  padding-left: 20px
+}
+body img[align=left] {
+  padding-right: 20px
+}
+body .emoji {
+  max-width: none;
+  vertical-align: text-top;
+  background-color: transparent
+}
+body span.frame {
+  display: block;
+  overflow: hidden
+}
+body span.frame > span {
+  display: block;
+  float: left;
+  width: auto;
+  padding: 7px;
+  margin: 13px 0 0;
+  overflow: hidden;
+  border: 1px solid #30363d
+}
+body span.frame span img {
+  display: block;
+  float: left
+}
+body span.frame span span {
+  display: block;
+  padding: 5px 0 0;
+  clear: both;
+  color: #c9d1d9
+}
+body span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both
+}
+body span.align-center > span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: center
+}
+body span.align-center span img {
+  margin: 0 auto;
+  text-align: center
+}
+body span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both
+}
+body span.align-right > span {
+  display: block;
+  margin: 13px 0 0;
+  overflow: hidden;
+  text-align: right
+}
+body span.align-right span img {
+  margin: 0;
+  text-align: right
+}
+body span.float-left {
+  display: block;
+  float: left;
+  margin-right: 13px;
+  overflow: hidden
+}
+body span.float-left span {
+  margin: 13px 0 0
+}
+body span.float-right {
+  display: block;
+  float: right;
+  margin-left: 13px;
+  overflow: hidden
+}
+body span.float-right > span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: right
+}
+body code,
+body tt {
+  padding: .2em .4em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(110,118,129,.4);
+  border-radius: 6px
+}
+body code br,
+body tt br {
+  display: none
+}
+body del code {
+  text-decoration: inherit
+}
+body pre code {
+  font-size: 100%
+}
+body pre > code {
+  padding: 0;
+  margin: 0;
+  word-break: normal;
+  white-space: pre;
+  background: 0 0;
+  border: 0
+}
+body .highlight {
+  margin-bottom: 16px
+}
+body .highlight pre {
+  margin-bottom: 0;
+  word-break: normal
+}
+body .highlight pre,
+body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #161b22;
+  border-radius: 6px
+}
+body pre code,
+body pre tt {
+  display: inline;
+  max-width: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0
+}
+body .csv-data td,
+body .csv-data th {
+  padding: 5px;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 1;
+  text-align: left;
+  white-space: nowrap
+}
+body .csv-data .blob-num {
+  padding: 10px 8px 9px;
+  text-align: right;
+  background: #0d1117;
+  border: 0
+}
+body .csv-data tr {
+  border-top: 0
+}
+body .csv-data th {
+  font-weight: 600;
+  background: #161b22;
+  border-top: 0
+}
+body .footnotes {
+  font-size: 12px;
+  color: #8b949e;
+  border-top: 1px solid #30363d
+}
+body .footnotes ol {
+  padding-left: 16px
+}
+body .footnotes li {
+  position: relative
+}
+body .footnotes li:target::before {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  bottom: -8px;
+  left: -24px;
+  pointer-events: none;
+  content: "";
+  border: 2px solid #1f6feb;
+  border-radius: 6px
+}
+body .footnotes li:target {
+  color: #c9d1d9
+}
+body .footnotes .data-footnote-backref g-emoji {
+  font-family: monospace
+}
+body [hidden] {
+  display: none!important
+}
+body ::-webkit-calendar-picker-indicator {
+  filter: invert(50%)
+}
+
+/* node_modules/highlight.js/styles/github-dark.css */
+pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5px}/*!
+  Theme: GitHub Dark
+  Description: Dark theme as seen on github.com
+  Author: github.com
+  Maintainer: @Hirse
+  Updated: 2021-05-15
+
+  Outdated base version: https://github.com/primer/github-syntax-dark
+  Current colors taken from GitHub's CSS
+*/.hljs{color:#c9d1d9;background:#0d1117}.hljs-doctag,.hljs-keyword,.hljs-meta .hljs-keyword,.hljs-template-tag,.hljs-template-variable,.hljs-type,.hljs-variable.language_{color:#ff7b72}.hljs-title,.hljs-title.class_,.hljs-title.class_.inherited__,.hljs-title.function_{color:#d2a8ff}.hljs-attr,.hljs-attribute,.hljs-literal,.hljs-meta,.hljs-number,.hljs-operator,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-id,.hljs-variable{color:#79c0ff}.hljs-meta .hljs-string,.hljs-regexp,.hljs-string{color:#a5d6ff}.hljs-built_in,.hljs-symbol{color:#ffa657}.hljs-code,.hljs-comment,.hljs-formula{color:#8b949e}.hljs-name,.hljs-quote,.hljs-selector-pseudo,.hljs-selector-tag{color:#7ee787}.hljs-subst{color:#c9d1d9}.hljs-section{color:#1f6feb;font-weight:700}.hljs-bullet{color:#f2cc60}.hljs-emphasis{color:#c9d1d9;font-style:italic}.hljs-strong{color:#c9d1d9;font-weight:700}.hljs-addition{color:#aff5b4;background-color:#033a16}.hljs-deletion{color:#ffdcd7;background-color:#67060c}
+
+</style>
+</head>
+<body>
+<div class="document">
+<div class="header"></div><div class="inner">
+<!-- HTML Header End -->
+<!-- Header Start -->
+
+<h1>x386.org: Debian and Ubuntu Documentation</h1>
+<h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
+<!-- Copyright Start -->
+<details>
+<summary>Copyright (C) 2020 - 2025 Exforge exforge@x386.org</summary>
+<hr />
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
+<p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program.  If not, see: <a href="https://www.gnu.org/licenses/">www.gnu.org/licenses/</a>.</p>
+<hr />
+</details>
+<!-- Copyright End -->
+
+<!-- Header End -->
+<h5>Apache2ndEd</h5>
+<h1>Apache Tutorial for Debian and Ubuntu, 2nd Edition</h1>
+<details>
+<summary>
+0. Specs
+</summary>
+<hr />
+<h3>0.0. The What</h3>
+<p><a href="ApacheOnDebianUbuntu.html">ApacheOnDebianUbuntu</a> was my very first tutorial. I was new to Linux, and I wanted to document Apache HTTP server usage. The old document will be available for some time, in case you'd like to check it too.</p>
+<p>After some years, I've grown older and I decided to revise it. So here is the result.</p>
+<p>Apache HTTPD is a very powerful web server software. Some sources tell that it is the most used web server software with Nginx.</p>
+<h3>0.1. Environment</h3>
+<p>I used Debian and Ubuntu server editions, namely Debian 11 &amp; 12, Ubuntu 22.04 &amp; 24.04 LTS Servers.</p>
+<p>I have a test domain name: 386387.xyz. I used it for my tests. </p>
+<p>Unless you want to run a totally static website, you would need PHP and a database server too. So we're going to touch them a bit.</p>
+<h3>0.3. Sources</h3>
+<ul>
+<li><a href="https://httpd.apache.org/docs/">Apache Documentation</a>  </li>
+<li><a href="https://manpages.debian.org/">Debian</a> and <a href="https://manpages.ubuntu.com/">Ubuntu</a> manpages.</li>
+<li><a href="https://www.deepseek.com/">Deepseek</a> (I tested everything she says)</li>
+<li><a href="https://chatgpt.com/">ChatGPT</a> (I tested everything he says)</li>
+</ul>
+<p>I guess at this point you realized that I declared Deepseek as female and ChatGPT as male. That doesn't mean anything, I just didn't want to call them as "it".
+<br></p>
+</details>
+<details>
+<summary>
+1. Installation and Configuration Files
+</summary>
+<hr />
+<h3>1.1. Installation</h3>
+<p>Upgrade repositories and install apache2 package</p>
+<pre><code>sudo apt update
+sudo apt install apache2 --yes
+</code></pre>
+<p>When installed on Debian and Ubuntu, apache (as the other daemon packages) starts automatically. You can check the service:</p>
+<pre><code>systemctl status apache2
+</code></pre>
+<p>Debian administrators prepared a sample page for the web server. You can check it:</p>
+<pre><code>sudo nano /var/www/html/index.html
+</code></pre>
+<h3>1.2. Configuration Files</h3>
+<p>Debian and Ubuntu installations have the following files and directories at /etc/apache2:</p>
+<ul>
+<li>
+<p><strong>apache2.conf</strong>: Main configuration file for the Apache web server. Contains global server settings and typically includes other configuration files.</p>
+</li>
+<li>
+<p><strong>envvars</strong>: Sets environment variables used by Apache, such as paths and user/group settings. It is sourced (included) when Apache starts.</p>
+</li>
+<li>
+<p><strong>magic</strong>: Helps Apache identify file types based on their content rather than just their extensions. It's used for MIME type detection.</p>
+</li>
+<li>
+<p><strong>ports.conf</strong>: Defines the ports on which Apache listens (like port 80 for HTTP and 443 for HTTPS).</p>
+</li>
+<li>
+<p><strong>conf-available/</strong>: Contains additional configuration files that can be enabled or disabled as needed. These are typically non-essential but provide extra features.</p>
+</li>
+<li>
+<p><strong>conf-enabled/</strong>: Symbolic links to configuration files in conf-available/ that are currently enabled. Files here are active and loaded by Apache.</p>
+</li>
+<li>
+<p><strong>mods-available/</strong>: Contains configuration files for Apache modules that can be enabled or disabled. These modules extend Apache's functionality (like SSL or PHP).</p>
+</li>
+<li>
+<p><strong>mods-enabled/</strong>: Symbolic links to enabled module configurations from mods-available/. Only modules listed here are active.</p>
+</li>
+<li>
+<p><strong>sites-available/</strong>: Contains configuration files for individual websites (virtual hosts). Each file defines settings like the document root, domain name, and logging for a specific site.</p>
+</li>
+<li>
+<p><strong>sites-enabled/</strong>: Symbolic links to enabled site configurations from sites-available/. Only sites listed here are active and accessible.</p>
+</li>
+</ul>
+<p>Normally, we do not need to edit configuration files other than the ones in sites-available/. </p>
+<h3>1.3. Debian Specific Apache Commands</h3>
+<p>Debian makes available of 6 commands for easy Apache configuration. These commands are prepared by Debian package managers and they are available on Ubuntu servers too.</p>
+<ul>
+<li>
+<p><strong>a2ensite</strong>: Enables a site configuration by creating a symbolic link in sites-enabled/ from sites-available/.</p>
+</li>
+<li>
+<p><strong>a2dissite</strong>: Disables a site configuration by removing its symbolic link from sites-enabled/.</p>
+</li>
+<li>
+<p><strong>a2enmod</strong>: Enables an Apache module by creating a symbolic link in mods-enabled/ from mods-available/.</p>
+</li>
+<li>
+<p><strong>a2dismod</strong>: Disables an Apache module by removing its symbolic link from mods-enabled/.</p>
+</li>
+<li>
+<p><strong>a2enconf</strong>: Enables additional configuration files from conf-available/ by creating symbolic links in conf-enabled/.</p>
+</li>
+<li>
+<p><strong>a2disconf</strong>: Disables additional configuration files by removing symbolic links from conf-enabled/.</p>
+</li>
+</ul>
+<p>After enabling or disabling a site we need to reload apache2:</p>
+<pre><code>sudo systemctl reload apache2
+</code></pre>
+<p>After enabling or disabling a conf or a mod, we need to restart apache2:</p>
+<pre><code>sudo systemctl restart apache2
+</code></pre>
+<p><br></p>
+</details>
+<details>
+<summary>
+2. Creating Our First Website
+</summary>
+<hr />
+<h3>2.0. Explanations</h3>
+<p>When Apache package is installed, it creates 2 configuration files in sites-available/ directory. <code>000-default.conf</code> and <code>default-ssl.conf</code>. </p>
+<p>000-default.conf comes enabled, that is linked to sites-enabled/ directory. </p>
+<p>default-ssl.conf is not enabled and can be considered as a template for configuring an SSL site.</p>
+<p>There are 4 steps to create a web site on Apache Web Server.</p>
+<ol>
+<li>Prepare a place for the website contents and put the contents in there. Generally, a directory under /var/www is fine.</li>
+<li>Create a configuration file for the site in /etc/apache2/sites-available/</li>
+<li>Enable the site with a2ensite command.</li>
+<li>Reload Apache daemon.</li>
+</ol>
+<h3>2.1. Configure the Website</h3>
+<h4>2.1.1. Prepare Website Home</h4>
+<p>Make a home for our website:</p>
+<pre><code>sudo mkdir /var/www/386387.xyz
+</code></pre>
+<p>Create a sample home page</p>
+<pre><code>sudo nano /var/www/386387.xyz/index.html
+</code></pre>
+<p>Fill as below:</p>
+<pre><code>&lt;html&gt;
+&lt;title&gt;386387.xyz Test Page&lt;/title&gt;
+&lt;body&gt;
+&lt;h1&gt;386387.xyz Test Page&lt;/h1&gt;
+&lt;p&gt;386387.xyz and www.386387.xyz land here.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Make Apache daemon user own the directory and files:</p>
+<pre><code>sudo chown -R www-data:www-data /var/www/386387.xyz
+</code></pre>
+<p>Change all directory permissions to 755 and file permissions to 644</p>
+<pre><code>sudo find /var/www/386387.xyz -type d -exec chmod 755 {} \;
+sudo find /var/www/386387.xyz -type f -exec chmod 644 {} \;
+</code></pre>
+<h3>2.1.2. Create Website Configuration</h3>
+<p>Disable the default site configuration, we don't need it anymore</p>
+<pre><code>sudo a2dissite 000-default.conf
+</code></pre>
+<p>Create the configuration file of the site</p>
+<pre><code>sudo nano /etc/apache2/sites-available/386387.xyz.conf
+</code></pre>
+<p>Fill as below:</p>
+<pre><code>&lt;VirtualHost *:80&gt;
+   ServerAdmin webmaster@386387.xyz 
+   ServerName 386387.xyz
+   ServerAlias www.386387.xyz
+   DocumentRoot /var/www/386387.xyz
+   ErrorLog ${APACHE_LOG_DIR}/386387.xyz-error.log
+   CustomLog ${APACHE_LOG_DIR}/386387.xyz-access.log combined
+&lt;/VirtualHost&gt;
+</code></pre>
+<p>Line by line explanation of the configuration file</p>
+<ul>
+<li>Start of the site configuration. Site listens from all IPs in the host at the port 80.</li>
+<li>Site is accessibleed by name 386387.xyz</li>
+<li>Site is also accessible by name www.386387.xyz</li>
+<li>Content of the site is in /var/www/386387.xyz</li>
+<li>File for error logs</li>
+<li>File for access logs</li>
+<li>End of the site configuration</li>
+</ul>
+<h3>2.1.3. Enable the Website</h3>
+<p>Enable the site and reload Apache daemon.</p>
+<pre><code>sudo a2ensite 386387.xyz.conf
+sudo systemctl reload apache2
+</code></pre>
+<p>Our site is ready. Assuming 386387.xyz points to the IP of the server, we can reach our site by reaching to the following URL:</p>
+<pre><code>http://386387.xyz
+</code></pre>
+<h3>2.2. Add SSL (TLS) Support</h3>
+<h4>2.2.1. Install Certbot</h4>
+<p>Thanks to <a href="https://letsencrypt.org/">Let's Encrypt</a> we can get free certificates and let our site to be connected by HTTPS. We use <a href="https://certbot.eff.org/">certbot</a> tool to automatically install and update the certificates.</p>
+<p>Let's Encrypt certificates last 3 months, they have to be renewed periodically. Certbot tool handles acquiring and renewing tasks.</p>
+<p>Install certbot:</p>
+<pre><code>sudo apt update
+sudo apt install certbot --yes
+</code></pre>
+<h4>2.2.2. Install Necessary Apache Modules</h4>
+<p>To enable HTTPS and forward our HTTP site to HTTPS, we need to enable 2 Apache modules:</p>
+<pre><code>sudo a2enmod ssl
+sudo a2enmod rewrite
+sudo systemctl restart apache2
+</code></pre>
+<h4>2.2.3.Get the Certificates</h4>
+<p>Get the certificates with certbot:</p>
+<pre><code>sudo certbot certonly -d 386387.xyz,www.386387.xyz --agree-tos --webroot
+</code></pre>
+<ul>
+<li><strong>certonly</strong>: Get the certificates only, do not install them</li>
+<li><strong>-d ...</strong>: Get a certificate for all these domains</li>
+<li><strong>--agree-tos</strong>: Accept the terms of services</li>
+<li><strong>--webroot</strong>: Put challenge (authentication) files to a webroot folder. If you don't have a web server installed, then certbot may span a temporary web server to authenticate. But we already have 1 so we don't need it.</li>
+</ul>
+<p>It asks for your email to inform you if needed and asks to share your email address with EFF, you can answer Y if you want. </p>
+<p>Then asks for the webroot directory of the domain, you can enter yours, mine is <code>/var/www/386387.xyz</code>.</p>
+<p>If you are getting a certificate for more than 1 domains like me, it asks for other's webroot too, you can select 2 as the other webroot.</p>
+<p>Our certificates are installed as following:</p>
+<pre><code>Certificate is saved at: /etc/letsencrypt/live/386387.xyz/fullchain.pem
+Key is saved at:         /etc/letsencrypt/live/386387.xyz/privkey.pem
+</code></pre>
+<h4>2.2.4. Create HTTPS Site Configuration</h4>
+<p>Now we need to prepare a configuration for the HTTPS site.</p>
+<pre><code>sudo nano /etc/apache2/sites-available/386387.xyz-ssl.conf
+</code></pre>
+<p>Fill as below:</p>
+<pre><code>&lt;VirtualHost *:443&gt;
+   ServerName 386387.xyz
+   ServerAlias www.386387.xyz
+   DocumentRoot /var/www/386387.xyz
+   ErrorLog ${APACHE_LOG_DIR}/386387.xyz-error.log
+   CustomLog ${APACHE_LOG_DIR}/386387.xyz-access.log combined
+   SSLEngine on
+   SSLCertificateFile /etc/letsencrypt/live/386387.xyz/fullchain.pem
+   SSLCertificateKeyFile /etc/letsencrypt/live/386387.xyz/privkey.pem
+&lt;/VirtualHost&gt;
+</code></pre>
+<p>There are 3 unfamiliar lines starting with SSL, they say SSL is working and certificates are at the given paths.</p>
+<p>Our HTTPS site is ready at <code>https://386387.xyz</code>after we enable the new configuration and reload the Apache daemon:</p>
+<pre><code>sudo a2ensite 386387.xyz-ssl.conf
+sudo systemctl reload apache2
+</code></pre>
+<h4>2.2.5. HTTP to HTTPS Redirection</h4>
+<p>Our site works as HTTPS, but there is one some more work to do.</p>
+<p>Whenever someone tries to connect to https://386387.xyz, they meet our HTTPS site. But if someone tries to connect to https://386387.xyz, they get to our plain HTTP site. </p>
+<p>We can redirect our HTTP site to HTTPS site to overcome this little problem.</p>
+<p>Edit our HTTP site configuration:</p>
+<pre><code>sudo nano /etc/apache2/sites-available/386387.xyz.conf
+</code></pre>
+<p>Change as below :</p>
+<pre><code>&lt;VirtualHost *:80&gt;
+   ServerAdmin webmaster@386387.xyz 
+   ServerName 386387.xyz
+   ServerAlias www.386387.xyz
+   DocumentRoot /var/www/386387.xyz
+   # Redirection BEGIN
+   # Force redirect to HTTPS unless the request is for Let's Encrypt
+   RewriteEngine On
+   RewriteCond %{REQUEST_URI} !^/.well-known/acme-challenge/
+   RewriteCond %{HTTPS} off
+   RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301]
+   # Redirection END
+   ErrorLog ${APACHE_LOG_DIR}/386387.xyz-error.log
+   CustomLog ${APACHE_LOG_DIR}/386387.xyz-access.log combined
+&lt;/VirtualHost&gt;
+</code></pre>
+<p>Certbot puts some files on .well-know/acme-challenge/ directory to authenticate the server. The lines we added redirects the other requests to the HTTPS site.</p>
+<p>Reload the Apache daemon and we are (almost) done.</p>
+<pre><code>sudo systemctl reload apache2
+</code></pre>
+<h3>2.2.6. Certbot Hooks</h3>
+<p>When the time comes, certbot renews the certificates. But Apache doesn't know that and tries to use the old ones. That means our HTTPS site does not work anymore. </p>
+<p>To handle this situation, we need to find a way to reload Apache when certbot renews the certificates.</p>
+<p>Certbot runs all scripts in the  /etc/letsencrypt/renewal-hooks/deploy directory after a successfull renewal. We'll put a script there.</p>
+<pre><code>sudo nano /etc/letsencrypt/renewal-hooks/deploy/reloadapache.sh
+</code></pre>
+<p>Fill as below:</p>
+<pre><code>#!/bin/bash
+systemctl reload apache2
+</code></pre>
+<p>Make the script executable</p>
+<pre><code>sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/reloadapache.sh
+</code></pre>
+<p><br></p>
+</details>
+<details>
+<summary>
+3. Adding More Sites to Our Server
+</summary>
+<hr />
+<h3>3.0. Explanations</h3>
+<p>Apache server can host many sites. Actually there is no limit on the number of the sites, you can add sites as much as your server's CPU and RAM allows.</p>
+<p>We're going to add some more sites with different properties</p>
+<ul>
+<li>Local access only</li>
+<li>Only Accessible by 2 IPs</li>
+<li>Reverse proxy configuration</li>
+<li>Custom error pages</li>
+<li>Listening on a different port</li>
+<li>No access logs</li>
+</ul>
+<p>There will be only HTTP configurations for these sites, you can add HTTPS access to them as in step 2.2.</p>
+<h3>3.1. Local Access Only</h3>
+<p>Our site will allow access only from the server, no other IP's will be able to access it.</p>
+<p>These type of sites can be used for management purposes.</p>
+<p>Create a home for the site, a sample HTML, configure permissions and ownerships.</p>
+<pre><code>sudo mkdir /var/www/srv1
+sudo touch /var/www/srv1/index.html
+sudo chown -R www-data:www-data /var/www/srv1
+sudo find /var/www/srv1 -type d -exec chmod 755 {} \;
+sudo find /var/www/srv1 -type f -exec chmod 644 {} \;
+</code></pre>
+<p>Fill sample HTML</p>
+<pre><code>sudo nano /var/www/srv1/index.html
+</code></pre>
+<p>Fill as below:</p>
+<pre><code>&lt;html&gt;
+&lt;title&gt;srv1.386387.xyz Test Page&lt;/title&gt;
+&lt;body&gt;
+&lt;h1&gt;srv1.386387.xyz Test Page&lt;/h1&gt;
+&lt;p&gt;Local access only&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Create configuration for the site</p>
+<pre><code>sudo nano /etc/apache2/sites-available/srv1.conf
+</code></pre>
+<p>Fill as below:</p>
+<pre><code>&lt;VirtualHost 127.0.0.1:80&gt;
+   ServerAdmin admin@386387.xyz 
+   ServerName srv1.386387.xyz
+   DocumentRoot /var/www/srv1
+   ErrorLog ${APACHE_LOG_DIR}/srv1-error.log
+   CustomLog ${APACHE_LOG_DIR}/srv1-access.log combined
+&lt;/VirtualHost&gt;
+</code></pre>
+<p>Enable the site and reload Apache daemon</p>
+<pre><code>sudo a2ensite srv1.conf
+sudo systemctl reload apache2
+</code></pre>
+<p>You will not be able to reach to the site at <code>https://srv1.386387.xyz</code>, but if you run the following command on the server, it will retrieve the HTML:</p>
+<pre><code>curl 127.0.0.1
+</code></pre>
+<h3>3.2. Only Accessible by 2 IPs</h3>
+<p>Only 2 given IPs will be able to access this site.</p>
+<p>These type of sites can be used to serve to only some selected persons.</p>
+<p>Create a home for the site, a sample HTML, configure permissions and ownerships.</p>
+<pre><code>sudo mkdir /var/www/srv2
+sudo touch /var/www/srv2/index.html
+sudo chown -R www-data:www-data /var/www/srv2
+sudo find /var/www/srv2 -type d -exec chmod 755 {} \;
+sudo find /var/www/srv2 -type f -exec chmod 644 {} \;
+</code></pre>
+<p>Fill sample HTML</p>
+<pre><code>sudo nano /var/www/srv2/index.html
+</code></pre>
+<p>Fill as below:</p>
+<pre><code>&lt;html&gt;
+&lt;title&gt;srv2.386387.xyz Test Page&lt;/title&gt;
+&lt;body&gt;
+&lt;h1&gt;srv2.386387.xyz Test Page&lt;/h1&gt;
+&lt;p&gt;Only 2 IPs can access.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Create configuration for the site</p>
+<pre><code>sudo nano /etc/apache2/sites-available/srv2.conf
+</code></pre>
+<p>Fill as below:</p>
+<pre><code>&lt;VirtualHost *:80&gt;
+    &lt;Directory &quot;/var/www/srv2&quot;&gt;
+        Require ip 195.174.44.28
+        Require ip 138.199.28.46
+    &lt;/Directory&gt;
+    ServerAdmin admin@386387.xyz
+    ServerName srv2.386387.xyz
+    DocumentRoot /var/www/srv2
+    ErrorLog ${APACHE_LOG_DIR}/srv2-error.log
+    CustomLog ${APACHE_LOG_DIR}/srv2-access.log combined
+&lt;/VirtualHost&gt;
+</code></pre>
+<p>Enable the site and reload Apache daemon</p>
+<pre><code>sudo a2ensite srv2.conf
+sudo systemctl reload apache2
+</code></pre>
+<p>Only 2 given IPs will be able to access to the site, the other will have Forbidden message.</p>
+<p>You can add more IPs or even IP blocks as following:</p>
+<pre><code>        Require ip 195.174.44.0/24
+</code></pre>
+<h3>3.3. Reverse Proxy Configuration</h3>
+<p>Some software supplies locally running mini web servers. One of them is RSpamd. You can only access them from the server they are running.</p>
+<p>Using Apache's Reverse Proxy module, we can access them from outside the server too.</p>
+<p>We can simulate such a system, open another terminal window on your server and type the following commands, that terminal will stay busy:</p>
+<pre><code>mkdir /tmp/test
+echo Test &gt; /tmp/test/index.html
+cd /tmp/test
+python3 -m http.server 8080 --bind 127.0.0.1
+</code></pre>
+<p>Now if you run the following command on another terminal for your server:</p>
+<pre><code>curl 127.0.0.1:8080
+</code></pre>
+<p>You will see it is replying with Test</p>
+<p>This mini server can be accessed from our server only, and we'll make it accessible from the world too.</p>
+<p>First we need to enable proxy and proxy_http modules of Apache</p>
+<pre><code>sudo a2enmod proxy
+sudo a2enmod proxy_http
+sudo systemctl restart apache2
+</code></pre>
+<p>Create a configuration for the site</p>
+<pre><code>sudo nano /etc/apache2/sites-available/srv3.conf
+</code></pre>
+<p>Fill as below:</p>
+<pre><code>&lt;VirtualHost *:80&gt;
+   ServerAdmin admin@386387.xyz
+   ServerName srv3.386387.xyz
+   ProxyPreserveHost On
+   ProxyPass &quot;/reverse&quot; &quot;http://127.0.0.1:8080/&quot;
+   ProxyPassReverse &quot;/reverse&quot;  &quot;http://127.0.0.1:8080/&quot;
+   ErrorLog ${APACHE_LOG_DIR}/srv3-error.log
+   CustomLog ${APACHE_LOG_DIR}/srv3-access.log combined
+&lt;/VirtualHost&gt;
+</code></pre>
+<p>Enable the site and reload Apache daemon</p>
+<pre><code>sudo a2ensite srv3.conf
+sudo systemctl reload apache2
+</code></pre>
+<p>Now, when you browse <code>http://srv3.386387.xyz/reverse</code> you will access to the local server.</p>
+<p>Remember terminating the local server at the other terminal.</p>
+<h3>3.4. Custom Error Pages</h3>
+<p>When there is an error, Apache server inform us with an error page. The most occuring error is 404, page not found. But there are other errors too.</p>
+<p>We can change the error pages as we like. Let's try it.</p>
+<p>Create a home for the site, a sample HTML, 404 error page HTML, configure permissions and ownerships.</p>
+<pre><code>sudo mkdir /var/www/srv4
+sudo touch /var/www/srv4/index.html
+sudo touch /var/www/srv4/404.html
+sudo chown -R www-data:www-data /var/www/srv4
+sudo find /var/www/srv4 -type d -exec chmod 755 {} \;
+sudo find /var/www/srv4 -type f -exec chmod 644 {} \;
+</code></pre>
+<p>Fill sample HTML</p>
+<pre><code>sudo nano /var/www/srv4/index.html
+</code></pre>
+<p>Fill as below:</p>
+<pre><code>&lt;html&gt;
+&lt;title&gt;srv4.386387.xyz Test Page&lt;/title&gt;
+&lt;body&gt;
+&lt;h1&gt;srv4.386387.xyz Test Page&lt;/h1&gt;
+&lt;p&gt;This site has a modified error 404 page.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Fill error page HTML</p>
+<pre><code>sudo nano /var/www/srv4/404.html
+</code></pre>
+<p>Fill as below:</p>
+<pre><code>&lt;html&gt;
+&lt;title&gt;I cannot find the page&lt;/title&gt;
+&lt;body&gt;
+&lt;h1&gt;I cannot find the page&lt;/h1&gt;
+&lt;p&gt;May I ask you to change the address you're browsing?&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Create a configuration for the site</p>
+<pre><code>sudo nano /etc/apache2/sites-available/srv4.conf
+</code></pre>
+<p>Fill as below:</p>
+<pre><code>&lt;VirtualHost *:80&gt;
+    ServerAdmin admin@386387.xyz
+    ServerName srv4.386387.xyz
+    DocumentRoot /var/www/srv4
+    ErrorDocument 404 /404.html
+    # You can add more error codes and HTMLs here
+    ErrorLog ${APACHE_LOG_DIR}/srv4-error.log
+    CustomLog ${APACHE_LOG_DIR}/srv4-access.log combined
+&lt;/VirtualHost&gt;
+</code></pre>
+<p>Enable the site and reload Apache daemon</p>
+<pre><code>sudo a2ensite srv4.conf
+sudo systemctl reload apache2
+</code></pre>
+<p>When you visit <code>http://srv4.386387.xyz</code> you can see the main page, visit <code>http://srv4.386387/test</code> to see the custom error page.</p>
+<h3>3.5. Listening on a Different Port</h3>
+<p>Normally web servers listen on ports 80 (HTTP) and 443 (HTTPS). But sometimes it might be necessary to use the other ports.</p>
+<p>We are going to configure our server to listen on port 8080.</p>
+<p>Before everything we have to tell the Apache server to listen on port 8080 too.</p>
+<pre><code>sudo nano /etc/apache2/ports.conf
+</code></pre>
+<p>Add to the end of the file:</p>
+<pre><code>Listen 8080
+</code></pre>
+<p>Apache restart required</p>
+<pre><code>sudo systemctl restart apache2
+</code></pre>
+<p>Create a home for the site, a sample HTML, configure permissions and ownerships.</p>
+<pre><code>sudo mkdir /var/www/srv5
+sudo touch /var/www/srv5/index.html
+sudo chown -R www-data:www-data /var/www/srv5
+sudo find /var/www/srv5 -type d -exec chmod 755 {} \;
+sudo find /var/www/srv5 -type f -exec chmod 644 {} \;
+</code></pre>
+<p>Fill sample HTML</p>
+<pre><code>sudo nano /var/www/srv5/index.html
+</code></pre>
+<p>Fill as below:</p>
+<pre><code>&lt;html&gt;
+&lt;title&gt;srv5.386387.xyz Test Page&lt;/title&gt;
+&lt;body&gt;
+&lt;h1&gt;srv5.386387.xyz Test Page&lt;/h1&gt;
+&lt;p&gt;This site listens on port 8080.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Create a configuration for the site</p>
+<pre><code>sudo nano /etc/apache2/sites-available/srv5.conf
+</code></pre>
+<p>Fill as below:</p>
+<pre><code>&lt;VirtualHost *:8080&gt;
+    ServerAdmin admin@386387.xyz
+    ServerName srv5.386387.xyz
+    DocumentRoot /var/www/srv5
+    ErrorLog ${APACHE_LOG_DIR}/srv5-error.log
+    CustomLog ${APACHE_LOG_DIR}/srv4-access.log combined
+&lt;/VirtualHost&gt;
+</code></pre>
+<p>Enable the site and reload Apache daemon</p>
+<pre><code>sudo a2ensite srv5.conf
+sudo systemctl reload apache2
+</code></pre>
+<p>Now you can visit <code>http://srv5.386387.xyz:8080</code> to see our new site.</p>
+<h3>3.6. No Access Logs</h3>
+<p>We want our site to have no access logs. There might be a lot of reason for that. One reason that comes to my mind is privacy. </p>
+<p>Create a home for the site, a sample HTML, configure permissions and ownerships.</p>
+<pre><code>sudo mkdir /var/www/srv6
+sudo touch /var/www/srv6/index.html
+sudo chown -R www-data:www-data /var/www/srv5
+sudo find /var/www/srv6 -type d -exec chmod 755 {} \;
+sudo find /var/www/srv6 -type f -exec chmod 644 {} \;
+</code></pre>
+<p>Fill sample HTML</p>
+<pre><code>sudo nano /var/www/srv6/index.html
+</code></pre>
+<p>Fill as below:</p>
+<pre><code>&lt;html&gt;
+&lt;title&gt;srv6.386387.xyz Test Page&lt;/title&gt;
+&lt;body&gt;
+&lt;h1&gt;srv6.386387.xyz Test Page&lt;/h1&gt;
+&lt;p&gt;We do not collect access logs.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Create a configuration for the site</p>
+<pre><code>sudo nano /etc/apache2/sites-available/srv6.conf
+</code></pre>
+<p>Fill as below:</p>
+<pre><code>&lt;VirtualHost *:80&gt;
+    ServerAdmin admin@386387.xyz
+    ServerName srv6.386387.xyz
+    DocumentRoot /var/www/srv6
+    ErrorLog ${APACHE_LOG_DIR}/srv6-error.log
+    CustomLog /dev/null combined
+&lt;/VirtualHost&gt;
+</code></pre>
+<p>Enable the site and reload Apache daemon</p>
+<pre><code>sudo a2ensite srv6.conf
+sudo systemctl reload apache2
+</code></pre>
+<p>Now you can visit <code>http://srv6.386387.xyz</code> to see our new site.</p>
+<p>If you want to disable error logs too, you can change the following line in the site config: </p>
+<pre><code>    ErrorLog ${APACHE_LOG_DIR}/srv6-error.log
+</code></pre>
+<p>as</p>
+<pre><code>    ErrorLog /dev/null
+</code></pre>
+<p><br></p>
+</details>
+<details>
+<summary>
+4. Adding PHP Support to Apache
+</summary>
+<hr />
+<h3>4.1. Install PHP and Apache Dependencies</h3>
+<pre><code>sudo apt update
+sudo apt install php libapache2-mod-php --yes
+</code></pre>
+<p>Let's use our srv4 site to check PHP. We're going to add a page with PHP content and check if it is working.</p>
+<pre><code>sudo nano /var/www/srv4/info.php
+</code></pre>
+<p>Fill as below:</p>
+<pre><code>&lt;?php phpinfo(); ?&gt;
+</code></pre>
+<p>Now you can visit <code>http://srv4.386387.xyz/info.php</code> to see the PHP content.</p>
+<h3>4.2. PHP Configuration</h3>
+<p>You may want to make some changes to the PHP configuration. You can edit the configurations:</p>
+<pre><code>sudo nano /etc/php/*/apache2/php.ini
+</code></pre>
+<p>Common settings to adjust would be:</p>
+<pre><code>upload_max_filesize = 16M
+post_max_size = 16M
+memory_limit = 128M
+display_errors = Off  # Set to On for development
+</code></pre>
+<p>After making changes you need to restart Apache:</p>
+<pre><code>sudo systemctl restart apache2
+</code></pre>
+<h3>4.3. Additional PHP Packages</h3>
+<ul>
+<li>php-mysql: Connect to MySQL/MariaDB databases</li>
+<li>php-pgsql: Connect to PostgreSQL databases</li>
+<li>php-sqlite3: Lightweight SQLite database support</li>
+<li>php-json: Encode/decode JSON data</li>
+<li>php-xml: Parse/generate XML</li>
+<li>php-mbstring: Handle non-English characters (e.g., UTF-8)</li>
+<li>php-curl: Make HTTP requests to APIs</li>
+<li>php-opcache: (Essential) Caches PHP code for faster execution</li>
+<li>php-zip: Create/extract ZIP files</li>
+<li>php-gd: Process images (resize, crop, add watermarks)</li>
+</ul>
+<p>To install them all (and restart Apache afterwards):</p>
+<pre><code>sudo apt install php-mysql php-pgsql php-sqlite3 php-json \
+   php-xml php-mbstring php-curl php-opcache php-zip php-gd
+sudo systemctl restart apache2
+</code></pre>
+<p><br></p>
+</details><!-- HTML Footer Start -->
+
+</body>
+</html>
+
+<!-- HTML Footer End -->

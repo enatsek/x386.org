@@ -1,5 +1,7 @@
 # Tutorials
 
+- [**Apache 2nd Ed.:**](Apache2ndEd.html) Apache http server on Debian and Ubuntu servers. With sample configurations and SSL support.
+
 - [**Etc Folder:**](EtcOnDebianUbuntu.html) Contents of /etc/ folder on Debian & Ubuntu.
 
 - [**Regex:**](RegexOnDebianUbuntu.html) Regular Expressions tutorial.
@@ -62,4 +64,3 @@
 
 - [**AD:**](ADOnDebianUbuntu.html) Simple Active Directory, with 1 domain, 2 DCs and 1 Fileserver with Debian and Ubuntu Servers.
 
-- [**Apache:**](ApacheOnDebianUbuntu.html) Installing and configuring Apache 2 on Debian and Ubuntu servers. With sample configurations and SSL support.
