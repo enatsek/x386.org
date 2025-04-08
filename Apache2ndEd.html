@@ -1177,7 +1177,7 @@ sudo find /var/www/srv1 -type f -exec chmod 644 {} \;
 <pre><code>sudo a2ensite srv1.conf
 sudo systemctl reload apache2
 </code></pre>
-<p>You will not be able to reach to the site at <code>https://srv1.386387.xyz</code>, but if you run the following command on the server, it will retrieve the HTML:</p>
+<p>You will not be able to reach to the site at <code>http://srv1.386387.xyz</code>, but if you run the following command on the server, it will retrieve the HTML:</p>
 <pre><code>curl 127.0.0.1
 </code></pre>
 <h3>3.2. Only Accessible by 2 IPs</h3>

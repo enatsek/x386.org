@@ -458,7 +458,7 @@ sudo a2ensite srv1.conf
 sudo systemctl reload apache2
 ```
 
-You will not be able to reach to the site at ```https://srv1.386387.xyz```, but if you run the following command on the server, it will retrieve the HTML:
+You will not be able to reach to the site at ```http://srv1.386387.xyz```, but if you run the following command on the server, it will retrieve the HTML:
 
 ```
 curl 127.0.0.1
