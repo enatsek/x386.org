@@ -1,5 +1,7 @@
 # Tutorials
 
+- [**Nginx 2nd Ed.:**](Nginx2ndEd.html) Nginx http server on Debian and Ubuntu servers. With sample configurations, SSL support and LEMP Stack.
+
 - [**Apache 2nd Ed.:**](Apache2ndEd.html) Apache http server on Debian and Ubuntu servers. With sample configurations and SSL support.
 
 - [**Etc Folder:**](EtcOnDebianUbuntu.html) Contents of /etc/ folder on Debian & Ubuntu.
@@ -25,8 +27,6 @@
 - [**Deb Packaging:**](DebPackagingOnDebianUbuntu.html) A basic tutorial about creating and using .deb packages.
 
 - [**Systemd:**](SystemdOnDebianUbuntu.html) Basic systemd tutorial.
-
-- [**Nginx:**](NginxOnDebianUbuntu.html) Installing and configuring Nginx on Debian and Ubuntu server. With sample configuration and SSL support.
 
 - [**Other Linuxes:**](OtherLinuxesOnDebianUbuntu.html) Basic management of Debian, Ubuntu, Red Hat, Alpine and Devuan distributions.
 
