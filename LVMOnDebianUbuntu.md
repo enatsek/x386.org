@@ -446,6 +446,12 @@ Extend mylv logical volume by 2 GB
 sudo lvextend -L +2G myvg/mylv
 ```
  
+Or extend the mylv logical volume to maximum available
+
+```
+sudo lvextend -l +100%FREE  myvg/mylv
+```
+
 Resize the file system
 
 ```

@@ -836,7 +836,7 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<summary>Copyright (C) 2020 - 2025 Exforge exforge@x386.org</summary>
 <hr />
 <p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
 <p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
@@ -1123,6 +1123,9 @@ sudo mount /dev/myvg/mylv /mnt/point
 <p>Extends the size of a logical volume.</p>
 <p>Extend mylv logical volume by 2 GB</p>
 <pre><code>sudo lvextend -L +2G myvg/mylv
+</code></pre>
+<p>Or extend the mylv logical volume to maximum available</p>
+<pre><code>sudo lvextend -l +100%FREE  myvg/mylv
 </code></pre>
 <p>Resize the file system</p>
 <pre><code>sudo resize2fs /dev/myvg/mylv
