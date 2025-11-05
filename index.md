@@ -66,7 +66,6 @@
 
 - [**LAMP Stack:**](LampOnDebianUbuntu.html) Installation of LAMP stack on Debian and Ubuntu servers. My choice of DB is Mariadb.
 
-- [**Certbot:**](CertbotOnDebianUbuntu.html) Using certbot tool of eff.org to automatize obtaining and renewing letsencrytp.org SSL certificates on Apache 2 for Debian and Ubuntu Servers.
+- [**Certbot:**](certbot.html) Using certbot tool of eff.org to automatize obtaining and renewing letsencrytp.org SSL certificates on Apache 2 and Nginx for Debian and Ubuntu Servers.
 
-- [**AD:**](ADOnDebianUbuntu.html) Simple Active Directory, with 1 domain, 2 DCs and 1 Fileserver with Debian and Ubuntu Servers.
-
+- [**AD:**](ad.html) Simple Active Directory, with 1 domain, 2 DCs and 1 Fileserver with Debian and Ubuntu Servers.
