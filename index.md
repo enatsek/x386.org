@@ -1,6 +1,6 @@
 # Tutorials
 
-- [**Self Hosted VPN**](shvpn.html) Self hosted VPN tutorial using wireguard on Debian and Ubuntu servers.
+- [**Self Hosted VPN:**](shvpn.html) Self hosted VPN tutorial using wireguard on Debian and Ubuntu servers.
 
 - [**Site-to-site VPN:**](s2svpn.html) Site-to-site VPN tutorial using wireguard on Debian and Ubuntu servers.
 
@@ -56,9 +56,9 @@
 
 - [**Keepalived:**](KeepalivedOnDebianUbuntu.html) Clustering with keepalived on Debian and Ubuntu Server.
 
-- [**DNS:**](DNSOnDebianUbuntu.html) Installing and configuring Master and Slave DNS Servers on Debian and Ubuntu Server.
+- [**DNS:**](dns.html) Installing and configuring Primary and Replica DNS Servers on Debian and Ubuntu Server.
 
-- [**Wordpress:**](WordpressOnDebianUbuntu.html) Installing and activating Wordpress on Debian and Ubuntu Servers.
+- [**Wordpress:**](wordpress.html) Installing and activating Wordpress on Debian and Ubuntu Servers.
 
 - [**Mariadb:**](mariadb.html) Mariadb installation and basic configuration on Debian and Ubuntu Servers. Includes some user management and primary-replica (master-slave) replication.
 
