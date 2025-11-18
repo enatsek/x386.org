@@ -52,9 +52,9 @@
 
 - [**Ansible:**](AnsibleOnDebianUbuntu.html) Ansible tutorial based on Debian/Ubuntu workstation and servers.
 
-- [**User And Group Admin:**](UserAndGroupAdminOnDebianUbuntu.html) User and Group administration on Debian and Ubuntu Server (and desktops).
+- [**User And Group Admin:**](useradministration.html) User and Group administration on Debian and Ubuntu Server (and desktops).
 
-- [**Keepalived:**](KeepalivedOnDebianUbuntu.html) Clustering with keepalived on Debian and Ubuntu Server.
+- [**Keepalived:**](keepalived.html) Clustering with keepalived on Debian and Ubuntu Servers.
 
 - [**DNS:**](dns.html) Installing and configuring Primary and Replica DNS Servers on Debian and Ubuntu Server.
 
