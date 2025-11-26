@@ -836,7 +836,7 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<summary>Copyright (C) 2020 - 2025 Exforge exforge@x386.org</summary>
 <hr />
 <p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
 <p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
@@ -846,301 +846,106 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <!-- Copyright End -->
 
 <!-- Header End -->
-<h5>MariadbClusterOnDebianUbuntu</h5>
-<h1>Mariadb Main-Main Replication with Galera Cluster Tutorial on Debian and Ubuntu</h1>
+<h5>Adminer</h5>
+<h1>Adminer Tutorial for Debian and Ubuntu Servers</h1>
 <details>
 <summary>
 0. Specs
 </summary>
 <hr />
-<h3>0.1. Definitions</h3>
-<p>3 servers will be installed and configured as Mariadb clusters. </p>
-<p>All the changes in one server will be updated to others momentarily. At least 3 nodes are advised for Mariadb cluster, there is no upper limit.</p>
-<p><strong>At least 2 of the cluster nodes must be online always</strong>. If you fall  to 1 you may have problems. If you shut down all of the nodes, your cluster stops and you need some work to (hopefully) start again. !!!</p>
-<h3>0.2. My Configuration</h3>
-<p>srv1 -&gt; 192.168.1.221 Debian 12/11 Ubuntu 24.04/22.04 LTS Server<br />
-srv2 -&gt; 192.168.1.222 Debian 12/11 Ubuntu 24.04/22.04 LTS Server<br />
-srv3 -&gt; 192.168.1.223 Debian 12/11 Ubuntu 24.04/22.04 LTS Server  </p>
-<p>All the nodes must have the same version of Mariadb. That is, they must  have the same Linux distros.</p>
-<h3>0.3. Resources</h3>
-<p><a href="https://www.howtoforge.com/how-to-setup-mariadb-galera-multi-master-synchronous-replication-using-debian-10/">www.howtoforge.com</a><br />
-<a href="https://www.symmcom.com/docs/how-tos/databases/how-to-recover-mariadb-galera-cluster-after-partial-or-full-crash">www.symmcom.com</a><br />
-<a href="https://mariadb.com/docs/multi-node/galera-cluster/understand-mariadb-galera-cluster/">mariadb.com/docs</a><br />
-<a href="https://mariadb.com/kb/en/galera-cluster-recovery/">mariadb.com/kb</a></p>
+<h3>0.1. The What</h3>
+<p>Adminer is a lightweight database management tool written in PHP that allows users to manage databases like MySQL, PostgreSQL, and SQLite through a simple web interface. It is distributed as a single PHP file, making it easy to deploy on a server.</p>
+<p>In this configuration, I wanted to bind Adminer to a specific site configuration on the server side and restrict access to only one client IP (though more can be added).</p>
+<h3>0.2. The Environment</h3>
+<ul>
+<li>My Hostname: <code>adminer.386387.xyz</code></li>
+<li>LAMP is already installed (See <a href="lamp.html">LAMP Tutorial</a>)</li>
+<li>My Client IP address: <code>192.168.1.56</code></li>
+<li>MariaDB Admin User: <code>dbadmin</code> | Password: <code>PaSswOrD1234</code></li>
+<li>Server Versions: Debian 13/12, Ubuntu 24.04/22.04 LTS Server</li>
+</ul>
 <p><br></p>
 </details>
 <details>
 <summary>
-1. Mariadb Installations (Run on all servers)
+1. Install Adminer
 </summary>
 <hr />
-<h3>1.1. Install Mariadb and Galera Cluster on all servers</h3>
+<p>While it's possible to download the Adminer PHP files directly, I prefer installing the package. This way, all upgrades will be managed by Debian/Ubuntu's package management system.</p>
 <pre><code>sudo apt update
-sudo apt install mariadb-server galera-4 --yes
-</code></pre>
-<h3>1.2. Secure Mariadb Installations</h3>
-<p>The following command makes some fine tunes regarding Mariadb security.</p>
-<pre><code>sudo mysql_secure_installation
-</code></pre>
-<p>You will be asked some questions.  </p>
-<p><code>Enter current password for root (enter for none):</code>  </p>
-<p>There is no password yet, so press enter.</p>
-<p>The next 2 questions </p>
-<p><code>Switch to unix_socket authentication [Y/n]</code> <br />
-and<br />
-<code>Change the root password? [Y/n]</code>   </p>
-<p>are about securing root account. In Ubuntu and Debian root account is  already protected, so you can answer n.</p>
-<p>For the next questions you can select default answers.</p>
-<p><br></p>
-</details>
-<details>
-<summary>
-2. Mariadb Configurations (Run on all servers)
-</summary>
-<hr />
-<h3>2.1. Temporarily Stop Mariadb</h3>
-<pre><code>sudo systemctl stop mariadb
-</code></pre>
-<h3>2.2. Bind Address Enablement</h3>
-<p>Mariadb daemon must listen to the network for the cluster</p>
-<pre><code>sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
-</code></pre>
-<p>Change the following line (Around line 27-30)</p>
-<p>from:</p>
-<pre><code>bind-address = 127.0.0.1
-</code></pre>
-<p>to:</p>
-<pre><code>bind-address = 0.0.0.0
-</code></pre>
-<h3>2.3. Cluster Options</h3>
-<p>Create a new conf file and fill it</p>
-<pre><code>sudo nano /etc/mysql/mariadb.conf.d/99-cluster.cnf
-</code></pre>
-<p>Fill as below, remember to use your ip addresses</p>
-<pre><code>[galera]
-# Mariadb only supports this lock mode
-innodb_autoinc_lock_mode = 2
-# Name of the cluster, you can change it
-wsrep_cluster_name    = &quot;x386_cluster&quot;
-# List of cluster nodes
-wsrep_cluster_address = &quot;gcomm://192.168.1.221,192.168.1.222,192.168.1.223&quot;
-# Galera plugin path
-wsrep_provider = /usr/lib/galera/libgalera_smm.so
-# If a node does not respond in 10 second, it is assumed to be offline
-wsrep_provider_options = &quot;evs.suspect_timeout=PT10S&quot;
-# Replication for this node is on
-wsrep_on = on 
-# Galera cluster supports InnoDB
-default_storage_engine = InnoDB 
-# Use InnoDB double write buffer
-innodb_doublewrite = 1 
-# Use ROW format for bin logs
-binlog_format = ROW
+sudo apt install adminer --yes
 </code></pre>
 <p><br></p>
 </details>
 <details>
 <summary>
-3. Start Cluster
+2. DB Admin User
 </summary>
 <hr />
-<h3>3.1. Start Cluster on One of the Nodes</h3>
-<p><strong>!!! You should run this only on one of the servers !!!</strong></p>
-<pre><code>sudo galera_new_cluster
-</code></pre>
-<p>This command should also start mariadb on this node, check it:</p>
-<pre><code>systemctl status mariadb
-</code></pre>
-<h3>3.2. Start Mariadb on Other Nodes too</h3>
-<p>Run on the other servers:</p>
-<pre><code>sudo systemctl start mariadb
-</code></pre>
-<p>Our Cluster is established</p>
-<p><br></p>
-</details>
-<details>
-<summary>
-4. Test Mariadb Cluster 
-</summary>
-<hr />
-<p>We will run commands on the nodes and see the changes on other nodes</p>
-<h3>4.1. Create a Database on the First Node</h3>
-<p><strong>!!! Run on the first server !!!</strong></p>
+<p>We need to create a database admin user to log into Adminer and manage the databases.</p>
 <pre><code>sudo mariadb
 </code></pre>
-<p>Run on mariadb shell</p>
-<pre><code>CREATE DATABASE Test;
-exit;
-</code></pre>
-<h3>4.2. Create a Table on the Database on the Second Node</h3>
-<p><strong>!!! Run on second server !!!</strong></p>
-<pre><code>sudo mariadb
-</code></pre>
-<p>Run on mariadb shell</p>
-<pre><code>USE Test;
-CREATE TABLE People (Name char(15), Age int(3));
-exit;
-</code></pre>
-<h3>4.3. Add Records to the Table on the Third Node</h3>
-<p><strong>!!! Run on third server !!!</strong></p>
-<pre><code>sudo mariadb
-</code></pre>
-<p>Run on mariadb shell</p>
-<pre><code>USE Test;
-INSERT INTO People VALUES ('Exforge', '52');
-INSERT INTO People VALUES ('Kedi', '8');
-SELECT * FROM People;
-exit;
-</code></pre>
-<h3>4.4. Check First and Second Node for the Records</h3>
-<p><strong>!!! Run on first and second server !!!</strong></p>
-<pre><code>sudo mariadb
-</code></pre>
-<p>Run on mariadb shell</p>
-<pre><code>USE Test;
-SELECT * FROM People;
+<p>Run the following in the MariaDB shell:</p>
+<pre><code>grant all on *.* to 'dbadmin'@'localhost' identified by 'PaSswOrD1234';
 exit;
 </code></pre>
 <p><br></p>
 </details>
 <details>
 <summary>
-5. Maintenance
+3. Prepare a Web Site
 </summary>
 <hr />
-<h3>5.1. Healthcheck</h3>
-<p>The following commands runs on Mariadb shell and show information about  Mariadb cluster.</p>
-<p>Show the running nodes:</p>
-<pre><code>show status like 'wsrep_incoming_addresses' ;
+<h3>3.1. Create a Web Site Config File and Fill it</h3>
+<pre><code>sudo nano /etc/apache2/sites-available/adminer.386387.xyz.conf
 </code></pre>
-<p>Show the number of running nodes:</p>
-<pre><code>show status like 'wsrep_cluster_size';
+<p>Add the following configuration. If you have more than one IP that needs access to Adminer, add them to the <code>Require ip</code> line. If you don't need IP-based access control, remove the entire <code>&lt;Directory&gt;</code> section (lines 2-4).</p>
+<pre><code>&lt;VirtualHost *:80&gt;
+    &lt;Directory /usr/share/adminer/adminer&gt;
+       Require ip 192.168.1.56
+    &lt;/Directory&gt;   
+    Alias /adminer /usr/share/adminer/adminer
+    ServerAdmin webmaster@386387.xyz    
+    ServerName adminer.386387.xyz
+    DocumentRoot /var/www/adminer
+    ErrorLog ${APACHE_LOG_DIR}/adminer-error.log
+    CustomLog ${APACHE_LOG_DIR}/adminer-access.log combined
+&lt;/VirtualHost&gt;
 </code></pre>
-<p>Show the UUID of the cluster</p>
-<pre><code>show status like 'wsrep_cluster_state_uuid';
+<h3>3.2. Create the Site Directory and Set Permissions</h3>
+<pre><code>sudo mkdir /var/www/adminer
+sudo chown www-data:www-data /var/www/adminer
+sudo chmod 770 /var/www/adminer
 </code></pre>
-<p>Show the status of the current node</p>
-<pre><code>show status like 'wsrep_local_state_comment';
+<p>You can optionally place an <code>index.html</code> file in the home directory, but I prefer leaving it empty and accessing Adminer directly through its subdirectory.</p>
+<h3>3.3. Enable the Site and Reload Apache</h3>
+<pre><code>sudo a2ensite adminer.386387.xyz.conf
+sudo systemctl reload apache2
 </code></pre>
-<h3>5.2. Adding a Node to Mariadb Cluster</h3>
-<p>Install Mariadb and Galera Cluster to the new node, that is follow the  steps at 1. and 2. At step 2.3. at the line starting with  wsrep_cluster_address, add the IP of the new server too. Then start  mariadb:</p>
-<pre><code>sudo systemctl start mariadb
-</code></pre>
-<p>The new node is going to start replicating data, it may take some time  depending on the volume of the DBs. You can run following command and see the status of the replication:</p>
-<pre><code>show status like 'wsrep_local_state_comment';
-</code></pre>
-<p>When you see the value as "Synced", you can understand that the new node  is replicated.</p>
-<p>You added the ip of the new node to the configuration of the new node  only.</p>
-<p>Before it is too late, You need to add it to the other cluster member  configurations too. Otherwise, it would be very difficult to resolve if  any cluster error occurs in the future.</p>
-<p>Run on other cluster members one by one:</p>
-<pre><code>sudo nano /etc/mysql/mariadb.conf.d/99-cluster.cnf
-</code></pre>
-<p>At the line starting with wsrep_cluster_address, add the IP of the new  server.</p>
-<p>Restart Mariadb after changing the configuration</p>
-<pre><code>sudo systemctl restart mariadb
-</code></pre>
-<h3>5.3. Removing a Node from Mariadb Cluster</h3>
-<p>If you want to remove a node temporarily, it wouldn't be a problem. If  you don't change any configurations on the cluster servers, it would join  back to the cluster.</p>
-<p>If you want to remove a node permanently, a good way would be uninstall  mariadb or permanently poweroff the computer. And then, remove its ip from other servers' <code>/etc/mysql/mariadb.conf.d/99-cluster.cnf</code> file and restart mariadb at the other servers one by one.</p>
-<h3>5.4. Shutting Down the Cluster</h3>
-<p>It is not advised to keep less than 2 nodes online. But if you really  need to shutdown all the cluster (e.g. to physically move to somewhere  else), or a total power failure occurs; you may try to shutdown servers one at a time and when they are ready to start, first you have to turn on the last shutdown node.</p>
-<p>If the cluster doesn't go online, refer to 6.</p>
 <p><br></p>
 </details>
 <details>
 <summary>
-6. Recovery
+4. Run Adminer
 </summary>
 <hr />
-<p>Mariadb Galera Cluster would run fine for a long time, as long as you  keep at least 2 nodes alive and running. If you have 3 nodes, you can  proceed on maintenance tasks (backup, upgrade etc) one at a time. </p>
-<p>But problems are for humans (and computers). There might come one day and cluster doesn't start. And when cluster doesn't start, Mariadb doesn't  start either.</p>
-<p>In that case, we need to restart the cluster, but we need to find the  safe node to start the cluster.</p>
-<h3>6.1. Finding the Safe Node - 1st Try</h3>
-<p>run the following command on every node:</p>
-<pre><code>sudo cat /var/lib/mysql/grastate.dat
-</code></pre>
-<p>It's output will be something like below:</p>
-<pre><code># GALERA saved state
-version: 2.1
-uuid:    2d878884-9ae6-11eb-955f-fa6fa258f122
-seqno:   -1
-safe_to_bootstrap: 0
-</code></pre>
-<p>or</p>
-<pre><code># GALERA saved state
-version: 2.1
-uuid: 886dd8da-3d07-11e8-a109-8a3c80cebab4
-seqno: 31929
-safe_to_bootstrap: 1
-</code></pre>
-<p>If output in any node contains "safe_to_bootstrap: 1" or a positive value of "seqno: ", that means we can restart the cluster at that node. We  have found the safe node, proceed to 6.3.</p>
-<p>Otherwise, we keep trying to find the safe node.</p>
-<h3>6.2. Finding the Safe Node - 2nd Try</h3>
-<p><strong>!!! Run on all nodes !!!</strong></p>
-<p>sudo galera_recovery</p>
-<p>Output will be something like as below:</p>
-<pre><code>WSREP: Recovered position 2d878884-9ae6-11eb-955f-fa6fa258f122:8
---wsrep_start_position=2d878884-9ae6-11eb-955f-fa6fa258f122:8
-</code></pre>
-<p>The node with the highest value after ":" will be our candidate to  restart the cluster. We have found the safe node. If more than 1 node has  the same highest value, just choose one.</p>
-<p>We need to set safe node to restart the cluster:</p>
-<p><strong>!!! Run on the Safe Node !!!</strong></p>
-<pre><code>sudo nano /var/lib/mysql/grastate.dat
-</code></pre>
-<p>Change the line starting with "safe_to_bootstrap" as below:</p>
-<pre><code>safe_to_bootstrap: 1
-</code></pre>
-<h3>6.3. Restart the Galera Cluster</h3>
-<p>Run the following command at the safe node:</p>
-<pre><code>sudo galera_new_cluster
-</code></pre>
-<p>After a while (1-2minutes) Run following command at the other nodes:</p>
-<pre><code>sudo systemctl restart mariadb
-</code></pre>
-<p>The cluster is working again, we are done.</p>
-<p>It would be wise to make a healthcheck as in 5.1. and see cluster is working.</p>
-<p>If this step doesn't work either. We have just one more thing to do. Go  to the next step.</p>
-<h3>6.4. Last Chance</h3>
-<p><strong>!! On the safe node !!</strong></p>
-<p>Disable mariadb and reboot</p>
-<pre><code>sudo systemctl disable mariadb
-sudo reboot
-</code></pre>
-<p>Edit cluster config at the safe node:</p>
-<pre><code>sudo nano /etc/mysql/mariadb.conf.d/99-cluster.cnf
-</code></pre>
-<p>Change the wsrep_cluster_address parameter to contain only the safe node. That is, if the 3rd node is the safe node as belowÇ</p>
-<pre><code>wsrep_cluster_address = &quot;gcomm://192.168.1.223&quot;
-</code></pre>
-<p>Enable mariadb </p>
-<pre><code>sudo systemctl enable mariadb
-</code></pre>
-<p>Start Galera Cluster</p>
-<pre><code>sudo galera_new_cluster
-</code></pre>
-<p><strong>!! On the other nodes !!</strong></p>
-<p>Restart mariadb </p>
-<pre><code>sudo systemctl restart mariadb
-</code></pre>
-<p>If they cannot restart, it is because it cannot be stopped. Do the  disable, reboot, enable trick on them too</p>
-<pre><code>sudo systemctl disable mariadb
-sudo reboot
-</code></pre>
-<p>After reboot enable and start mariadb</p>
-<pre><code>sudo systemctl enable mariadb
-sudo systemctl start mariadb
-</code></pre>
-<p>If they start, most probably your cluster is working again Otherwise, you need a professional support.</p>
-<p><strong>!! On the safe node !!</strong></p>
-<p>Revert the first node to the original configuration</p>
-<pre><code>sudo nano /etc/mysql/mariadb.conf.d/99-cluster.cnf
-</code></pre>
-<p>Change the wsrep_cluster_address parameter to original</p>
-<pre><code>wsrep_cluster_address = &quot;gcomm://192.168.1.221,192.168.1.222,192.168.1.223&quot;
-</code></pre>
-<p>Restart mariadb</p>
-<pre><code>sudo systemctl restart mariadb
-</code></pre>
+<p>Your web-based database management tool is now ready:</p>
+<p><strong>URL:</strong> <code>http://adminer.386387.xyz/adminer</code></p>
+<p><strong>Login Information:</strong>
+- System: Select <strong>MySQL</strong> for MariaDB
+- Server: <code>localhost</code> (default)
+- Username: <code>dbadmin</code>
+- Password: <code>PaSswOrD1234</code> (or whatever you set in the MariaDB script)
+- Database: Leave empty to access all databases</p>
+<p><br></p>
+</details>
+<details>
+<summary>
+5. Security
+</summary>
+<hr />
+<p>You should enable HTTPS, especially if you plan to expose your site to the internet. HTTPS is also recommended for local network sites for enhanced security.</p>
+<p>Refer to the <a href="certbot.html">Certbot Tutorial</a> for instructions on enabling HTTPS with free Let's Encrypt certificates.</p>
 </details><!-- HTML Footer Start -->
 
 </body>

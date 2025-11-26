@@ -836,7 +836,7 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<summary>Copyright (C) 2020 - 2025 Exforge exforge@x386.org</summary>
 <hr />
 <p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
 <p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
@@ -846,33 +846,37 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <!-- Copyright End -->
 
 <!-- Header End -->
-<h5>AnsibleOnDebianUbuntu</h5>
+<h5>Ansible</h5>
 <h1>Ansible Tutorial For Debian and Ubuntu</h1>
 <details>
 <summary>
 0. Specs
 </summary>
 <hr />
-<h3>0.0. Servers managed from a workstation</h3>
-<p>This tutorial aims to bring you to a moderate level using Ansible.</p>
-<p>(Almost) All examples are tested and verified as working. There might be  slight mistakes and you can think of them as small challenges. </p>
-<p>This tutorial is about using Ansible on Debian and Ubuntu servers, but I  believe you can apply most of the examples to other distributions.</p>
-<p>I am not an expert of Ansible. Actually I prepared this tutorial while I  was learning it. </p>
-<h3>0.1. Workstation:</h3>
-<p>wrk -&gt; Debian 12 or Ubuntu 24.04 LTS Desktop</p>
-<p><strong>Hint:</strong> You can use server editions, because Ansible does not need any graphical UI.</p>
+<h3>0.0. The What</h3>
+<p>Ansible is an open-source automation tool designed for configuration management, application deployment, and task automation. It enables you to manage servers from a central workstation, simplifying complex workflows through declarative configuration.</p>
+<p>This tutorial aims to bring you to an intermediate level of proficiency with Ansible.</p>
+<p>(Almost) all examples have been tested and verified as working. There might be minor mistakes; consider them learning opportunities.</p>
+<p>While this tutorial focuses on Debian and Ubuntu servers, most concepts can be applied to other Linux distributions.</p>
+<p><strong>Note:</strong> I prepared this tutorial while learning Ansible myself, so it reflects a practical learning journey rather than expert-level knowledge.</p>
+<h3>0.1. Environment</h3>
+<p><strong>Workstation:</strong>
+- <code>wrk</code> -&gt; Debian 13 or Ubuntu 24.04 LTS Desktop</p>
+<p><strong>Hint:</strong> You can use server editions as well, as Ansible does not require a graphical user interface.</p>
 <h3>0.2. Servers:</h3>
-<p>Local Virtual Servers:</p>
-<p>debian12 -&gt; Debian 12 Server<br />
-debian11 -&gt; Debian 11 Server<br />
-ubuntu24 -&gt; Ubuntu 24.04 LTS Server<br />
-ubuntu22 -&gt; Ubuntu 22.04 LTS Server  </p>
+<p>Local Virtual Servers:
+- <code>debian13</code> -&gt; Debian 13 Server
+- <code>debian12</code> -&gt; Debian 12 Server
+- <code>ubuntu24</code> -&gt; Ubuntu 24.04 LTS Server
+- <code>ubuntu22</code> -&gt; Ubuntu 22.04 LTS Server</p>
 <h3>0.3. Resources:</h3>
-<p>Book: 978-1-4842-1660-6 Ansible From Beginner to Pro by Michael Heap<br />
-Book: 978-1-78899-756-0 Mastering Ubuntu Server Second Edition by Jay LaCroix<br />
-<a href="https://docs.ansible.com/ansible/">docs.ansible.com/ansible</a><br />
-<a href="https://www.howtoforge.com/ansible-guide-ad-hoc-command/">www.howtoforge.com</a><br />
-<a href="https://www.golinuxcloud.com/ansible-tutorial/">www.golinuxcloud.com</a></p>
+<ul>
+<li>Book: 978-1-4842-1660-6 Ansible From Beginner to Pro by Michael Heap</li>
+<li>Book: 978-1-78899-756-0 Mastering Ubuntu Server Second Edition by Jay LaCroix </li>
+<li><a href="https://docs.ansible.com/ansible/">docs.ansible.com/ansible</a></li>
+<li><a href="https://www.howtoforge.com/ansible-guide-ad-hoc-command/">www.howtoforge.com</a></li>
+<li><a href="https://www.golinuxcloud.com/ansible-tutorial/">www.golinuxcloud.com</a></li>
+</ul>
 <p><br></p>
 </details>
 <details>
@@ -880,54 +884,47 @@ Book: 978-1-78899-756-0 Mastering Ubuntu Server Second Edition by Jay LaCroix<br
 1. Installation and Main Configuration
 </summary>
 <hr />
-<h3>1.1. Install ansible on workstation</h3>
-<p><strong>Run on workstation</strong></p>
+<p>Install Ansible on the workstation. <strong>Run on workstation only:</strong></p>
 <pre><code>sudo apt update
 sudo apt install ansible --yes
 </code></pre>
-<h3>1.2. Create ansible user on all the servers and on the workstation</h3>
-<p><strong>Run on workstation and on all servers</strong></p>
-<p>Create user ansible and give it a password </p>
+<p>Create an <code>ansible</code> user on all servers and the workstation. <strong>Run on workstation and all servers:</strong></p>
 <pre><code>sudo useradd -d /home/ansible -m ansible -s /bin/bash
 sudo passwd ansible
 </code></pre>
-<p>add it to the sudo group</p>
+<p>Add the user to the sudo group:</p>
 <pre><code>sudo usermod -aG sudo ansible
 </code></pre>
-<p>make sure it is added</p>
+<p>Verify the user was added to the sudo group:</p>
 <pre><code>getent group sudo
 </code></pre>
-<h3>1.3. Copy workstation's ansible user's ssh key to servers</h3>
-<p><strong>Run only on workstation</strong></p>
-<p>Change to ansible user</p>
+<p>Copy the workstation's ansible user SSH key to the servers. <strong>Run only on workstation:</strong></p>
+<p>Switch to the ansible user:</p>
 <pre><code>sudo su ansible
 </code></pre>
-<p>Create SSH keys, leave passfield empty</p>
+<p>Generate SSH key pair (leave the passphrase empty):</p>
 <pre><code>ssh-keygen -t rsa
 </code></pre>
-<p>Copy ansible user's SSH key to the servers</p>
-<pre><code>ssh-copy-id -i ~/.ssh/id_rsa.pub debian12
-ssh-copy-id -i ~/.ssh/id_rsa.pub debian11
+<p>Copy the SSH public key to all servers:</p>
+<pre><code>ssh-copy-id -i ~/.ssh/id_rsa.pub debian13
+ssh-copy-id -i ~/.ssh/id_rsa.pub debian12
 ssh-copy-id -i ~/.ssh/id_rsa.pub ubuntu24
 ssh-copy-id -i ~/.ssh/id_rsa.pub ubuntu22
 </code></pre>
-<p>Now we can ssh to servers with ansible user without password</p>
-<h3>1.4. On all servers, configure ansible user to sudo without password</h3>
-<p><strong>Run on all servers</strong></p>
-<p>create /etc/sudoers.d/ansible file</p>
+<p>You should now be able to SSH to all servers as the ansible user without a password.</p>
+<p>Configure the ansible user to use sudo without a password on all servers. <strong>Run on all servers:</strong></p>
+<p>Create the sudoers configuration file:</p>
 <pre><code>sudo nano /etc/sudoers.d/ansible
 </code></pre>
-<p>put the following line in it</p>
+<p>Add the following line:</p>
 <pre><code>ansible ALL=(ALL) NOPASSWD: ALL
 </code></pre>
-<p>make the file owned by root</p>
+<p>Set proper ownership and permissions:</p>
 <pre><code>sudo chown root:root /etc/sudoers.d/ansible
+sudo chmod 440 /etc/sudoers.d/ansible
 </code></pre>
-<p>change the permissions of file </p>
-<pre><code>sudo chmod 440 /etc/sudoers.d/ansible
-</code></pre>
-<p>All the preliminary work is completed<br />
-From now on, all the commands will be run on the workstation
+<p><strong>All preliminary work is now complete.</strong><br />
+From this point forward, all commands should be run on the workstation unless otherwise specified.
 <br></p>
 </details>
 <details>
@@ -936,68 +933,60 @@ From now on, all the commands will be run on the workstation
 </summary>
 <hr />
 <h3>2.1. Configuration File</h3>
-<p>Ansible looks for the configuration file in the following order:</p>
-<ul>
-<li>File specified by the ANSIBLE_CONFIG environment variable</li>
-<li>./ansible.cfg (ansible.cfg in the current directory)</li>
-<li>~/.ansible.cfg (.ansible.cfg in your home directory)</li>
-<li>/etc/ansible/ansible.cfg</li>
-</ul>
-<p>My choice is to use the 3. option</p>
-<p>First change to user ansible (If you haven't done already)</p>
+<p>Ansible looks for configuration files in the following order:
+1. File specified by the <code>ANSIBLE_CONFIG</code> environment variable
+2. <code>./ansible.cfg</code> (in the current directory)
+3. <code>~/.ansible.cfg</code> (in your home directory)
+4. <code>/etc/ansible/ansible.cfg</code></p>
+<p>We will use option 3 (user-specific configuration).</p>
+<p>Switch to the ansible user (if not already done):</p>
 <pre><code>sudo su ansible
 </code></pre>
-<p>Edit ansible config ifle</p>
+<p>Create and edit the Ansible configuration file:</p>
 <pre><code>nano /home/ansible/.ansible.cfg
 </code></pre>
-<p>Fill as below:</p>
+<p>Add the following content:</p>
 <pre><code>[defaults]
+interpreter_python = auto_silent
 inventory = .hosts
 remote_user = ansible
 roles_path = /home/ansible/ansible/playbooks
 forks = 5
 </code></pre>
-<p>We stated as:</p>
-<ul>
-<li>our hosts file will be /home/ansible/.hosts</li>
-<li>the remote user to use on servers is ansible</li>
-<li>look to /home/ansible/ansible/playbooks for extra roles</li>
-<li>maximum 5 parallel tasks between the workstation and servers</li>
-</ul>
-<p>There are numerous thing to be configured, you may check them at file /etc/ansible/ansible.cfg</p>
-<h3>2.2. Making a home for Ansible files</h3>
-<p>I prefer placing all ansible files on /home/ansible/ansible</p>
-<pre><code>mkdir /home/ansible/ansible
-</code></pre>
-<p>And a subdirectory for playbooks (explained later)</p>
+<p>This configuration specifies:
+- Python binary: Find automatically and do not display warning messages
+- Inventory file: <code>/home/ansible/.hosts</code>
+- Remote user: <code>ansible</code>
+- Additional roles path: <code>/home/ansible/ansible/playbooks</code>
+- Maximum of 5 parallel tasks</p>
+<p>Many other options are available; you can reference <code>/etc/ansible/ansible.cfg</code> for examples.</p>
+<p>Create a directory structure for Ansible files:</p>
 <pre><code>mkdir /home/ansible/ansible/playbooks
 </code></pre>
-<h3>2.3. Inventory File</h3>
-<p>Create a clean inventory file</p>
+<p>Create the inventory file:</p>
 <pre><code>touch /home/ansible/.hosts
 </code></pre>
-<p>Change ownership and permissions for ansible user</p>
+<p>Set appropriate ownership and permissions:</p>
 <pre><code>sudo chown ansible /home/ansible/.hosts
 sudo chmod 600 /home/ansible/.hosts
 </code></pre>
-<p>Populate the file with server IPs or names</p>
+<p>Populate the inventory file with server information:</p>
 <pre><code>nano /home/ansible/.hosts
 </code></pre>
-<p>Fill as below:</p>
+<p>Add the following content:</p>
 <pre><code>[debian]
+debian13
 debian12
-debian11
 
 [ubuntu]
 ubuntu24
 ubuntu22
 </code></pre>
-<p>As in our example, you can group hosts</p>
-<h3>2.4. A simple test</h3>
-<p>Ping all our servers</p>
+<p>You can group hosts as shown above for organizational purposes.</p>
+<p>Test the connection to all servers:</p>
 <pre><code>ansible all -m ping
 </code></pre>
-<p>with full verbose</p>
+<p>For detailed output:</p>
 <pre><code>ansible all -m ping -vvvv
 </code></pre>
 <p><br></p>
@@ -1007,63 +996,63 @@ ubuntu22
 3. More on Inventory
 </summary>
 <hr />
-<h3>3.1. Command based inventory</h3>
-<p>It is possible to use a different inventory for each ansible or ansible-playbook command:</p>
+<p>You can specify a custom inventory file for individual commands:</p>
 <pre><code>ansible all –i /path/to/inventory –m ping
 </code></pre>
-<h3>3.2. To use a different ssh port</h3>
+<p>To use a non-standard SSH port:</p>
 <pre><code>host1.example.com:50822
 </code></pre>
-<h3>3.3. Using ranges in host file names</h3>
+<p>Using ranges in hostnames:</p>
 <pre><code>host[1:3].example.com
 host[a:d][a:z].example.com
 </code></pre>
-<h3>3.4. Using options for user name, ssh port, ssh private key</h3>
+<p>Setting connection parameters per host:</p>
 <pre><code>alpha.example.com ansible_user=bob ansible_port=50022
 bravo.example.com ansible_user=mary ansible_ssh_private_key_file=/path/to/mary.key
 frontend.example.com ansible_port=50022
 yellow.example.com ansible_host=192.168.33.10
 </code></pre>
-<h3>3.5. Using more than 1 inventory</h3>
-<p>If you want to use more than 1 inventory file you can put all your  inventories in a directory and specify the directory as the inventory file. </p>
-<p>Below is a simple example.</p>
+<p><strong>Using Multiple Inventory Files</strong></p>
+<p>You can use a directory containing multiple inventory files:</p>
 <pre><code>sudo su ansible
 mkdir /home/ansible/ansible/inventory
 nano /home/ansible/ansible/inventory/inventory1
 </code></pre>
-<p>Contents:</p>
+<p>Create the first inventory file:</p>
+<pre><code>nano /home/ansible/ansible/inventory/inventory1
+</code></pre>
+<p>Content:</p>
 <pre><code>ubuntu24
 ubuntu22
 </code></pre>
+<p>Create the second inventory file:</p>
 <pre><code>nano /home/ansible/ansible/inventory/inventory2
 </code></pre>
-<p>Contents:</p>
-<pre><code>debian12
-debian11
+<p>Content:</p>
+<pre><code>debian13
+debian12
 </code></pre>
+<p>Use the inventory directory:</p>
 <pre><code>ansible all -i /home/ansible/ansible/inventory -m ping
 </code></pre>
-<h3>3.6. Dynamic Inventory</h3>
-<p>If you want to use a dynamic host file, you can use a program which  outputs the inventory in Json format. Then you can give your program as  inventory file. </p>
-<p>Here is a very simple example:</p>
-<pre><code>sudo su ansible
-nano /home/ansible/ansible/inventory.py
+<p><strong>Dynamic Inventory</strong></p>
+<p>You can use scripts that output inventory in JSON format. Create a simple dynamic inventory script:</p>
+<pre><code>nano /home/ansible/ansible/inventory.py
 </code></pre>
-<p>Fill as below:</p>
+<p>Content:</p>
 <pre><code>#!/usr/bin/env python3
 print('{&quot;ubuntu&quot;: {&quot;hosts&quot; : [&quot;ubuntu24&quot;, &quot;ubuntu22&quot;]}}')
 </code></pre>
+<p>Make it executable and test it:</p>
 <pre><code>chmod +x /home/ansible/ansible/inventory.py
 ansible all -i /home/ansible/ansible/inventory.py -m ping
 </code></pre>
-<p>Needless to say; you can combine dynamic and static inventories, by 
-combining methods in 3.5. and 3.6.</p>
-<h3>3.7. Groups of Groups</h3>
-<p>You can create master groups to include other groups. Master groups require children keyword.</p>
-<p>In my inventory, if I want to combine all ubuntu adn debian servers I would modify my inventory file as follows:</p>
+<p>You can combine dynamic and static inventories using the methods above.</p>
+<p><strong>Groups of Groups</strong></p>
+<p>Create parent groups that include other groups using the <code>children</code> keyword:</p>
 <pre><code>[debian]
+debian13
 debian12
-debian11
 
 [ubuntu]
 ubuntu24
@@ -1073,13 +1062,11 @@ ubuntu22
 ubuntu
 debian
 </code></pre>
-<h3>3.8. Inventory Variables</h3>
-<p>You can define variables in inventory file. They might be host or group  based.</p>
-<p>For group based variables; var keyword is used. </p>
-<p>Below, using my inventory file, I created a variable named role for a  group and # a host. </p>
+<p><strong>Inventory Variables</strong></p>
+<p>Define variables in your inventory file for hosts or groups:</p>
 <pre><code>[debian]
+debian13
 debian12
-debian11
 
 [ubuntu]
 ubuntu24
@@ -1088,7 +1075,7 @@ ubuntu22
 [ubuntu:vars]
 role=&quot;dbserver&quot;
 </code></pre>
-<p>That way, using ansible, you can install apache to servers with webserver role and install mariadb to servers with role dbserver.</p>
+<p>This allows you to conditionally install software based on roles (e.g., Apache for webservers, MariaDB for dbservers).</p>
 <p><br></p>
 </details>
 <details>
@@ -1096,90 +1083,84 @@ role=&quot;dbserver&quot;
 4. Ansible Ad Hoc Commands
 </summary>
 <hr />
-<p>You can run Ansible commands in 2 ways, 1 is direct (adhoc), 2 is through  playbooks. </p>
-<p>In the next section we will work on our first playbook. </p>
-<p>Ad hoc commands might be suitable for one time tasks. For recurring tasks it # would be better to use playbooks.</p>
-<h3>4.1. Ping host(s)</h3>
-<p>Actually we ran our 1st command at 2.4. Ping all hosts in default  inventory.</p>
+<p>Ansible commands can be executed in two ways: ad hoc (direct) or through playbooks. Ad hoc commands are suitable for one-time tasks, while playbooks are better for recurring tasks.</p>
+<p>Ping all hosts in the default inventory:</p>
 <pre><code>ansible all -m ping
 </code></pre>
-<p>We can specify another inventory</p>
+<p>Ping with custom inventory:</p>
 <pre><code>ansible all -i /home/ansible/ansible/inventory.py -m ping
 ansible all -i /home/ansible/ansible/inventory -m ping
 </code></pre>
-<h3>4.2. Run a shell command on hosts</h3>
+<p>Execute shell commands on remote hosts:</p>
 <pre><code>ansible all -m shell -a &quot;ls -al&quot;
 </code></pre>
-<p>-m can be ommitted</p>
-<pre><code>ansible ubuntu22 -a &quot;ls -al&quot;
+<p>The <code>-m</code> (module) parameter can be omitted for the <code>command</code> module:</p>
+<pre><code>ansible debian13 -a &quot;ls -al&quot;
 </code></pre>
-<p>List of open ports on the servers</p>
-<pre><code>ansible all -m shell -a 'netstat -plntu' --become
-</code></pre>
-<h3>4.3. File and Directory Operations</h3>
-<p>Copy a file to servers</p>
+<p><strong>File and Directory Operations</strong></p>
+<p>Copy a file to servers:</p>
 <pre><code>ansible all -m copy -a &quot;src=/tmp/testfile dest=/tmp/testfile&quot;
 </code></pre>
-<p>Create a directory on server</p>
+<p>Create a directory:</p>
 <pre><code>ansible all -m file -a &quot;dest=/tmp/test mode=777 owner=ansible group=ansible state=directory&quot;
 </code></pre>
-<p>Delete a file or directory on server</p>
+<p>Delete a file or directory:</p>
 <pre><code>ansible all -m file -a &quot;dest=/tmp/testfile state=absent&quot;
 </code></pre>
-<p>Copy a file from server</p>
-<pre><code>ansible ubuntu22 -m fetch -a &quot;src=/var/log/dmesg dest=/home/ansible/backup flat=yes&quot; --become
+<p>Copy a file from a server to the workstation:</p>
+<pre><code>ansible debian13 -m fetch -a &quot;src=/var/log/dmesg dest=/home/ansible/backup flat=yes&quot; --become
 </code></pre>
-<h3>4.4. Reboot Servers</h3>
-<p>Reboot all servers  (Does not reboot because of the permissions)</p>
+<p><strong>Reboot Servers</strong></p>
+<p>Attempt to reboot all servers (will fail without proper privileges):</p>
 <pre><code>ansible all -a &quot;/sbin/reboot&quot;
 </code></pre>
-<p>Reboot all servers with sudo privilege</p>
+<p>Reboot with sudo privileges:</p>
 <pre><code>ansible all -a &quot;/sbin/reboot&quot; --become
 </code></pre>
-<p>Reboot all servers in 10 parallel forks (default is 5)</p>
+<p>Reboot with increased parallelism:</p>
 <pre><code>ansible all -a &quot;/sbin/reboot&quot; -f 10 --become
 </code></pre>
-<p>Reboot all servers with sudo privilege, manually enter sudo password</p>
+<p>Reboot with sudo password prompt:</p>
 <pre><code>ansible all -a &quot;/sbin/reboot&quot; --become --ask-become-pass
 </code></pre>
-<h3>4.5. User Management</h3>
-<p>Add a user</p>
-<pre><code>ansible debian12 -m ansible.builtin.user -a &quot;name=foo&quot; --become
+<p><strong>User Management</strong></p>
+<p>Add a user:</p>
+<pre><code>ansible debian13 -m ansible.builtin.user -a &quot;name=foo&quot; --become
 </code></pre>
-<p>Remove a user</p>
-<pre><code>ansible debian12 -m ansible.builtin.user -a &quot;name=foo state=absent&quot; --become
+<p>Remove a user:</p>
+<pre><code>ansible debian13 -m ansible.builtin.user -a &quot;name=foo state=absent&quot; --become
 </code></pre>
-<h3>4.6. Package Management (apt)</h3>
-<p>Update cache (apt update)</p>
-<pre><code>ansible debian12 -m apt -a &quot;update_cache=yes&quot; --become
+<p><strong>Package Management (APT)</strong></p>
+<p>Update package cache:</p>
+<pre><code>ansible debian13 -m apt -a &quot;update_cache=yes&quot; --become
 </code></pre>
-<p>update cache and upgrade all modules (apt update &amp;&amp; apt upgrade)</p>
-<pre><code>ansible debian12 -m apt -a &quot;upgrade=dist update_cache=yes&quot; --become
+<p>Update cache and upgrade packages:</p>
+<pre><code>ansible debian13 -m apt -a &quot;upgrade=dist update_cache=yes&quot; --become
 </code></pre>
-<p>Install apache (don't do anything if it is already installed)</p>
-<pre><code>ansible debian12 -m apt -a &quot;name=apache2 state=present&quot; --become 
+<p>Install Apache (if not already installed):</p>
+<pre><code>ansible debian13 -m apt -a &quot;name=apache2 state=present&quot; --become 
 </code></pre>
-<p>Install apache, if it is already installed, update it</p>
-<pre><code>ansible debian12 -m apt -a &quot;name=apache2 state=latest&quot; --become
+<p>Install/upgrade Apache to the latest version:</p>
+<pre><code>ansible debian13 -m apt -a &quot;name=apache2 state=latest&quot; --become
 </code></pre>
-<p>Remove apache</p>
-<pre><code>ansible debian12 -m apt -a &quot;name=apache2 state=absent&quot; --become
+<p>Remove Apache:</p>
+<pre><code>ansible debian13 -m apt -a &quot;name=apache2 state=absent&quot; --become
 </code></pre>
-<p>Remove apache and remove all configuration about it</p>
-<pre><code>ansible debian12 -m apt -a &quot;name=apache2 state=absent purge=yes&quot; --become
+<p>Remove Apache and its configuration files:</p>
+<pre><code>ansible debian13 -m apt -a &quot;name=apache2 state=absent purge=yes&quot; --become
 </code></pre>
-<p>Remove apache, remove all configuration about it, and also remove all unused packages</p>
-<pre><code>ansible debian12 -m apt -a &quot;name=apache2 state=absent purge=yes autoremove=yes&quot; --become
+<p>Remove Apache, configurations, and unused dependencies:</p>
+<pre><code>ansible debian13 -m apt -a &quot;name=apache2 state=absent purge=yes autoremove=yes&quot; --become
 </code></pre>
-<h3>4.7. Service Management</h3>
-<p>Start and Enable Apache service</p>
-<pre><code>ansible debian12 -m service -a &quot;name=apache2 state=started enabled=yes&quot; --become
+<p><strong>Service Management</strong></p>
+<p>Start and enable Apache service:</p>
+<pre><code>ansible debian13 -m service -a &quot;name=apache2 state=started enabled=yes&quot; --become
 </code></pre>
-<p>Stop Apache service</p>
-<pre><code>ansible debian12 -m service -a &quot;name=apache2 state=stopped&quot; --become
+<p>Stop Apache service:</p>
+<pre><code>ansible debian13 -m service -a &quot;name=apache2 state=stopped&quot; --become
 </code></pre>
-<p>Restart Apache service</p>
-<pre><code>ansible debian12 -m service -a &quot;name=apache2 state=restarted&quot; --become
+<p>Restart Apache service:</p>
+<pre><code>ansible debian13 -m service -a &quot;name=apache2 state=restarted&quot; --become
 </code></pre>
 <p><br></p>
 </details>
@@ -1188,22 +1169,21 @@ ansible all -i /home/ansible/ansible/inventory -m ping
 5. A Simple Playbook to Install Apache
 </summary>
 <hr />
-<p>Playbooks are files in YAML format. They contain commands to run by  Ansible.</p>
-<p>Our playbook will install apache, and prepare a sample homepage  containing the host name</p>
-<h3>5.1. Create directories</h3>
+<p>Playbooks are YAML files that define automation tasks. This playbook will install Apache and deploy a customized homepage.</p>
+<p>Create the directory structure:</p>
 <pre><code>sudo su ansible
 mkdir /home/ansible/ansible/playbooks/apache
 mkdir /home/ansible/ansible/playbooks/apache/templates
 cd /home/ansible/ansible/playbooks/apache
 </code></pre>
-<h3>5.2. Create ansible file and index.html template</h3>
+<p>Create the playbook file:</p>
 <pre><code>nano /home/ansible/ansible/playbooks/apache/apache.yml
 </code></pre>
-<p>Fill as below:</p>
+<p>Content:</p>
 <pre><code>#!/usr/bin/env ansible-playbook
 - name: Create webserver with apache
   become: True
-  hosts: debian12
+  hosts: debian13
   tasks:
   - name: install apache
     apt: name=apache2 update_cache=yes
@@ -1213,9 +1193,10 @@ cd /home/ansible/ansible/playbooks/apache
   - name: restart apache
     service: name=apache2 state=restarted
 </code></pre>
+<p>Create the HTML template:</p>
 <pre><code>nano /home/ansible/ansible/playbooks/apache/templates/index.html.j2
 </code></pre>
-<p>Fill as below:</p>
+<p>Content:</p>
 <pre><code>&lt;html&gt;
 &lt;head&gt;
 &lt;title&gt;Welcome to ansible on {{ ansible_hostname }}&lt;/title&gt;
@@ -1226,46 +1207,25 @@ cd /home/ansible/ansible/playbooks/apache
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-<h3>5.3. Explanations</h3>
+<p><strong>Playbook Explanation</strong></p>
 <ul>
-<li>/home/ansible/ansible/playbooks/apache/apache.yml</li>
+<li><code>name: Create webserver with Apache</code> - Descriptive name for the playbook</li>
+<li><code>become: true</code> - Execute tasks with elevated privileges</li>
+<li><code>hosts: debian13</code> - Target host or group</li>
+<li><code>tasks:</code> - List of tasks to execute</li>
+<li>Install Apache using the apt module</li>
+<li>Deploy customized index.html using template module</li>
+<li>Restart Apache service</li>
 </ul>
-<pre><code>#!/usr/bin/env ansible-playbook
-- name: Create webserver with apache
-# Name of the playbook, displayed when the playbook runs
-  become: True
-# Use sudo
-  hosts: debian12
-# Host or host group to run on
-  tasks:
-# Tasks to do in this playbook
-  - name: install apache
-# Name of task, displayed when the playbook runs, install apache
-    apt: name=apache2 update_cache=yes
-  # Install apache2, first update the cache
-  # Equivalent to:
-  #   apt update
-  #   apt install apache2
-  - name: copy index.html
-# Name of task, displayed when the playbook runs, copy customized index.html
-#   from the template
-    template: src=templates/index.html.j2 dest=/var/www/html/index.html
-  # variables in index.html.j2 are updated and copied to server
-      mode=0644
-    # File mode will be 0644
-  - name: restart apache
-# Name of task, displayed when the playbook runs, restart apache
-    service: name=apache2 state=restarted
-# Restart apache, systemctl restart apache2
-</code></pre>
-<p>Variables in /home/ansible/playbooks/apache/templates/index.html.j2:</p>
-<p>{{ ansible_hostname }} : hostname as ansible gathers<br />
-{{ inventory_hostname }} : hostname as in inventory file</p>
-<h3>5.4. Run the playbook</h3>
+<p><strong>Template Variables</strong>
+- <code>{{ ansible_hostname }}</code> - Hostname gathered by Ansible facts
+- <code>{{ inventory_hostname }}</code> - Hostname as defined in the inventory</p>
+<p>Run the playbook:</p>
 <pre><code>ansible-playbook apache.yml
 </code></pre>
-<p>or just</p>
-<pre><code>./apache.yml
+<p>Or make it executable and run directly:</p>
+<pre><code>chmod +x apache.yml
+./apache.yml
 </code></pre>
 <p><br></p>
 </details>
@@ -1274,26 +1234,25 @@ cd /home/ansible/ansible/playbooks/apache
 6. A More Complex Playbook to Install LAMP
 </summary>
 <hr />
-<h3>6.0. Necessary Steps</h3>
-<ul>
-<li>Cache Update (sudo apt update)</li>
-<li>Install Apache (sudo apt install apache2)</li>
-<li>Install Mariadb (sudo apt install mariadb-server)</li>
-<li>Install PHP (sudo apt install php libapache2-mod-php php-mysql)</li>
-</ul>
-<h3>6.1. Create Directories</h3>
+<p>This playbook installs a complete LAMP (Linux, Apache, MySQL/MariaDB, PHP) stack.</p>
+<p><strong>Steps:</strong>
+- Update package cache (<code>apt update</code>)
+- Install Apache (<code>apache2</code>)
+- Install MariaDB (<code>mariadb-server</code>)
+- Install PHP and dependencies (<code>php</code>, <code>libapache2-mod-php</code>, <code>php-mysql</code>)</p>
+<p>Create the directory and playbook:</p>
 <pre><code>sudo su ansible
 mkdir /home/ansible/ansible/playbooks/lamp
 cd /home/ansible/ansible/playbooks/lamp
 </code></pre>
-<h3>6.2. Create ansible playbook</h3>
+<p>Create the LAMP playbook:</p>
 <pre><code>nano /home/ansible/ansible/playbooks/lamp/lamp.yml
 </code></pre>
-<p>Fill as below:</p>
+<p>Content:</p>
 <pre><code>#!/usr/bin/env ansible-playbook
 - name: Install LAMP; Apache, MariaDB, PHP
   become: True
-  hosts: debian12
+  hosts: debian13
   tasks:
   - name: Update apt cache if not updated in 1 hour
     apt:
@@ -1316,7 +1275,7 @@ cd /home/ansible/ansible/playbooks/lamp
       - libapache2-mod-php
       - php-mysql
 </code></pre>
-<h3>6.3. Run the playbook</h3>
+<p>Run the playbook:</p>
 <pre><code>ansible-playbook lamp.yml
 </code></pre>
 <p><br></p>
@@ -1326,13 +1285,12 @@ cd /home/ansible/ansible/playbooks/lamp
 7. (IMHO) Important Ansible Modules
 </summary>
 <hr />
-<p>Well, actually all of the Ansible modules are important. I just selected  some of them considering my very humble opinion.</p>
-<p>To use an example, you have to put it in a playbook or in a role and  apply necessary indentation. Ansible is like Python, indentation is very  important.</p>
-<p>Below is a sample, using an example in a playbook</p>
+<p>While all Ansible modules are valuable, here are some commonly used ones. Remember that proper indentation is crucial in Ansible playbooks, similar to Python.</p>
+<p><strong>Example Usage Structure:</strong></p>
 <pre><code>#!/usr/bin/env ansible-playbook
 - name: Tutorial tasks
   become: True
-  hosts: debian12
+  hosts: debian13
   tasks:
   - name: Start apache if not started
     service:
@@ -1489,11 +1447,11 @@ cd /home/ansible/ansible/playbooks/lamp
         {{ item.ip }} {{ item.hostname }}
       marker: &quot;&lt;!-- {mark} {{ item.hostname }} MANAGED by ANSIBLE BLOCK --&gt;&quot;
     loop:
-      - { hostname: debian12, ip: 192.168.0.231 }
+      - { hostname: debian13, ip: 192.168.0.231 }
       - { hostname: srv2, ip: 192.168.0.232 }
       - { hostname: srv3, ip: 192.168.0.233 }
 </code></pre>
-<p><br>  </p>
+<p><br></p>
 <h3>7.3. command Module: Execute commands</h3>
 <p>Examples:</p>
 <pre><code>  - name: Run a command on server and take its output to a variable
@@ -1515,7 +1473,7 @@ cd /home/ansible/ansible/playbooks/lamp
         - now
       creates: /etc/flag
 </code></pre>
-<p><br>  </p>
+<p><br></p>
 <h3>7.4. copy Module: Copy files to remote servers</h3>
 <p>Examples</p>
 <pre><code>  - name: Copy a file with specified owner and permissions, backup the file
@@ -1624,8 +1582,8 @@ cd /home/ansible/ansible/playbooks/lamp
 <p>Examples:</p>
 <pre><code>  - name: Stop execution if hostname is something special
     fail:
-      msg: Cannot continue with hostname debian12
-    when: inventory_hostname == &quot;debian12&quot;
+      msg: Cannot continue with hostname debian13
+    when: inventory_hostname == &quot;debian13&quot;
 </code></pre>
 <p><br>  </p>
 <h3>7.8. fetch Module: Fetch files from server to the workstation</h3>
@@ -1762,7 +1720,7 @@ cd /home/ansible/ansible/playbooks/lamp
     lineinfile:
       path: /etc/hosts
       regexp: '^192\.168\.0\.201'
-      line: 192.168.0.201 debian12.x386.xyz
+      line: 192.168.0.201 debian13.x386.xyz
 </code></pre>
 <pre><code>  - name: Remove previously added line in /etc/hosts
     lineinfile:
@@ -1773,7 +1731,7 @@ cd /home/ansible/ansible/playbooks/lamp
 <pre><code>  - name: Create a file if it does not exist and add a line
     lineinfile:
       path: /tmp/test
-      line: 192.168.0.201 debian12.x386.xyz
+      line: 192.168.0.201 debian13.x386.xyz
       create: yes
 </code></pre>
 <p><br> </p>
@@ -2042,65 +2000,46 @@ cd /home/ansible/ansible/playbooks/lamp
 </summary>
 <hr />
 <h3>8.0. Introduction</h3>
-<p>Playbooks can be splitted into roles. That way, we can create reusable  code. The lamp example at 7. will be rewritten using 4 roles:</p>
+<p>Roles allow you to organize playbooks into reusable components. We'll refactor the LAMP stack installation from section 6 into four roles:</p>
 <ul>
-<li>Cache Update</li>
-<li>Install Apache</li>
-<li>Install MariaDB</li>
-<li>Install PHP and dependencies</li>
+<li>Cache update</li>
+<li>Apache installation</li>
+<li>MariaDB installation</li>
+<li>PHP installation</li>
 </ul>
 <h3>8.1. Role Structure</h3>
-<p>Roles are created with ansible-galaxy init command. Naming convention  for roles is as identifier.role. I use exforge as my identifier, you can  use anything you want. For a role to install apache, my rolename would be exforge.apache: </p>
+<p>Create roles using <code>ansible-galaxy init</code>. The naming convention is <code>identifier.role</code>. We'll use <code>exforge</code> as our identifier.</p>
 <pre><code>ansible-galaxy init exforge.apache
 </code></pre>
-<p>A directory with role.name is created under the current directory with  the following structure:</p>
-<ul>
-<li>README.md (file)</li>
-<li>defaults (directory)</li>
-<li>defaults/main.yml  (file)</li>
-<li>files (directory)</li>
-<li>handlers (directory)</li>
-<li>handlers/main.yml (file)</li>
-<li>meta (directory)</li>
-<li>meta/main.yml (file)</li>
-<li>tasks (directory)</li>
-<li>tasks/main.yml (file)</li>
-<li>templates (directory)</li>
-<li>tests (directory)</li>
-<li>tests/inventory (directory)</li>
-<li>tests/test.yml (file)</li>
-<li>vars (directory)</li>
-<li>vars/main.yml (file)</li>
-</ul>
-<p>All of the directories and files are optional.</p>
-<p><strong>README.md</strong> file is used for documentation. Expected to contain the  purpose of the role and any other important information.</p>
-<p><strong>defaults/main.yml</strong> is used as a configuration file to define default  variables in the role. Variables in vars/main.yml overrides variables  defined here.</p>
-<p><strong>files</strong> directory is used to place static files. Files used in roles  without any manipulation can be stored here.</p>
-<p><strong>handlers/main.yml</strong> is used to define handlers (like starting, stopping or restarting services). </p>
-<p><strong>meta/main.yml</strong> is used to contain metadata for the role. Metadata can be used if you want to publish your role to Ansible Galaxy.</p>
-<p><strong>tasks/main.yml</strong> is the main file of the role. Expected to contain role  actions. Actions here will be executed when your role runs.</p>
-<p><strong>templates</strong> directory is used to place template (dynamic) files. The files here can contain variables to interpolate them before using on target  systems.</p>
-<p><strong>test</strong> directory is used to create test playbooks to consume the role.  Mostly used to test roles with a system like Jenkins or Travis.</p>
-<p><strong>vars/main.yml</strong> is similar to defaults/main.yml with an exception.  Variables defined here overrides the variables defined at fact gathering  section. </p>
-<p>Variables defined here also overrides the variables defined in defaults/main.yml.</p>
-<p><strong>Note:</strong> The new version of Ansible, does not create templates and files  directories, but they still exist in the documentation. I am not sure if  it is a bug or something else. In any way, I create this directories when I need them.</p>
+<p>This creates a directory structure:
+- <code>README.md</code> - Documentation
+- <code>defaults/main.yml</code> - Default variables (lowest priority)
+- <code>files/</code> - Static files
+- <code>handlers/main.yml</code> - Service handlers
+- <code>meta/main.yml</code> - Role metadata
+- <code>tasks/main.yml</code> - Main tasks file
+- <code>templates/</code> - Jinja2 templates
+- <code>tests/</code> - Test cases
+- <code>vars/main.yml</code> - Role variables (higher priority)</p>
+<p><strong>Note:</strong> Newer Ansible versions may not create <code>templates</code> and <code>files</code> directories by default, but you should create them when needed.</p>
 <h3>8.2. Preparing LAMP Roles</h3>
-<p>We will have 4 roles for LAMP installation. Namely; aptcache, apache,  mariadb and php.</p>
-<p>Create a directory for the roles and init the roles:</p>
+<p>Create the role directory structure:</p>
 <pre><code>mkdir -p /home/ansible/ansible/playbooks/roles
 cd /home/ansible/ansible/playbooks/roles
-ansible-galaxy init exforge.aptcache
+</code></pre>
+<p>Initialize the roles:</p>
+<pre><code>ansible-galaxy init exforge.aptcache
 ansible-galaxy init exforge.apache
 ansible-galaxy init exforge.mariadb
 ansible-galaxy init exforge.php
 </code></pre>
-<h3>8.3. Create the new playbook with the roles</h3>
+<h3>8.3. Create the Role-Based Playbook</h3>
 <pre><code>nano /home/ansible/ansible/playbooks/lamp.yml
 </code></pre>
-<p>Fill as below:</p>
+<p>Content:</p>
 <pre><code>#!/usr/bin/env ansible-playbook
 ---
-- hosts: debian12
+- hosts: debian13
   become: true
   roles:
   - exforge.aptcache
@@ -2108,13 +2047,13 @@ ansible-galaxy init exforge.php
   - exforge.mariadb
   - exforge.php
 </code></pre>
-<p>Make it executable</p>
+<p>Make it executable:</p>
 <pre><code>chmod +x /home/ansible/ansible/playbooks/lamp.yml
 </code></pre>
-<h3>8.4. aptcache role</h3>
+<p><strong>Apt Cache Role</strong></p>
 <pre><code>nano /home/ansible/ansible/playbooks/roles/exforge.aptcache/tasks/main.yml
 </code></pre>
-<p>Fill as below:</p>
+<p>Content:</p>
 <pre><code>---
 # tasks file for exforge.aptcache
 - name: Update apt cache if not updated in 1 hour
@@ -2122,10 +2061,10 @@ ansible-galaxy init exforge.php
     update_cache: yes
     cache_valid_time: 3600
 </code></pre>
-<h3>8.5. apache role</h3>
+<p><strong>Apache Role</strong></p>
 <pre><code>nano /home/ansible/ansible/playbooks/roles/exforge.apache/tasks/main.yml
 </code></pre>
-<p>Fill as below:</p>
+<p>Content:</p>
 <pre><code>---
 # tasks file for exforge.apache
 - name: Install apache
@@ -2133,10 +2072,10 @@ ansible-galaxy init exforge.php
     name: apache2
     state: present
 </code></pre>
-<h3>8.6. mariadb role</h3>
+<p><strong>Mariadb Role</strong></p>
 <pre><code>nano /home/ansible/ansible/playbooks/roles/exforge.mariadb/tasks/main.yml
 </code></pre>
-<p>Fill as below:</p>
+<p>Content:</p>
 <pre><code>---
 # tasks file for exforge.mariadb
 - name: Install MariaDB
@@ -2144,11 +2083,13 @@ ansible-galaxy init exforge.php
     name: mariadb-server
     state: present
 </code></pre>
-<h3>8.7. php role</h3>
+<p><strong>PHP Role</strong></p>
 <pre><code>nano /home/ansible/ansible/playbooks/roles/exforge.php/tasks/main.yml
 </code></pre>
-<p>Fill as below:</p>
-<pre><code>- name: Install PHP and dependencies
+<p>Content:</p>
+<pre><code>---
+# tasks file for exforge.php
+- name: Install PHP and dependencies
   apt:
     name: &quot;{{ item }}&quot;
     state: present
@@ -2157,7 +2098,7 @@ ansible-galaxy init exforge.php
     - libapache2-mod-php
     - php-mysql
 </code></pre>
-<h3>8.8. Running the new playbook</h3>
+<h3>8.4. Running the new playbook</h3>
 <pre><code>cd /home/ansible/ansible/playbooks
 ansible-playbook lamp.yml
 </code></pre>
@@ -2169,119 +2110,133 @@ ansible-playbook lamp.yml
 </summary>
 <hr />
 <h3>9.1. Ansible Facts</h3>
-<h4>9.1.1. Getting Facts</h4>
-<p>Get all facts for debian12 server</p>
-<pre><code>ansible debian12 -m setup
+<p>Gather all facts for a server:</p>
+<pre><code>ansible debian13 -m setup
 </code></pre>
 <p>The output will be long, something like:</p>
-<pre><code>debian12 | SUCCESS =&gt; {
+<pre><code>debian13 | SUCCESS =&gt; {
     &quot;ansible_facts&quot;: {
         &quot;ansible_all_ipv4_addresses&quot;: [
-            &quot;192.168.0.111&quot;
+            &quot;192.168.1.135&quot;
         ],
         &quot;ansible_all_ipv6_addresses&quot;: [
-            &quot;fe80::a00:27ff:fe10:9&quot;
+            &quot;fe80::a00:27ff:feac:87e2&quot;
         ],
         &quot;ansible_apparmor&quot;: {
             &quot;status&quot;: &quot;enabled&quot;
         },
         &quot;ansible_architecture&quot;: &quot;x86_64&quot;,
         &quot;ansible_bios_date&quot;: &quot;12/01/2006&quot;,
+        &quot;ansible_bios_vendor&quot;: &quot;innotek GmbH&quot;,
         &quot;ansible_bios_version&quot;: &quot;VirtualBox&quot;,
+        &quot;ansible_board_asset_tag&quot;: &quot;NA&quot;,
+        &quot;ansible_board_name&quot;: &quot;VirtualBox&quot;,
+        &quot;ansible_board_serial&quot;: &quot;NA&quot;,
+        &quot;ansible_board_vendor&quot;: &quot;Oracle Corporation&quot;,
+        &quot;ansible_board_version&quot;: &quot;1.2&quot;,
+        &quot;ansible_chassis_asset_tag&quot;: &quot;NA&quot;,
+        &quot;ansible_chassis_serial&quot;: &quot;NA&quot;,
+        &quot;ansible_chassis_vendor&quot;: &quot;Oracle Corporation&quot;,
+        &quot;ansible_chassis_version&quot;: &quot;NA&quot;,
         &quot;ansible_cmdline&quot;: {
-            &quot;BOOT_IMAGE&quot;: &quot;/boot/vmlinuz-5.4.0-48-generic&quot;,
-            &quot;maybe-ubiquity&quot;: true,
+            &quot;BOOT_IMAGE&quot;: &quot;/boot/vmlinuz-6.12.48+deb13-amd64&quot;,
+            &quot;quiet&quot;: true,
             &quot;ro&quot;: true,
-            &quot;root&quot;: &quot;UUID=8842fb18-ffef-4b0d-8c10-419865ae27a2&quot;
+            &quot;root&quot;: &quot;UUID=76649b5f-2b95-4d0d-bf4a-4f21f8bbf1bd&quot;
         },
         &quot;ansible_date_time&quot;: {
-            &quot;date&quot;: &quot;2020-10-16&quot;,
-            &quot;day&quot;: &quot;16&quot;,
-            &quot;epoch&quot;: &quot;1602869883&quot;,
-            &quot;hour&quot;: &quot;17&quot;,
-            &quot;iso8601&quot;: &quot;2020-10-16T17:38:03Z&quot;,
-            &quot;iso8601_basic&quot;: &quot;20201016T173803661252&quot;,
-            &quot;iso8601_basic_short&quot;: &quot;20201016T173803&quot;,
-            &quot;iso8601_micro&quot;: &quot;2020-10-16T17:38:03.661346Z&quot;,
-            &quot;minute&quot;: &quot;38&quot;,
-            &quot;month&quot;: &quot;10&quot;,
-            &quot;second&quot;: &quot;03&quot;,
-            &quot;time&quot;: &quot;17:38:03&quot;,
-            &quot;tz&quot;: &quot;UTC&quot;,
-            &quot;tz_offset&quot;: &quot;+0000&quot;,
-            &quot;weekday&quot;: &quot;Friday&quot;,
-            &quot;weekday_number&quot;: &quot;5&quot;,
-            &quot;weeknumber&quot;: &quot;41&quot;,
-            &quot;year&quot;: &quot;2020&quot;
+            &quot;date&quot;: &quot;2025-11-19&quot;,
+            &quot;day&quot;: &quot;19&quot;,
+            &quot;epoch&quot;: &quot;1763581389&quot;,
+            &quot;epoch_int&quot;: &quot;1763581389&quot;,
+            &quot;hour&quot;: &quot;22&quot;,
+            &quot;iso8601&quot;: &quot;2025-11-19T19:43:09Z&quot;,
+            &quot;iso8601_basic&quot;: &quot;20251119T224309290590&quot;,
+            &quot;iso8601_basic_short&quot;: &quot;20251119T224309&quot;,
+            &quot;iso8601_micro&quot;: &quot;2025-11-19T19:43:09.290590Z&quot;,
+            &quot;minute&quot;: &quot;43&quot;,
+            &quot;month&quot;: &quot;11&quot;,
+            &quot;second&quot;: &quot;09&quot;,
+            &quot;time&quot;: &quot;22:43:09&quot;,
+            &quot;tz&quot;: &quot;+03&quot;,
+            &quot;tz_dst&quot;: &quot;+03&quot;,
+            &quot;tz_offset&quot;: &quot;+0300&quot;,
+            &quot;weekday&quot;: &quot;Wednesday&quot;,
+            &quot;weekday_number&quot;: &quot;3&quot;,
+            &quot;weeknumber&quot;: &quot;46&quot;,
+            &quot;year&quot;: &quot;2025&quot;
         },
-        &quot;ansible_system_capabilities_enforced&quot;: &quot;True&quot;,
-        &quot;ansible_system_vendor&quot;: &quot;innotek GmbH&quot;,
-        &quot;ansible_uptime_seconds&quot;: 244,
-        &quot;ansible_user_dir&quot;: &quot;/home/ansible&quot;,
-        &quot;ansible_user_gecos&quot;: &quot;&quot;,
-        &quot;ansible_user_gid&quot;: 1001,
-        &quot;ansible_user_id&quot;: &quot;ansible&quot;,
-        &quot;ansible_user_shell&quot;: &quot;/bin/bash&quot;,
-        &quot;ansible_user_uid&quot;: 1001,
-        &quot;ansible_userspace_architecture&quot;: &quot;x86_64&quot;,
-        &quot;ansible_userspace_bits&quot;: &quot;64&quot;,
-        &quot;ansible_virtualization_role&quot;: &quot;guest&quot;,
-        &quot;ansible_virtualization_type&quot;: &quot;virtualbox&quot;,
-        &quot;discovered_interpreter_python&quot;: &quot;/usr/bin/python3&quot;,
-        &quot;gather_subset&quot;: [
-            &quot;all&quot;
-        ],
-        &quot;module_setup&quot;: true
-    },
-    &quot;changed&quot;: false
+        &quot;ansible_default_ipv4&quot;: {
+            &quot;address&quot;: &quot;192.168.1.135&quot;,
+            &quot;alias&quot;: &quot;enp0s3&quot;,
+            &quot;broadcast&quot;: &quot;192.168.1.255&quot;,
+            &quot;gateway&quot;: &quot;192.168.1.1&quot;,
+            &quot;interface&quot;: &quot;enp0s3&quot;,
+            &quot;macaddress&quot;: &quot;08:00:27:ac:87:e2&quot;,
+            &quot;mtu&quot;: 1500,
+            &quot;netmask&quot;: &quot;255.255.255.0&quot;,
+            &quot;network&quot;: &quot;192.168.1.0&quot;,
+            &quot;prefix&quot;: &quot;24&quot;,
+            &quot;type&quot;: &quot;ether&quot;
+        },
+
 </code></pre>
-<h4>9.1.2. Accessing Ansible Facts</h4>
-<p>You can use any value from the facts as a variable. Some examples:</p>
-<p>Model of first disk: <code>{{ ansible_facts['devices']['xvda']['model'] }}</code><br />
-System hostname : <code>{{ ansible_facts['nodename'] }}</code>  </p>
-<p>Using another system's fact:<br />
-<code>{{ hostvars['asdf.example.com']['ansible_facts']['os_family'] }}</code></p>
-<h4>9.1.3. Important Ansible Facts</h4>
-<p>Date and time</p>
+<p><strong>Accessing Facts in Playbooks:</strong>
+- First disk model: <code>{{ ansible_facts['devices']['xvda']['model'] }}</code>
+- System hostname: <code>{{ ansible_facts['nodename'] }}</code>
+- Another host's OS: <code>{{ hostvars['asdf.example.com']['ansible_facts']['os_family'] }}</code></p>
+<p><strong>Common Facts:</strong>
+- <strong>Date/Time:</strong> <code>ansible_date_time.date</code>, <code>ansible_date_time.time</code>
+- <strong>OS Info:</strong> <code>ansible_os_family</code>, <code>ansible_distribution</code>, <code>ansible_distribution_version</code>
+- <strong>Hostname:</strong> <code>ansible_hostname</code></p>
+<h3>9.2. Magic Variables</h3>
 <ul>
-<li>ansible_date_time.date --&gt;  "2020-11-11"</li>
-<li>ansible_date_time.time --&gt;  "08:44:06"</li>
-</ul>
-<p>OS</p>
-<ul>
-<li>ansible_os_family      --&gt;  "Debian" for Debian and Ubuntu, "RedHat" for CentOS</li>
-<li>ansible_distribution   --&gt;  "Ubuntu" for Ubuntu, "Debian" for Debian, "CentOS" for CentOS</li>
-<li>ansible_hostname       --&gt;  "test201"</li>
-<li>ansible_distribution_version --&gt; "20.04"</li>
-</ul>
-<h3>9.2. Ansible Magic Variables</h3>
-<ul>
-<li>inventory_hostname: Hostname as in inventory</li>
-<li>inventory_hostname_short: Hostname as in inventory short format</li>
-<li>ansible_play_hosts: list of all hosts still active in the current play.</li>
-<li>ansible_play_batch: list of hostnames that are in scope for the current ‘batch’ of the play.</li>
-<li>ansible_playbook_python: Path to the python executable used to invoke the Ansible command line tool.</li>
-<li>inventory_dir: Pathname of the directory holding Ansible’s inventory </li>
-<li>inventory_file: Pathname and the filename pointing to the Ansible’s inventory host file.</li>
-<li>playbook_dir: Playbook base directory.</li>
-<li>role_path: current role’s pathname and only works inside a role.</li>
-<li>ansible_check_mode: Boolean, set to True if you run Ansible with --check.</li>
+<li><code>inventory_hostname</code> - Hostname as in inventory</li>
+<li><code>inventory_hostname_short</code> - Short hostname</li>
+<li><code>ansible_play_hosts</code> - All active hosts in current play</li>
+<li><code>ansible_playbook_python</code> - Python path used by Ansible</li>
+<li><code>playbook_dir</code> - Playbook base directory</li>
+<li><code>role_path</code> - Current role's path (works inside roles)</li>
+<li><code>ansible_check_mode</code> - True if running with <code>--check</code></li>
 </ul>
 <p><br></p>
 </details>
 <details>
 <summary>
-10. Distinguishing Linux Distribution
+10. Cross-Distribution Compatibility
 </summary>
 <hr />
-<p>Debian and Ubuntu name Apache Server as apache2 and use apt package  manager. </p>
-<p>Alpine also names Apache Server as apache2 and uses apk package manager.</p>
-<p>RHEL (and Alma &amp; Rocky) names it as httpd and use dnf package manager. </p>
-<p>Our example role will distinguish the distribution and call appropriate  tasks.</p>
-<h3>10.1. A Playbook to install Apache on Ubuntu (and Debian) and Alma (and Redhat)</h3>
+<p>Different Linux distributions use different package names and managers:</p>
+<table>
+<thead>
+<tr>
+<th>Distribution</th>
+<th>Web Server</th>
+<th>Package Manager</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Debian/Ubuntu</td>
+<td><code>apache2</code></td>
+<td><code>apt</code></td>
+</tr>
+<tr>
+<td>Alpine Linux</td>
+<td><code>apache2</code></td>
+<td><code>apk</code></td>
+</tr>
+<tr>
+<td>RHEL/Fedora</td>
+<td><code>httpd</code></td>
+<td><code>dnf</code></td>
+</tr>
+</tbody>
+</table>
+<h3>10.1. Multi-OS Apache Installation Playbook</h3>
 <pre><code>nano /home/ansible/ansible/playbooks/apache.yml
 </code></pre>
-<p>Fill as below:</p>
+<p>Content:</p>
 <pre><code>#!/usr/bin/env ansible-playbook
 - name: Install Apache on Ubuntu (Debian), RHEL (Alma) and Alpine
   become: True
@@ -2302,26 +2257,19 @@ System hostname : <code>{{ ansible_facts['nodename'] }}</code>  </p>
       update_cache: yes
     when: ansible_os_family == &quot;Alpine&quot;
 </code></pre>
-<h3>10.2. Other OS Families</h3>
-<p>Some of the other possible ansible_os_family options are:</p>
+<h3>10.2. Common OS Families</h3>
 <ul>
-<li>"Debian" for Linux Mint, Neon, KDE Neon, Raspbian</li>
-<li>"RedHat" for Centos, Fedora, Scientific, CloudLinux, PSBM, OracleLinux, Amazon</li>
-<li>"AlmaLinux" for Alma</li>
-<li>"Suse" for Suse, OpenSuSe, SLES, SLED</li>
-<li>"Gentoo" for Gentoo</li>
-<li>"Archlinux" for ArchLinux, Manjaro</li>
-<li>"Mandrake" for Mandrake, Mandriva</li>
-<li>"Solaris"  for Solaris, Nexenta, OnmiOS, OpenIndiana, SmartOS</li>
-<li>"Slackware" for Slackware</li>
-<li>"Darwin" for MacOSX</li>
+<li><strong>Debian</strong>: Linux Mint, Neon, Raspbian</li>
+<li><strong>RedHat</strong>: CentOS, Fedora, Oracle Linux, Amazon Linux</li>
+<li><strong>SUSE</strong>: OpenSUSE, SLES</li>
+<li><strong>Gentoo</strong>, <strong>Archlinux</strong>, <strong>Solaris</strong>, <strong>Slackware</strong>, <strong>Darwin</strong> (macOS)</li>
 </ul>
-<h3>10.3. A Role to install Apache on Ubuntu (Debian), Alma (Redhat), and Alpine</h3>
+<h3>10.3. Role-Based Multi-OS Approach</h3>
 <pre><code>cd /home/ansible/ansible/playbooks/roles
 ansible-galaxy init exforge.apacheDRA
 nano /home/ansible/ansible/playbooks/roles/exforge.apacheDRA/tasks/main.yml
 </code></pre>
-<p>Fill as below:</p>
+<p>Content:</p>
 <pre><code>---
 # tasks file for exforge.apacheDRA
 - include_tasks: debian.yml
@@ -2333,7 +2281,7 @@ nano /home/ansible/ansible/playbooks/roles/exforge.apacheDRA/tasks/main.yml
 </code></pre>
 <pre><code>nano  /home/ansible/ansible/playbooks/roles/exforge.apacheDRA/tasks/debian.yml
 </code></pre>
-<p>Fill as below:</p>
+<p>Content:</p>
 <pre><code>- name: install apache if Ubuntu or Debian
   apt: 
     name: apache2 
@@ -2342,7 +2290,7 @@ nano /home/ansible/ansible/playbooks/roles/exforge.apacheDRA/tasks/main.yml
 </code></pre>
 <pre><code>nano  /home/ansible/ansible/playbooks/roles/exforge.apacheDRA/tasks/redhat.yml
 </code></pre>
-<p>Fill as below:</p>
+<p>Content:</p>
 <pre><code>- name: install apache if RedHat or Alma
   dnf: 
     name: httpd 
@@ -2350,17 +2298,17 @@ nano /home/ansible/ansible/playbooks/roles/exforge.apacheDRA/tasks/main.yml
 </code></pre>
 <pre><code>nano  /home/ansible/ansible/playbooks/roles/exforge.apacheDRA/tasks/alpine.yml
 </code></pre>
-<p>Fill as below:</p>
+<p>Content:</p>
 <pre><code>- name: install apache if Alpine
   apk: 
     name: apache2 
     state: present
     update_cache: yes
 </code></pre>
-<p>Now we can create a playbook to consume this role</p>
+<p>Now we can create a playbook to consume this role:</p>
 <pre><code>nano  /home/ansible/ansible/playbooks/apacheDRA.yml
 </code></pre>
-<p>Fill as below:</p>
+<p>Content:</p>
 <pre><code>#!/usr/bin/env ansible-playbook
 ---
 - hosts: all
@@ -2368,12 +2316,10 @@ nano /home/ansible/ansible/playbooks/roles/exforge.apacheDRA/tasks/main.yml
   roles:
   - exforge.apacheDRA
 </code></pre>
-<p>Run the playbook</p>
+<p>Run the playbook:</p>
 <pre><code>cd /home/ansible/ansible/playbooks
 ansible-playbook apacheDRA.yml
 </code></pre>
-<h3>10.4. Exercise</h3>
-<p>Redesign apacheDRA role, using package module.</p>
 <p><br></p>
 </details>
 <details>
@@ -2381,18 +2327,16 @@ ansible-playbook apacheDRA.yml
 11. Role Variables
 </summary>
 <hr />
-<p>You can set role variables when you consume a role in a playbook. The  variables are defined in the roles and can be set values at the playbook.</p>
-<p>Our example will install apache (if it is not installed), create a  configuration with the given site name and create a default page with the  given parameters.</p>
-<p>After creating the role, default variables will be defined in defaults/main.yml dir, apache conf file and html templates will be created at  templates/ dir, and role tasks will be coded at tasks/main.yml. After all, we will create a playbook, set all variables there and run the role.</p>
-<h3>11.1. Create the apachesite role</h3>
+<p>Role variables allow for customizable, reusable roles. This example creates an Apache site with configurable parameters.</p>
+<p>Create the apachesite role:</p>
 <pre><code>cd /home/ansible/ansible/playbooks/roles
 ansible-galaxy init exforge.apachesite
 mkdir /home/ansible/ansible/playbooks/roles/exforge.apachesite/templates
 </code></pre>
-<h3>11.2. Define Variables</h3>
+<p>Define default variables:</p>
 <pre><code>nano /home/ansible/ansible/playbooks/roles/exforge.apachesite/defaults/main.yml
 </code></pre>
-<p>Fill as below:</p>
+<p>Content:</p>
 <pre><code>---
 # defaults file for exforge.apachesite
 server_name: www.example.com
@@ -2401,10 +2345,11 @@ html_title: Welcome to {{ ansible_hostname }}
 html_header: Welcome to {{ ansible_hostname }}
 html_text: This page is created by Ansible
 </code></pre>
-<h3>11.3. Create Apache conf file and index.html file templates</h3>
+<p><strong>Create Templates</strong></p>
+<p>Apache configuration template:</p>
 <pre><code>nano /home/ansible/ansible/playbooks/roles/exforge.apachesite/templates/apache.conf.j2
 </code></pre>
-<p>Fill as below:</p>
+<p>Content:</p>
 <pre><code>&lt;VirtualHost *:80&gt;
   ServerAdmin webmaster@{{ server_name }}
   ServerName {{ server_name }}
@@ -2414,9 +2359,10 @@ html_text: This page is created by Ansible
   CustomLog ${APACHE_LOG_DIR}/{{ server_name }}-access.log combined
 &lt;/VirtualHost&gt;
 </code></pre>
+<p>HTML template:</p>
 <pre><code>nano /home/ansible/ansible/playbooks/roles/exforge.apachesite/templates/index.html.j2
 </code></pre>
-<p>Fill as below:</p>
+<p>Content:</p>
 <pre><code>&lt;html&gt;
 &lt;head&gt;
 &lt;title&gt;{{ html_title }}&lt;/title&gt;
@@ -2427,10 +2373,10 @@ html_text: This page is created by Ansible
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-<h3>11.4. Create Tasks</h3>
+<p>Define tasks:</p>
 <pre><code>nano /home/ansible/ansible/playbooks/roles/exforge.apachesite/tasks/main.yml
 </code></pre>
-<p>Fill as below:</p>
+<p>Content:</p>
 <pre><code>---
 # tasks file for exforge.apachesite
 - name: Stop execution if OS is not in Debian family
@@ -2478,19 +2424,19 @@ html_text: This page is created by Ansible
     name: apache2
     state: reloaded
 </code></pre>
-<h3>11.5. Create a playbook and consume the role</h3>
+<p>Create and run the playbook:</p>
 <pre><code>nano /home/ansible/ansible/playbooks/apachesite.yml
 </code></pre>
-<p>Fill as below:</p>
+<p>Content:</p>
 <pre><code>#!/usr/bin/env ansible-playbook
 ---
-- hosts: debian12
+- hosts: debian13
   become: true
   vars:
-    server_name: debian12.x386.xyz
-    server_alias: debian12
-    html_title: debian12.x386.xyz Homepage
-    html_header: This is the homepage of debian12.x386.xyz
+    server_name: debian13.x386.xyz
+    server_alias: debian13
+    html_title: debian13.x386.xyz Homepage
+    html_header: This is the homepage of debian13.x386.xyz
     html_text: This is a sample page created by Ansible    
   roles:
   - exforge.apachesite
@@ -2506,8 +2452,8 @@ ansible-playbook apachesite.yml
 12. Variable Filters
 </summary>
 <hr />
-<p>There are a number of filters available for the variables used in  templates, playbooks and roles.</p>
-<h3>12.1. Syntax Filters</h3>
+<p>Ansible provides various filters for variable manipulation in templates and playbooks.</p>
+<p><strong>Syntax Filters</strong></p>
 <p>Allows case manipulation: lowercase, uppercase, capital case, title case</p>
 <ul>
 <li>my_message: We are the world</li>
@@ -2516,12 +2462,12 @@ ansible-playbook apachesite.yml
 <li>{{ my_message | capitalize }}  --&gt; We are the world</li>
 <li>{{ my_message | title }}  --&gt; We Are The World</li>
 </ul>
-<h3>12.2. Default Filter</h3>
+<p><strong>Default Filter</strong></p>
 <p>Using an undefined variable causes an error, to avoid that situation  default filter can be used.</p>
 <ul>
 <li>{{ my_message | default('No message') }}</li>
 </ul>
-<h3>12.3. List Filters</h3>
+<p><strong>List Filters</strong></p>
 <p>List definition is similar to Python: num_list: [1,2,3,4,5,6,7,8,9,0]</p>
 <p>Some of the list filters are: max, min and random</p>
 <ul>
@@ -2529,7 +2475,7 @@ ansible-playbook apachesite.yml
 <li>{{ num_list | min }}  --&gt; 0</li>
 <li>{{ num_list | random }}  --&gt; a random one</li>
 </ul>
-<h3>12.4. Pathname Filters</h3>
+<p><strong>Pathname Filters</strong></p>
 <p>First, let's define a variable containing a path</p>
 <pre><code>path: &quot;/etc/apache2/apache2.conf&quot;
 </code></pre>
@@ -2538,13 +2484,13 @@ ansible-playbook apachesite.yml
 <li>{{ path | dirname }}   --&gt; /etc/apache2</li>
 <li>{{ path | basename }}  --&gt; apache2.conf</li>
 </ul>
-<h3>12.5. Date and Time Filters</h3>
+<p><strong>Date and Time Filters</strong></p>
 <ul>
 <li>{{ '%d-%m-%Y' | strftime }}  --&gt; Current date</li>
 <li>{{ '%H:%M:%S' | strftime }}  --&gt; Current time</li>
 <li>{{ '%d-%m-%Y %H:%M:%S' | strftime }}  --&gt; Current date and time</li>
 </ul>
-<h3>12.6. Math Filters</h3>
+<p><strong>Math Filters</strong></p>
 <ul>
 <li>{{ num | log }}     --&gt; log of num on base e</li>
 <li>{{ num | log(10) }} --&gt; log of num on base 10</li>
@@ -2554,20 +2500,20 @@ ansible-playbook apachesite.yml
 <li>{{ num | abs }}     --&gt; absolute of num</li>
 <li>{{ num | round }}   --&gt; round of num</li>
 </ul>
-<h3>12.7. Encryption Filters</h3>
+<p><strong>Encryption Filters</strong></p>
 <ul>
 <li>{{ my_message | hash('sha1') }}  --&gt; sha1 hash of variable</li>
 <li>{{ my_message | hash('md5') }}   --&gt; md5 hash of variable</li>
 <li>{{ my_message | checksum }}     --&gt; checksum of variable</li>
 </ul>
-<h3>12.8. An Example Playbook to Cover all the Filters Here</h3>
+<p><strong>Example Playbook Demonstrating Filters:</strong></p>
 <pre><code>nano /home/ansible/ansible/playbooks/filters.yml
 </code></pre>
-<p>Fill as below:</p>
+<p>Content:</p>
 <pre><code>#!/usr/bin/env ansible-playbook
 - name: Demonstration of Filters
   become: True
-  hosts: debian12
+  hosts: debian13
   vars:
     my_message: &quot;We are the world&quot;
     num_list: [1,2,3,4,5,6,7,8,9,0]
@@ -2612,6 +2558,10 @@ ansible-playbook apachesite.yml
         - &quot;Absolute of {{ num2 }}: {{ num2 | abs }}&quot;
         - &quot;Round of {{ num3 }}: {{ num3 | round }}&quot;
 </code></pre>
+<p>Run the playbook:</p>
+<pre><code>cd /home/ansible/ansible/playbooks
+ansible-playbook filters.yml
+</code></pre>
 <p><br></p>
 </details>
 <details>
@@ -2619,17 +2569,18 @@ ansible-playbook apachesite.yml
 13. Handlers
 </summary>
 <hr />
+<h3>13.0. Overview</h3>
 <p>If you want a task to run when something is changed, you can use  handlers. For example, a task tries to change a conf file for apache, and  you need to reload or restart apache if the file is changed. That is when  you use handlers.</p>
 <p>You might remember, there is a folder for handlers for the roles. That is where you are expected to put your handlers. </p>
 <h3>13.1. A Simple Example</h3>
-<p>Our example playbook will install apache and reload it if it is  installed. </p>
+<p>Our example playbook will install apache and reload it if it is installed. </p>
 <pre><code>nano /home/ansible/ansible/playbooks/simple_handler.yml
 </code></pre>
-<p>Fill as below:</p>
+<p>Content:</p>
 <pre><code>#!/usr/bin/env ansible-playbook
 - name: Simple handler example
   become: true
-  hosts: debian12
+  hosts: debian13
   tasks:
   - name: Install Apache
     apt:
@@ -2642,12 +2593,16 @@ ansible-playbook apachesite.yml
       name: apache2
       state: restarted
 </code></pre>
+<p>Run the playbook:</p>
+<pre><code>cd /home/ansible/ansible/playbooks
+ansible-playbook simple_handler.yml
+</code></pre>
 <h3>13.2. Handlers in Roles</h3>
 <p>Let's change the role in apachesite in 11. so that it includes handlers.</p>
 <p>First change tasks in tasks folder:</p>
 <pre><code>nano /home/ansible/ansible/playbooks/roles/exforge.apachesite/tasks/main.yml
 </code></pre>
-<p>Fill as below:</p>
+<p>Content:</p>
 <pre><code>---
 # tasks file for exforge.apachesite
 - name: Stop execution if OS is not in Debian family
@@ -2697,10 +2652,10 @@ ansible-playbook apachesite.yml
   notify: reload_apache
 </code></pre>
 <p>Handlers run after the play is finished, so if a handler is called twice  (or more), it will run only once.</p>
-<p>Add handlers</p>
+<p>Add handlers:</p>
 <pre><code>nano /home/ansible/ansible/playbooks/roles/exforge.apachesite/handlers/main.yml
 </code></pre>
-<p>Fill as below:</p>
+<p>Content:</p>
 <pre><code>---
 # handlers file for exforge.apachesite
 - name: reload_apache
@@ -2709,7 +2664,7 @@ ansible-playbook apachesite.yml
     state: reloaded
 </code></pre>
 <p>Now you can run the role with handlers by calling the playbook we wrote at 11:</p>
-<p>Run the playbook</p>
+<p>Run the playbook:</p>
 <pre><code>cd /home/ansible/ansible/playbooks
 ansible-playbook apachesite.yml
 </code></pre>
@@ -2720,15 +2675,15 @@ ansible-playbook apachesite.yml
 14. Error Recovery (Block and rescue)
 </summary>
 <hr />
-<p>Ansible has an exception handling (error recovery) mechanism similar to  Python's try-except-finally block.</p>
-<h3>14.1. Block-Rescue-Always usage</h3>
+<p>Ansible provides exception handling similar to Python's try-except-finally.</p>
+<h3>14.1. Block-Rescue-Always Example</h3>
 <p>A very simple example playbook would be:</p>
 <pre><code>nano /home/ansible/ansible/playbooks/blocktest.yml
 </code></pre>
 <pre><code>#!/usr/bin/env ansible-playbook
 - name: Demonstration block-rescue-always
   become: True
-  hosts: debian12
+  hosts: debian13
   vars:
     message1: &quot;1. Message&quot;
     message2: &quot;2. Message&quot;
@@ -2755,6 +2710,10 @@ ansible-playbook apachesite.yml
         debug:
           msg: &quot;Job finished&quot;
 </code></pre>
+<p>Run the playbook:</p>
+<pre><code>cd /home/ansible/ansible/playbooks
+ansible-playbook blocktest.yml
+</code></pre>
 <h3>14.2. Explanations</h3>
 <p>Tasks in the block (Tasks 1, 2, 3 and 4 in our example) run  sequentially. </p>
 <p>If an error occurs in any task (Task 3 in our example), execution stops  and the control goes to rescue task. Then the tasks in rescue block  (Rescue Task in our example) run. Then the tasks in always block (Always  task in our example) run.</p>
@@ -2767,16 +2726,14 @@ ansible-playbook apachesite.yml
 15. Skipped Content
 </summary>
 <hr />
-<p>I skipped the following subjects just because I think I won't use them. I believe most of you won't use them ever. </p>
-<ul>
-<li>Ansible vault</li>
-<li>Ansible pull</li>
-<li>Ansible collections</li>
-<li>Testing (with a test tool)</li>
-<li>Writing your own modules</li>
-<li>Using Ansible on Windows servers</li>
-<li>And may be some more that I am not able to know now :)</li>
-</ul>
+<p>The following topics are beyond this tutorial's scope but are worth exploring:
+- Ansible Vault (encryption)
+- Ansible Pull
+- Ansible Collections
+- Automated testing
+- Custom module development
+- Windows server management</p>
+<p>These topics may be valuable for specific use cases but aren't essential for basic to intermediate Ansible proficiency.</p>
 </details><!-- HTML Footer Start -->
 
 </body>
