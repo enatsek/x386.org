@@ -836,7 +836,7 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<summary>Copyright (C) 2020 - 2025 Exforge exforge@x386.org</summary>
 <hr />
 <p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
 <p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
@@ -846,32 +846,30 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <!-- Copyright End -->
 
 <!-- Header End -->
-<h5>PostgresqlOnDebian</h5>
-<h1>Postgresql Tutorial On Debian</h1>
+<h5>Postgresql Ubuntu</h5>
+<h1>Postgresql Tutorial for Ubuntu</h1>
 <details>
 <summary>
 0. Specs
 </summary>
 <hr />
-<h3>0.0. Notes</h3>
-<p>Debian 12 and Ubuntu 24.04 LTS Server has packages for different versions of Postgresql (15 and 16). </p>
-<p>For the ease of following the tutorials, I prepared different versions  for Debian and Ubuntu.</p>
-<h3>0.1. Infrastructure</h3>
-<p>Server:  </p>
+<h3>0.1. The What</h3>
+<p>PostgreSQL is a powerful, open-source relational database management system known for its reliability, feature robustness, and performance. It supports both SQL and non-SQL queries, making it versatile for various applications.</p>
+<p>Debian 13 and Ubuntu 24.04 LTS Server include packages for different PostgreSQL versions (17 and 16). For ease of following tutorials, I've prepared separate guides for Debian and Ubuntu.</p>
+<h3>0.2. The Environment</h3>
+<p><strong>Server:</strong>
+- Ubuntu 24.04 LTS Server 
+- IP: 192.168.1.221</p>
+<p><strong>Workstation:</strong>
+- Ubuntu 24.04 LTS Server 
+- IP: 192.168.1.182</p>
+<h3>0.3. Resources</h3>
 <ul>
-<li>Debian 12   </li>
-<li>IP: 192.168.1.196</li>
+<li><a href="https://www.postgresql.org/docs">www.postgresql.org</a></li>
+<li><a href="https://www.postgresqltutorial.com">www.postgresqltutorial.com</a></li>
+<li><strong>PostgreSQL 14 Administration Cookbook</strong> by Simon Riggs &amp; Gianni Ciolli</li>
+<li><strong>Learn PostgreSQL</strong> by Luca Ferrari &amp; Enrico Pirozzi </li>
 </ul>
-<p>Workstation: </p>
-<ul>
-<li>Debian 12   </li>
-<li>IP: 192.168.1.181</li>
-</ul>
-<h3>0.2. Resources</h3>
-<p><a href="https://www.postgresql.org/docs">www.postgresql.org</a><br />
-<a href="https://www.postgresqltutorial.com">www.postgresqltutorial.com</a><br />
-<strong>PostgreSQL 14 Administration Cookbook</strong> by Simon Riggs &amp; Gianni Ciolli<br />
-<strong>Learn PostgreSQL</strong> by Luca Ferrari &amp; Enrico Pirozzi </p>
 <p><br></p>
 </details>
 <details>
@@ -880,25 +878,26 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 </summary>
 <hr />
 <h3>1.1. Terminology:</h3>
-<p><strong>Cluster</strong>: A PostgreSQL Instance. Can contain many databases</p>
-<p><strong>Database</strong>: Accessed by allowed users. Can contain schemas (namespaces)</p>
-<p><strong>Schema</strong>: Used for organizing database objects. Can contain database  objects.</p>
-<p><strong>Database Objects</strong>: Tables, functions, triggers, data types etc.</p>
-<h3>1.2. Basic Information</h3>
-<p>2 types of users: Normal and Superuser</p>
-<p>All the data and configuration information is kept in PGDATA directory.</p>
-<p>PostgreSQL supports information schema, but has catalog which is more  detailed.</p>
-<p>Postmaster: The first process, responsible for all the executions.</p>
-<p>WAL (Write Ahead Logs): Database change log, mainly used for recovering.</p>
-<h3>1.3. Software Components:</h3>
 <ul>
-<li>PostgreSQL server  : Database server.</li>
-<li>PostgreSQL client  : Client tools</li>
-<li>PostgreSQL contrib : Extensions.</li>
-<li>PostgreSQL docs    : Documentation.</li>
-<li>PostgreSQL PL/Perl, PL/Python, and PL/Tcl: Programming interface.</li>
+<li><strong>Cluster</strong>: A PostgreSQL Instance. Can contain multiple databases.</li>
+<li><strong>Database</strong>: Accessed by authorized users. Can contain schemas (namespaces).</li>
+<li><strong>Schema</strong>: Used for organizing database objects. Can contain database objects.</li>
+<li><strong>Database Objects</strong>: Tables, functions, triggers, data types etc.</li>
 </ul>
-<p>Debian postgresql package installs postgresql-client by default</p>
+<h3>1.2. Basic Information</h3>
+<p>All data and configuration information is stored in the PGDATA directory.</p>
+<p>PostgreSQL supports the information schema but also maintains a catalog that provides more detailed information.</p>
+<p><strong>Postmaster</strong>: The first PostgreSQL process, responsible for coordinating all other processes.</p>
+<p><strong>WAL (Write Ahead Logs)</strong>: Database change logs used primarily for recovery.</p>
+<h3>1.3. Software Components</h3>
+<ul>
+<li><strong>PostgreSQL server</strong>: The database server.</li>
+<li><strong>PostgreSQL client</strong>: Client tools for interacting with the server.</li>
+<li><strong>PostgreSQL contrib</strong>: Extensions and additional utilities.</li>
+<li><strong>PostgreSQL docs</strong>: Documentation.</li>
+<li><strong>PostgreSQL PL/Perl, PL/Python, and PL/Tcl</strong>: Programming language interfaces.</li>
+</ul>
+<p>The Ubuntu <code>postgresql</code> package installs <code>postgresql-client</code> by default.</p>
 <p><br></p>
 </details>
 <details>
@@ -907,89 +906,94 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 </summary>
 <hr />
 <h3>2.1. Installation</h3>
-<p>Update repositories</p>
+<p>Update package repositories:</p>
 <pre><code>sudo apt update
 </code></pre>
-<p>Install necessary packages</p>
-<p>Debian 12 installs Postgresql version 15</p>
+<p>Install PostgreSQL (Ubuntu 24.04 installs version 16 by default):</p>
 <pre><code>sudo apt install --yes postgresql
 </code></pre>
-<p>Check status</p>
+<p>Check the service status:</p>
 <pre><code>systemctl status postgresql
 </code></pre>
 <h3>2.2. Cluster Management</h3>
-<p>Debian allows running more than 1 clusters (instances) on a server.</p>
-<p>See the list of clusters on a server:</p>
+<p>Ubuntu allows running multiple clusters (instances) on a single server.</p>
+<p>List clusters on the server:</p>
 <pre><code>pg_lsclusters
 </code></pre>
 <p>Sample output:</p>
 <pre><code>Ver Cluster Port Status Owner    Data directory              Log file
-15  main    5432 online postgres /var/lib/postgresql/15/main /var/log/...
+16  main    5432 online postgres /var/lib/postgresql/16/main /var/log/...
 </code></pre>
-<p>Values of Ver and Cluster is important for us. We'll use them for  pg_ctlcluster command. Ours are 15 and main.</p>
-<p>pg_ctlcluster is a wrapper command for the original pg_ctl command of  postgres.</p>
-<p>See the status of a cluster:</p>
-<pre><code>sudo pg_ctlcluster 15 main status
+<p>The "Ver" (Version) and "Cluster" values are important for the <code>pg_ctlcluster</code> command. In this case, they are <code>16</code> and <code>main</code>.</p>
+<p><code>pg_ctlcluster</code> is a wrapper command for PostgreSQL's native <code>pg_ctl</code> command.</p>
+<p>Check the status of a specific cluster:</p>
+<pre><code>sudo pg_ctlcluster 16 main status
 </code></pre>
-<p>Start a cluster</p>
-<pre><code>sudo pg_ctlcluster 15 main start
+<p>Start a cluster:</p>
+<pre><code>sudo pg_ctlcluster 16 main start
 </code></pre>
-<p>Stop a cluster</p>
-<pre><code>sudo pg_ctlcluster 15 main stop
+<p>Stop a cluster:</p>
+<pre><code>sudo pg_ctlcluster 16 main stop
 </code></pre>
-<p>There are 3 modes of stop: smart (wait for connections to stop), fast  (stop all connections), immediate (immediately). immediate option may  cause database to crash. Default mode is fast.</p>
-<pre><code>sudo pg_ctlcluster 15 main stop -m smart
-sudo pg_ctlcluster 15 main stop -m fast
-sudo pg_ctlcluster 15 main stop -m immediate
+<p>There are three stop modes:
+- <code>smart</code>: Wait for connections to finish (graceful shutdown)
+- <code>fast</code>: Stop all connections immediately (default)
+- <code>immediate</code>: Force immediate shutdown (may cause database corruption)</p>
+<pre><code>sudo pg_ctlcluster 16 main stop -m smart
+sudo pg_ctlcluster 16 main stop -m fast
+sudo pg_ctlcluster 16 main stop -m immediate
 </code></pre>
-<p>Restart, reload a cluster</p>
-<pre><code>sudo pg_ctlcluster 15 main restart
-sudo pg_ctlcluster 15 main reload
+<p>Restart or reload a cluster:</p>
+<pre><code>sudo pg_ctlcluster 16 main restart
+sudo pg_ctlcluster 16 main reload
 </code></pre>
 <h3>2.3. Adding and Deleting Clusters</h3>
-<p>There might be more than 1 clusters on a server. At the first sight it  may not make sense, but for example if you need of 2 different admins for  2 different databases this solution could be very useful.</p>
-<p>Currently we only have main cluster. We will add a second one with the  name second. </p>
-<p>Create another Postgres 15 cluster with the name second</p>
-<pre><code>sudo pg_createcluster 15 second
+<p>You can run multiple clusters on a single server. While this might seem unnecessary at first, it can be useful when different databases require separate administrators.</p>
+<p>Currently, we only have the <code>main</code> cluster. Let's add a second one named <code>second</code>.</p>
+<p>Create another PostgreSQL 16 cluster named <code>second</code>:</p>
+<pre><code>sudo pg_createcluster 16 second
 </code></pre>
-<p>Start it</p>
-<pre><code>sudo pg_ctlcluster 15 second start
+<p>Start it:</p>
+<pre><code>sudo pg_ctlcluster 16 second start
 </code></pre>
-<p>Create another Postgres 15 cluster with the name third and start it</p>
-<pre><code>sudo pg_createcluster 15 third --start
+<p>Create a third cluster and start it immediately:</p>
+<pre><code>sudo pg_createcluster 16 third --start
 </code></pre>
-<p>Delete (drop) third cluster</p>
-<pre><code>sudo pg_dropcluster 15 third --stop
+<p>Delete (drop) the third cluster:</p>
+<pre><code>sudo pg_dropcluster 16 third --stop
 </code></pre>
-<p>Rename second cluster to secondary</p>
-<pre><code>sudo pg_renamecluster 15 second secondary
+<p>Rename the <code>second</code> cluster to <code>secondary</code>:</p>
+<pre><code>sudo pg_renamecluster 16 second secondary
 </code></pre>
-<p>List clusters:</p>
+<p>List clusters again:</p>
 <pre><code>pg_lsclusters
 </code></pre>
 <p>Sample output:</p>
 <pre><code>Ver Cluster   Port Status Owner    Data directory                   Log file
-15  main      5432 online postgres /var/lib/postgresql/15/main      /var/log/..
-15  secondary 5433 online postgres /var/lib/postgresql/15/secondary /var/log/..
+16  main      5432 online postgres /var/lib/postgresql/16/main      /var/log/...
+16  secondary 5433 online postgres /var/lib/postgresql/16/secondary /var/log/...
 </code></pre>
-<p>Here we can understand that, our 15 main cluster listens on port 5432  (default postgres listening port), and 15 secondary cluster listens on  port 5433.</p>
-<p>Directory of configuration files for both clusters:<br />
-/var/lib/postgresql/14/main/ and /var/lib/postgresql/14/secondary.</p>
+<p>From this output, we can see:</p>
+<ul>
+<li>The <code>16-main</code> cluster listens on port 5432 (PostgreSQL's default port)</li>
+<li>The <code>16-secondary</code> cluster listens on port 5433</li>
+<li>Data directories are <code>/var/lib/postgresql/16/main/</code> and <code>/var/lib/postgresql/16/secondary/</code></li>
+</ul>
 <h3>2.4. Service vs Cluster Management</h3>
-<p>Postgres and its clusters can be managed by systemctl command too.
-Stop postgres (all the clusters)</p>
+<p>PostgreSQL and its clusters can also be managed using <code>systemctl</code>.</p>
+<p>Stop all PostgreSQL clusters:</p>
 <pre><code>sudo systemctl stop postgresql
 </code></pre>
-<p>Stop 15-main postgres cluster</p>
-<pre><code>sudo systemctl stop postgresql@15-main
+<p>Stop only the <code>16-main</code> cluster:</p>
+<pre><code>sudo systemctl stop postgresql@16-main
 </code></pre>
-<p>Other systemctl options (like restart, stop, enable, disable, reload)  can be used too.</p>
+<p>Other <code>systemctl</code> commands (<code>restart</code>, <code>enable</code>, <code>disable</code>, <code>reload</code>) work similarly.</p>
 <h3>2.5. Login to Postgres shell</h3>
-<p>With the default installation; postgres linux user can login to psql  shell without the need of password authentication. </p>
+<p>After default installation, the <code>postgres</code> Linux user can log into the <code>psql</code> shell without password authentication:</p>
 <pre><code>sudo -u postgres psql
 </code></pre>
-<p>Type <code>exit</code> to quit from postgres shell</p>
-<p>As you may guess, you logged in to 15 Main cluster. To login 15 secondary cluster:</p>
+<p>Type <code>exit</code> to quit the PostgreSQL shell.</p>
+<p>By default, you connect to the <code>16-main</code> cluster. To connect to the <code>16-secondary</code> cluster:</p>
 <pre><code>sudo -u postgres psql -p 5433
 </code></pre>
 <p><br></p>
@@ -999,136 +1003,130 @@ Stop postgres (all the clusters)</p>
 3. User and Connection Management
 </summary>
 <hr />
-<p>After installing Postgres, postgres user is able to login psql shell  with Linux authentication. No other users are defined and noone can login  remotely.</p>
-<p>We will implement a scenario for user management.</p>
+<p>After installing PostgreSQL, only the <code>postgres</code> user can log into the <code>psql</code> shell via Linux authentication. No other users are defined, and remote connections are not allowed.</p>
+<p>We'll implement a user management scenario.</p>
 <h3>3.0. Backup Configuration Files</h3>
-<pre><code>cd /etc/postgresql/15/main/
+<pre><code>cd /etc/postgresql/16/main/
 sudo cp postgresql.conf postgresql.conf.backup
 sudo cp pg_hba.conf pg_hba.conf.backup
 </code></pre>
 <h3>3.1. Scenario</h3>
 <ul>
-<li>Leave postgres user as it is (will be used as DB admin)</li>
-<li>Create a database named test1</li>
-<li>Create a user (role) rwuser with read and write permission at all the  test1 tables. Can access only from 1 IP (192.168.1.181). </li>
-<li>Create a user (role) rouser with read only permissons at all the test1  tables.</li>
-<li>Can access from a network (192.168.1.1/24).</li>
+<li>Leave the <code>postgres</code> user as is (will serve as the database administrator)</li>
+<li>Create a database named <code>test1</code></li>
+<li>Create a user (role) <code>rwuser</code> with read/write permissions on all <code>test1</code> tables, accessible only from IP <code>192.168.1.182</code></li>
+<li>Create a user (role) <code>rouser</code> with read-only permissions on all <code>test1</code> tables, accessible from the network <code>192.168.1.0/24</code></li>
 </ul>
-<h3>3.2. Create users</h3>
-<p>Give their passwords too</p>
+<h3>3.2. Create Users</h3>
+<p>Create users with passwords:</p>
 <pre><code>sudo -u postgres createuser --pwprompt rwuser
 sudo -u postgres createuser --pwprompt rouser
 </code></pre>
-<h3>3.3. Create test1 database and give R/W and R/O permissions.</h3>
-<p>Create database</p>
+<h3>3.3. Create the <code>test1</code> Database and Set Permissions</h3>
+<p>Create the database:</p>
 <pre><code>sudo -u postgres createdb test1
 </code></pre>
-<p>Create a sample table and fill it with sample data.</p>
-<p>Run psql to connect test1 database</p>
+<p>Create a sample table and populate it with data.</p>
+<p>Connect to the <code>test1</code> database:</p>
 <pre><code>sudo -u postgres psql test1
 </code></pre>
-<p>Run on psql shell</p>
+<p>Run these commands in the <code>psql</code> shell:</p>
 <pre><code>CREATE TABLE Employees (Name char(15), Age int, Occupation char(15));
 INSERT INTO Employees VALUES ('Joe Smith', '26', 'Ninja');
 GRANT ALL ON ALL TABLES IN SCHEMA public to rwuser;
 GRANT SELECT ON ALL TABLES IN SCHEMA public to rouser;
-exit
+\q
 </code></pre>
-<h3>3.4. Configure Postgres to allow remote connections</h3>
-<p>Edit postgres.conf file to allow network connections</p>
-<pre><code>sudo nano /etc/postgresql/15/main/postgresql.conf
+<h3>3.4. Configure PostgreSQL to Allow Remote Connections</h3>
+<p>Edit <code>postgresql.conf</code> to allow network connections:</p>
+<pre><code>sudo nano /etc/postgresql/16/main/postgresql.conf
 </code></pre>
-<p>Uncomment and change the line below (around line 60)</p>
+<p>Uncomment and modify this line (around line 60):</p>
 <pre><code>#listen_addresses = 'localhost'         # what IP address(es) to listen on;
 </code></pre>
-<p>as below</p>
+<p>Change it to:</p>
 <pre><code>listen_addresses = '*'                  # what IP address(es) to listen on;
 </code></pre>
-<p>Edit pg_hba.conf file to allow rwuser and rouser to allow connections  from specified ip/networks.</p>
-<pre><code>sudo nano /etc/postgresql/15/main/pg_hba.conf
+<p>Edit <code>pg_hba.conf</code> to allow <code>rwuser</code> and <code>rouser</code> to connect from specified IPs/networks:</p>
+<pre><code>sudo nano /etc/postgresql/16/main/pg_hba.conf
 </code></pre>
-<p>Add following lines to the file</p>
-<pre><code>host    test1           rwuser          192.168.1.181/32        scram-sha-256
+<p>Add these lines to the file:</p>
+<pre><code>host    test1           rwuser          192.168.1.182/32        scram-sha-256
 host    test1           rouser          192.168.1.0/24          scram-sha-256
 </code></pre>
-<p>Restart our cluster</p>
-<pre><code>sudo pg_ctlcluster restart 15 main
+<p>Restart the cluster:</p>
+<pre><code>sudo pg_ctlcluster restart 16 main
 </code></pre>
-<h3>3.5. Connection test from Workstation (192.168.1.181)</h3>
-<p><strong>!! Run on workstation !!</strong></p>
-<p>Install Postgres Client to the workstation</p>
+<h3>3.5. Connection Test from Workstation (192.168.1.182)</h3>
+<p><strong>Note: Run these commands on the workstation!</strong></p>
+<p>Install the PostgreSQL client on the workstation:</p>
 <pre><code>sudo apt update
 sudo apt install postgresql-client --yes    
 </code></pre>
-<p>Connect with rwuser and test adding data (test must be successfull)</p>
-<pre><code>psql -h 192.168.1.196 -U rwuser test1
+<p>Connect as <code>rwuser</code> and test data insertion (should succeed):</p>
+<pre><code>psql -h 192.168.1.221 -U rwuser test1
 </code></pre>
-<p>Run on psql shell</p>
+<p>In the <code>psql</code> shell:</p>
 <pre><code>INSERT INTO Employees VALUES ('John Doe', '33', 'Kedi');
-exit
+\q
 </code></pre>
-<p>Connect with rouser and test reading and adding data <br />
-(reading test must be successfull, adding test must fail)</p>
-<pre><code>psql -h 192.168.1.196 -U rouser test1
+<p>Connect as <code>rouser</code> and test reading/inserting (reading should succeed, inserting should fail):</p>
+<pre><code>psql -h 192.168.1.221 -U rouser test1
 </code></pre>
-<p>Run on psql shell</p>
+<p>In the <code>psql</code> shell:</p>
 <pre><code>SELECT * from Employees;
 INSERT INTO Employees VALUES ('Halim Selim', '41', 'Hirsiz');
-exit
+\q
 </code></pre>
-<p>If you try to use psql from another workstation in 192.168.1.0/24  network, you will see that rwuser cannot connect and rouser can connect.</p>
+<p>If you try to connect from another workstation in the <code>192.168.1.0/24</code> network, you'll see that <code>rwuser</code> cannot connect while <code>rouser</code> can.</p>
 <p><br></p>
 </details>
 <details>
 <summary>
-4. Backup and Restore
+4. Backup and Restore 
 </summary>
 <hr />
-<p>You can backup a database or a whole cluster. When backing up a database, users (roles) and any other clusterwide data is not backed up.</p>
-<p>So if you backup a database and restore it on another cluster, you have to create users and (if necessary) access permissions there too.</p>
+<p>You can back up individual databases or entire clusters. When backing up a single database, cluster-wide data like users and roles are not included. Therefore, when restoring a database to another cluster, you must recreate users and permissions.</p>
 <h3>4.0. Considerations</h3>
-<p>We need to use postgres user for backup and restore. When we sudo for  this user; we need to change the directory to /tmp, because postgres user  does not have permissions on our home directory.</p>
+<p>We need to use the <code>postgres</code> user for backup and restore operations. When using <code>sudo</code> for this user, we should change to the <code>/tmp</code> directory because the <code>postgres</code> user doesn't have permission to write to our home directory.</p>
 <h3>4.1. Backup a database</h3>
-<p>Backing up a database is performed with pg_dump command:</p>
-<p><code>pg_dump dbname &gt; dumpfile</code></p>
-<p>pg_dump command's connection parameters are like psql command's. </p>
-<p>Move to /tmp directory</p>
+<p>Back up a database using <code>pg_dump</code>:</p>
+<pre><code>pg_dump dbname &gt; dumpfile
+</code></pre>
+<p><code>pg_dump</code> uses the same connection parameters as <code>psql</code>.</p>
+<p>Change to the <code>/tmp</code> directory:</p>
 <pre><code>cd /tmp
 </code></pre>
-<p>Backup test1 database on 15 main cluster to test1.pg file:</p>
+<p>Back up the <code>test1</code> database from the <code>16-main</code> cluster:</p>
 <pre><code>sudo -u postgres pg_dump test1 &gt; /tmp/test1.pg
 </code></pre>
-<p>Backup postgres database on 15 secondary cluster to sdb.pg:<br />
-We need to specify the port of 15 secondary cluster</p>
+<p>Back up the <code>postgres</code> database from the <code>16-secondary</code> cluster (specify port):</p>
 <pre><code>sudo -u postgres pg_dump -p 5433 postgres &gt; /tmp/sdb.pg
 </code></pre>
 <h3>4.2. Restore a database</h3>
-<p>You can restore a database dump with psql command:</p>
-<p><code>psql dbname &lt; dumpfile</code></p>
-<p>Restore test1 database back on 15 main cluster</p>
+<p>Restore a database dump using <code>psql</code>:</p>
+<pre><code>psql dbname &lt; dumpfile
+</code></pre>
+<p>Restore the <code>test1</code> database to the <code>16-main</code> cluster:</p>
 <pre><code>sudo -u postgres psql test1 &lt; /tmp/test1.pg
 </code></pre>
-<p>Lets restore test1 db to secondary cluster:<br />
-We need an empty test1 database. </p>
-<p>Create test1 database on 15 secondary</p>
+<p>Restore the <code>test1</code> database to the secondary cluster. First, create an empty <code>test1</code> database:</p>
 <pre><code>sudo -u postgres createdb -p 5433 test1
 </code></pre>
-<p>Create users rwuser and rouser on secondary cluster. <br />
-createuser command's connection parameter are like psql command's too. So </p>
-<p>we need to specify port number 5433 for secondary cluster.</p>
+<p>Create <code>rwuser</code> and <code>rouser</code> on the secondary cluster (specify port 5433):</p>
 <pre><code>sudo -u postgres createuser -p 5433 --pwprompt rwuser
 sudo -u postgres createuser -p 5433 --pwprompt rouser
 </code></pre>
-<p>Import the database</p>
+<p>Import the database:</p>
 <pre><code>sudo -u postgres psql -p 5433 test1 &lt; /tmp/test1.pg
 </code></pre>
 <h3>4.3. Backup and Restore Whole Cluster</h3>
-<p>When we backup a cluster, all clusterwide data including users and access rights are backed up too. But remember, you have to change the  configuration files by yourself.</p>
-<p>Cluster dump is made by <code>pg_dumpall</code> command. This command too has the  same connection parameters as psql command. </p>
-<p>Backup 15 main cluster to main.pg file</p>
+<p>When backing up a cluster, all cluster-wide data including users and access rights are included. However, configuration files must be handled separately.</p>
+<p>Back up a cluster using <code>pg_dumpall</code> (uses the same connection parameters as <code>psql</code>):</p>
+<p>Back up the <code>16-main</code> cluster:</p>
 <pre><code>sudo -u postgres pg_dumpall &gt; /tmp/main.pg
 </code></pre>
-<p>Restore main.pg file to 15 secondary cluster</p>
+<p>Restore to the <code>16-secondary</code> cluster:</p>
 <pre><code>sudo -u postgres psql -p 5433 -f /tmp/main.pg
 </code></pre>
 <p><br></p>
@@ -1139,86 +1137,85 @@ sudo -u postgres createuser -p 5433 --pwprompt rouser
 </summary>
 <hr />
 <h3>5.1. The Command</h3>
-<p>psql command is used to open a Postgres shell. At the fresh install, only postgres Linux user has the right to connect to Postgres shell. So we need to run it by impersonating postgres user:</p>
+<p>The <code>psql</code> command opens a PostgreSQL shell. After a fresh installation, only the <code>postgres</code> Linux user can connect without authentication:</p>
 <pre><code>sudo -u postgres psql
 </code></pre>
-<p>If we want another Linux user to login to psql shell, we have to create  them using createuser command and add connection permission to them at  pg_hba.conf configuration file. I don't prefer that method. In my very  humble opinion, 1 database admin is enough.</p>
+<p>To allow other Linux users to log into <code>psql</code>, you would need to create them using <code>createuser</code> and add connection permissions in <code>pg_hba.conf</code>. In most of the cases, having one database administrator is sufficient.</p>
 <h3>5.2. The command arguments</h3>
-<p>psql command has a lot of arguments. If no arguments are given; it tries  to connect with the current Linux user name as the user name and again  current Linux user name as the database name. My Linux user name is exforge, so when I run psql command, I get the following error message.</p>
+<p><code>psql</code> has many arguments. If no arguments are provided, it attempts to connect using the current Linux username as both the username and database name. For example, if my username is <code>exforge</code>:</p>
+<pre><code>psql
+</code></pre>
+<p>I would receive an error:</p>
 <pre><code>psql: error: connection to server on socket &quot;/var/run/postgresql/.s.PGSQL.5432&quot;
 failed: FATAL:  role &quot;exforge&quot; does not exist
 </code></pre>
-<p>If I go beyond and create exforge user (role actually, user=role in  postgres) only I have a different error message:</p>
+<p>Even if I create a role named <code>exforge</code>, I would get:</p>
 <pre><code>psql: error: connection to server on socket &quot;/var/run/postgresql/.s.PGSQL.5432&quot; failed: FATAL:  database &quot;exforge&quot; does not exist
 </code></pre>
-<p>If I go even beyond and create a database named exforge then everything  goes fine.</p>
-<p>Well, of course instead of creating a database with my user name, I can  connect to psql with specifying an existing database.</p>
+<p>Instead, connect to an existing database:</p>
 <pre><code>psql postgres
 </code></pre>
-<p>As we have seen before we can specify port number with -p switch, host  name with -h switch. We can also specify postgres user with -U switch. </p>
-<p>Full list of arguments can be seen with --help switch</p>
+<p>You can specify:
+- Port number with <code>-p</code>
+- Host with <code>-h</code>
+- Username with <code>-U</code></p>
+<p>View all arguments:</p>
 <pre><code>psql --help
 </code></pre>
 <h3>5.3. psql Commands</h3>
-<p>You can run SQL commands at psql shell. You can also run psql commands,  some of which are very useful.</p>
+<p>You can run SQL commands in the <code>psql</code> shell, as well as <code>psql</code> meta-commands (prefixed with <code>\</code>):</p>
 <ul>
-<li>\x    Toggles expanded display</li>
-<li>\c    Connect to a database</li>
-<li>\d    List tables</li>
-<li>\du   List roles (users)</li>
-<li>\?    psql command help</li>
+<li><code>\x</code> - Toggle expanded display</li>
+<li><code>\c</code> - Connect to a database</li>
+<li><code>\d</code> - List tables</li>
+<li><code>\du</code> - List roles (users)</li>
+<li><code>\?</code> - Show psql command help</li>
 </ul>
 <p><br></p>
 </details>
 <details>
 <summary>
-6. Bonus: Postgres 15 and Postgres 16 together
+6. Bonus: Postgres 16 and Postgres 17 together
 </summary>
 <hr />
-<p>For testing purposes we will install Postgresql 16 on the same server. </p>
-<p>That way we will have different postgres clusters with different versions.</p>
-<p>Debian 12 has Postgres 15 in its repositories. For Postgres 16 we need to add Postgres repositories.</p>
-<h3>6.1. Add Postgresql Repositories</h3>
-<p>We are going to need, gpg and curl. Let's install them:</p>
-<pre><code>sudo apt install gpg curl --yes
+<p>For testing purposes, we can install PostgreSQL 17 on the same server, allowing us to run clusters with different versions simultaneously.</p>
+<p>Ubuntu 24.04 includes PostgreSQL 16 in its repositories. For PostgreSQL 17, we need to add a PPA.</p>
+<h3>6.1. Add Postgresql PPA</h3>
+<p>Add the repository key:</p>
+<pre><code>curl -fSsL https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+    | gpg --dearmor \
+    | sudo tee /usr/share/keyrings/postgresql.gpg &gt; /dev/null
 </code></pre>
-<p>Add keys</p>
-<pre><code>curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc \
-    | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
+<p>Add the PPA:</p>
+<pre><code>echo deb [arch=amd64,arm64,ppc64el \
+    signed-by=/usr/share/keyrings/postgresql.gpg] \
+    http://apt.postgresql.org/pub/repos/apt/ noble-pgdg main \
+    | sudo tee -a /etc/apt/sources.list.d/postgresql.list
 </code></pre>
-<p>Add repository</p>
-<pre><code>sudo sh -c 'echo &quot;deb http://apt.postgresql.org/pub/repos/apt \
-       $(lsb_release -cs)-pgdg main&quot; &gt; /etc/apt/sources.list.d/pgdg.list'
-</code></pre>
-<h3>6.2. Install Postgresql 16</h3>
+<h3>6.2. Install PostgreSQL 17</h3>
 <pre><code>sudo apt update
-sudo apt install postgresql-16
+sudo apt install -y postgresql-17
 </code></pre>
-<h3>6.3. List clusters:</h3>
+<h3>6.3. List Clusters</h3>
 <pre><code>pg_lsclusters
 </code></pre>
-<p>Output will be like below, now we have 3 clusters namely 14-main, 15-main, and 15-secondary running on the same computer:</p>
+<p>Sample output (now with three clusters):</p>
 <pre><code>Ver Cluster   Port Status Owner    Data directory                   Log file
-15  main      5432 online postgres /var/lib/postgresql/15/main      /var/..
-15  secondary 5433 online postgres /var/lib/postgresql/15/secondary /var/..
-16  main      5434 online postgres /var/lib/postgresql/16/main      /var/..
+16  main      5432 online postgres /var/lib/postgresql/16/main      /var/log/...
+16  secondary 5433 online postgres /var/lib/postgresql/16/secondary /var/log/...
+17  main      5434 online postgres /var/lib/postgresql/17/main      /var/log/...
 </code></pre>
 <h3>6.4. Connecting to the clusters with psql</h3>
-<p>Connect to the first cluster (15-main), remember it runs on port 5432</p>
+<p>Connect to the first cluster (16-main, port 5432):</p>
 <pre><code>sudo -u postgres psql -p 5432
 </code></pre>
-<p>Connect to the second cluster (15-secondary), remember it runs on port  5433</p>
+<p>Connect to the second cluster (16-secondary, port 5433):</p>
 <pre><code>sudo -u postgres psql -p 5433
 </code></pre>
-<p>Connect to the third cluster (16-main), remember it runs on port 5434</p>
+<p>Connect to the third cluster (17-main, port 5434):</p>
 <pre><code>sudo -u postgres psql -p 5434
 </code></pre>
-<h3>6.5. Upgrade Cluster</h3>
-<p>Upgrade 15 secondary cluster to Postgresql 16 </p>
-<pre><code>sudo pg_upgradecluster 15 secondary -v 16
-</code></pre>
-</details>
-</summary><!-- HTML Footer Start -->
+</details><!-- HTML Footer Start -->
 
 </body>
 </html>

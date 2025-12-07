@@ -836,7 +836,7 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<summary>Copyright (C) 2020 - 2025 Exforge exforge@x386.org</summary>
 <hr />
 <p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
 <p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
@@ -846,121 +846,116 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <!-- Copyright End -->
 
 <!-- Header End -->
-<h5>OtherLinuxesOnDebianUbuntu</h5>
-<h1>Other Linuxes for Debian and Ubuntu Admins</h1>
+<h5>Other Linuxes</h5>
+<h1>Other Linux Distributions for Debian and Ubuntu Admins</h1>
 <details>
 <summary>
 0. Specs
 </summary>
 <hr />
-<h3>0.1. Information</h3>
-<p>Although my tutorials (and my learning curve) contain Debian and Ubuntu Linux distributions; Time to time, an admin may need to handle other Linuxes too. </p>
-<p>In this tutorial, my aim is to help with other linuxes,  namely Red Hat, Alpine and Devuan. </p>
-<p>In the previous versions, I used to include OpenSuse too; but I decided that I cannot concentrate on it anymore.</p>
-<p>Main subjects are:</p>
-<ul>
-<li>Package Management</li>
-<li>Network Configuration</li>
-<li>Installing LAMP Stack</li>
-<li>Service Management</li>
-</ul>
-<p>Main Distributions:</p>
-<ul>
-<li>Debian 12 and 11</li>
-<li>Ubuntu 24.04 and 22.04 LTS</li>
-<li>RHEL (Centos, Alma, Rocky) 9.x, 8.x</li>
-<li>Alpine 3.17, 3.18, 3.19</li>
-<li>Devuan 4, 5</li>
-</ul>
+<h3>0.1. The What</h3>
+<p>Although my tutorials (and my learning journey) focus on Debian and Ubuntu Linux distributions, administrators may occasionally need to work with other Linux distributions as well.</p>
+<p>This tutorial aims to help Debian/Ubuntu administrators adapt to other Linux distributions, specifically Red Hat, Alpine, and Devuan.</p>
+<p>Main topics covered:
+- Package Management
+- Network Configuration
+- Installing LAMP Stack
+- Service Management</p>
+<p>Distributions covered:
+- Debian 13 and 12
+- Ubuntu 24.04 and 22.04 LTS
+- RHEL (CentOS, AlmaLinux, Rocky Linux) 10.x, 9.x
+- Alpine 3.23
+- Devuan 6 and 5</p>
 <h3>0.2. Resources:</h3>
-<p><a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9">access.redhat.com</a><br />
-<a href="https://wiki.alpinelinux.org/wiki/Main_Page">wiki.alpinelinux.org</a><br />
-<a href="https://wiki.debian.org/">wiki.debian.org</a><br />
-<a href="https://www.geeksforgeeks.org/how-to-retrieve-data-from-mysql-database-using-php/">www.geeksforgeeks.org</a>  </p>
+<ul>
+<li><a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9">access.redhat.com</a></li>
+<li><a href="https://wiki.alpinelinux.org/wiki/Main_Page">wiki.alpinelinux.org</a></li>
+<li><a href="https://wiki.debian.org/">wiki.debian.org</a></li>
+<li><a href="https://www.geeksforgeeks.org/how-to-retrieve-data-from-mysql-database-using-php/">www.geeksforgeeks.org</a></li>
+</ul>
 <p><br></p>
 </details>
 <details>
 <summary>
-1. Debian 12 &amp; 11
+1. Debian 13 &amp; 12
 </summary>
 <hr />
 <h3>1.1. Package Management</h3>
-<p>Commands require root or sudo.</p>
+<p>Commands require root or sudo privileges.</p>
 <h4>1.1.1. Update Cache</h4>
-<pre><code>apt update
+<pre><code>sudo apt update
 </code></pre>
 <h4>1.1.2. Upgrade Packages</h4>
-<pre><code>apt upgrade
+<pre><code>sudo apt upgrade
 </code></pre>
 <h4>1.1.3. Install a Package</h4>
-<pre><code>apt install apache2
+<pre><code>sudo apt install apache2
 </code></pre>
 <h4>1.1.4. Remove a Package</h4>
-<pre><code>apt remove apache2
+<pre><code>sudo apt remove apache2
 </code></pre>
-<h4>1.1.5. Search a Package</h4>
-<pre><code>apt search apache2
+<h4>1.1.5. Search for a Package</h4>
+<pre><code>sudo apt search apache2
 </code></pre>
 <h4>1.1.6. Clean Unused Packages</h4>
-<pre><code>apt autoremove
+<pre><code>sudo apt autoremove
 </code></pre>
-<h4>1.1.7. Show Package Info</h4>
-<pre><code>apt show apache2
+<h4>1.1.7. Show Package Information</h4>
+<pre><code>sudo apt show apache2
 </code></pre>
 <h3>1.2. Network Configuration</h3>
-<h4>1.2.1. Get the name of the network adapter</h4>
-<p>The name of the network adapter will be something like enp0s3, but we  need the exact name. </p>
-<p>The following command lists the network interface name(s). The one in en* format should be the name of your network adapter.</p>
+<h4>1.2.1. Identify Network Adapter Name</h4>
+<p>Network adapter names typically follow patterns like <code>enp0s3</code>. To find the exact name:</p>
 <pre><code>ls /sys/class/net
 </code></pre>
-<p>In any case you cannot get the name, you can try to following command:</p>
+<p>The interface with an <code>en*</code> format is usually your network adapter. If unsure, use:</p>
 <pre><code>ip a
 </code></pre>
 <h4>1.2.2. IP configuration.</h4>
+<p>Edit the network interfaces file (replace <code>enp0s3</code> with your actual interface name):</p>
 <pre><code>sudo nano /etc/network/interfaces
 </code></pre>
-<p>I assume that your network adapter name is enp0s3, otherwise change it.</p>
-<p>Fill the file like below (change to your IP addresses)</p>
+<p><strong>Static IP configuration:</strong></p>
 <pre><code>auto enp0s3
 iface enp0s3 inet static
-address 192.168.0.3/24
-broadcast 192.168.0.255
-network 192.168.0.0
-gateway 192.168.0.1
+   address 192.168.1.135/24
+   broadcast 192.168.1.255
+   network 192.168.1.0
+   gateway 192.168.1.1
 </code></pre>
-<p>If you want to use DHCP, fill the file as below</p>
+<p><strong>DHCP configuration:</strong></p>
 <pre><code>auto enp0s3
 iface enp0s3 inet dhcp
 </code></pre>
 <h4>1.2.3. DNS Addresses</h4>
 <pre><code>sudo nano /etc/resolv.conf
 </code></pre>
-<p>Add your DNS addresses as below</p>
+<p>Add DNS servers:</p>
 <pre><code>nameserver 46.196.235.35
 nameserver 178.233.140.110
 nameserver 46.197.15.60
 </code></pre>
 <h4>1.2.4. Restart Network Adapter</h4>
-<p>Assuming your network adapter name is enp0s3</p>
+<p>Replace <code>enp0s3</code> with your interface name:</p>
 <pre><code>sudo ifdown enp0s3 &amp;&amp; sudo ifup enp0s3
 </code></pre>
-<p>or</p>
+<p>Alternatively:</p>
 <pre><code>sudo systemctl restart networking.service
 </code></pre>
-<p>If you are connecting through SSH, your connection would break up. You  need to connect with the new IP again.</p>
+<p><strong>Note:</strong> If connected via SSH, your connection will drop. Reconnect using the new IP address.</p>
 <h3>1.3. Installing LAMP Stack</h3>
-<h4>1.3.1. Install packages</h4>
+<h4>1.3.1. Install Packages</h4>
 <pre><code>sudo apt update
 sudo apt install --yes apache2 mariadb-server php \
    libapache2-mod-php php-mysql
 </code></pre>
-<p>This is all we need actually. But if you are like me, that is you have to see it to believe it; you are going to want to test it. So let's test it.</p>
-<h4>1.3.2. Test LAMP</h4>
-<p>We'll create a test database on Mariadb, we'll create a table in that  database, add some rows to the table. We will also create a test PHP file  with the PHP code to retrieve the data from the database and display it as HTML. That way we'll be able to test the PHP-Mariadb and PHP-Apache  connections.</p>
+<h4>1.3.2. Test LAMP Stack</h4>
+<p>We'll create a test database, table, and PHP file to verify all components work together.</p>
+<p><strong>Create test database and user:</strong></p>
 <pre><code>sudo mariadb
 </code></pre>
-<p>Create mysampledb database, connect to it, create a table, fill the  table, create a user with the access permission to that database and the  table.</p>
-<p>Run on Mariadb shell:</p>
+<p>Run in MariaDB shell:</p>
 <pre><code>CREATE DATABASE mysampledb;
 USE mysampledb;
 CREATE TABLE Employees (Name char(15), Age int(3), Occupation char(15));
@@ -970,10 +965,10 @@ INSERT INTO Employees VALUES ('Mariadb Server', '14', 'RDBM');
 GRANT ALL ON mysampledb.* TO 'appuser'@'localhost' IDENTIFIED BY 'password';
 exit
 </code></pre>
-<p>Create test PHP</p>
+<p><strong>Create test PHP file:</strong></p>
 <pre><code>sudo nano /var/www/html/test.php
 </code></pre>
-<p>Fill it as below</p>
+<p>Add the following content:</p>
 <pre><code>&lt;?php
    $mycon = new mysqli(&quot;localhost&quot;, &quot;appuser&quot;, &quot;password&quot;, &quot;mysampledb&quot;);
    if ($mycon-&gt;connect_errno)
@@ -1020,27 +1015,24 @@ exit
     mysqli_close($conn);
 ?&gt;
 </code></pre>
-<p>Now, from your workstation's browser, load the page (replace srv with  your server's IP: </p>
-<p>http:/srv/test.php</p>
-<p>You can use the same steps for testing LAMP stack on other distros too.</p>
+<p><strong>Test:</strong> Access <code>http://[your-server-ip]/test.php</code> from a browser to verify the LAMP stack is working.</p>
 <h3>1.4. Service Management</h3>
-<p>Conventionally, when a package with a service is installed on Debian, it  is enabled and started by default.</p>
-<h4>1.4.1. Status of a Service</h4>
+<p>In Debian, services are typically enabled and started automatically upon installation.</p>
+<h4>1.4.1. Check Service Status</h4>
 <pre><code>systemctl status apache2
 </code></pre>
 <h4>1.4.2. Start/Stop a Service</h4>
 <pre><code>sudo systemctl stop apache2
 sudo systemctl start apache2
 </code></pre>
-<p>To force to stop</p>
+<p>Force stop:</p>
 <pre><code>sudo systemctl kill apache2
 </code></pre>
 <h4>1.4.3. Reload a Service</h4>
-<p>Reads configuration file again</p>
+<p>Reloads configuration without stopping:</p>
 <pre><code>sudo systemctl reload apache2
 </code></pre>
 <h4>1.4.4. Restart a Service</h4>
-<p>Stops and Starts</p>
 <pre><code>sudo systemctl restart apache2
 </code></pre>
 <h4>1.4.5. Enable/Disable a Service</h4>
@@ -1055,44 +1047,41 @@ sudo systemctl disable apache2
 </summary>
 <hr />
 <h3>2.1. Package Management</h3>
-<p>Commands require root or sudo.</p>
+<p>Commands require root or sudo privileges.</p>
 <h4>2.1.1. Update Cache</h4>
-<pre><code>apt update
+<pre><code>sudo apt update
 </code></pre>
 <h4>2.1.2. Upgrade Packages</h4>
-<pre><code>apt upgrade
+<pre><code>sudo apt upgrade
 </code></pre>
 <h4>2.1.3. Install a Package</h4>
-<pre><code>apt install apache2
+<pre><code>sudo install apache2
 </code></pre>
 <h4>2.1.4. Remove a Package</h4>
-<pre><code>apt remove apache2
+<pre><code>sudo remove apache2
 </code></pre>
-<h4>2.1.5. Search a Package</h4>
-<pre><code>apt search apache2
+<h4>2.1.5. Search for a Package</h4>
+<pre><code>sudo search apache2
 </code></pre>
 <h4>2.1.6. Clean Unused Packages</h4>
-<pre><code>apt autoremove
+<pre><code>sudo autoremove
 </code></pre>
-<h4>2.1.7. Show Package Info</h4>
-<pre><code>apt show apache2
+<h4>2.1.7. Show Package Information</h4>
+<pre><code>sudo show apache2
 </code></pre>
 <h2>2.2. Network Configuration</h2>
 <h4>2.2.1. Get the name of the network adapter</h4>
-<p>The name of the network adapter will be something like enp0s3, but we  need the exact name. </p>
-<p>The following command lists the network interface name(s). The one in en* format should be the name of your network adapter.</p>
+<p>Network adapter names typically follow patterns like <code>enp0s3</code>. To find the exact name:</p>
 <pre><code>ls /sys/class/net
 </code></pre>
-<p>In any case you cannot get the name, you can try to following command:</p>
+<p>The interface with an <code>en*</code> format is usually your network adapter. If unsure, use:</p>
 <pre><code>ip a
 </code></pre>
 <h4>2.2.2. Network configuration.</h4>
-<p>By default Ubuntu uses netplan for network configuration.</p>
+<p>Ubuntu uses Netplan for network configuration. Edit the configuration file (filename may vary):</p>
 <pre><code>sudo nano /etc/netplan/00-installer-config.yaml
 </code></pre>
-<p>The file name might be different, in that case, use that file.</p>
-<p>I assume that your network adapter name is enp0s3, otherwise change it.</p>
-<p>Fill the file like below (change to your IP addresses)</p>
+<p>Replace <code>enp0s3</code> with your interface name and adjust IP settings:</p>
 <pre><code>network:
   ethernets:
     enp0s3:
@@ -1109,28 +1098,28 @@ sudo systemctl disable apache2
         - x11.xyz
   version: 2
 </code></pre>
-<h4>2.2.3. Restart Netplan</h4>
+<h4>2.2.3. Apply Netplan Configuration</h4>
 <pre><code>sudo netplan apply
 </code></pre>
-<p>If you are connecting through SSH, your connection would break up. You  need to connect with the new IP again.</p>
+<p><strong>Note:</strong> SSH connections may drop; reconnect using the new IP.</p>
 <h3>2.3. Installing LAMP Stack</h3>
-<h4>2.3.1. Install packages</h4>
+<h4>2.3.1. Install Packages</h4>
 <pre><code>sudo apt update
 sudo apt install --yes apache2 mariadb-server php \
     libapache2-mod-php php-mysql
 </code></pre>
 <h4>2.3.2. Test LAMP</h4>
-<p>You can use the test scenario at 1.3.2 to test RHEL LAMP stack.</p>
+<p>Use the test scenario from section 1.3.2.</p>
 <h3>2.4. Service Management</h3>
-<p>As Ubuntu being a derivative of Debian, when a package with a service is  installed, it is enabled and started by default.</p>
-<h4>2.4.1. Status of a Service</h4>
+<p>As a Debian derivative, Ubuntu behaves similarly for service management.</p>
+<h4>2.4.1. Check Service Status</h4>
 <pre><code>systemctl status apache2
 </code></pre>
 <h4>2.4.2. Start/Stop a Service</h4>
 <pre><code>sudo systemctl stop apache2
 sudo systemctl start apache2
 </code></pre>
-<p>To force to stop</p>
+<p>Force stop:</p>
 <pre><code>sudo systemctl kill apache2
 </code></pre>
 <h4>2.4.3. Reload a Service</h4>
@@ -1138,7 +1127,6 @@ sudo systemctl start apache2
 <pre><code>sudo systemctl reload apache2
 </code></pre>
 <h4>2.4.4. Restart a Service</h4>
-<p>Stops and Starts</p>
 <pre><code>sudo systemctl restart apache2
 </code></pre>
 <h4>2.4.5. Enable/Disable a Service</h4>
@@ -1149,87 +1137,80 @@ sudo systemctl disable apache2
 </details>
 <details>
 <summary>
-3. RHEL (Centos, Alma, Rocky) 9.x, 8.x
+3. RHEL (AlmaLinux, Rocky Linux) 10.x, 9.x
 </summary>
 <hr />
-<p>Centos (upto 8.x version), Alma and Rocky Linux are compatible  with Red Hat. That is, they are same other than brandings and names. So if something works in RHEL, it works in Centos, Alma, and Rocky too.</p>
-<p>RHEL gives free licenses for testing purposes, I have 2 VMs running for testing purposes (versions 8.x and 9.x).</p>
+<p>AlmaLinux and Rocky Linux are RHEL-compatible distributions, meaning commands and configurations for RHEL work on these distributions as well.</p>
 <h3>3.1. Package Management</h3>
-<p>Commands require root or sudo.</p>
-<h4>3.1.1. Update Cache</h4>
-<pre><code>dnf check-update   
+<p>Commands require root or sudo privileges.</p>
+<h4>3.1.1. Check for Updates</h4>
+<pre><code>sudo dnf check-update
 </code></pre>
-<p>It is always called when installing or updating packages.<br />
-So it is not necessary</p>
+<p>It is always called when installing or updating packages. So it is not necessary before installing or upgrading packages.</p>
 <h4>3.1.2. Upgrade Packages</h4>
-<pre><code>dnf upgrade
+<pre><code>sudo dnf upgrade
 </code></pre>
 <h4>3.1.3. Install a Package</h4>
-<pre><code>dnf install httd
+<pre><code>sudo dnf install httpd
 </code></pre>
 <h4>3.1.4. Remove a Package</h4>
-<pre><code>dnf remove httpd
+<pre><code>sudo dnf remove httpd
 </code></pre>
-<h4>3.1.5. Search a Package</h4>
-<pre><code>dnf search httpd
+<h4>3.1.5. Search for a Package</h4>
+<pre><code>sudo dnf search httpd
 </code></pre>
 <h4>3.1.6. Clean Unused Packages</h4>
-<pre><code>dnf autoremove
+<pre><code>sudo dnf autoremove
 </code></pre>
-<h4>3.1.7. Show Package Info</h4>
-<pre><code>dnf info httpd
+<h4>3.1.7. Show Package Information</h4>
+<pre><code>sudo dnf info httpd
 </code></pre>
 <h3>3.2. Network Configuration</h3>
-<h4>3.2.1. Get the name of the network adapter</h4>
-<p>The name of the network adapter will be something like enp0s3, but we  need the exact name. </p>
-<p>The following command lists the network interface name(s). The one in en* format should be the name of your network adapter.</p>
+<h4>3.2.1. Identify Network Adapter Name</h4>
+<p>Network adapter names typically follow patterns like <code>enp0s3</code>. To find the exact name:</p>
 <pre><code>ls /sys/class/net
 </code></pre>
-<p>In any case you cannot get the name, you can try to following command:</p>
+<p>The interface with an <code>en*</code> format is usually your network adapter. If unsure, use:</p>
 <pre><code>ip a
 </code></pre>
-<h4>3.2.2. IP and DNS configuration.</h4>
-<p>I assume that your network adapter name is enp0s3, otherwise change it.</p>
-<p>Change IP and Gateway, change DNS</p>
+<h4>3.2.2. IP and DNS Configuration</h4>
+<p>Replace <code>enp0s3</code> with your interface name:</p>
 <pre><code>sudo nmcli con modify 'enp0s3' ifname enp0s3 ipv4.method manual \
-   ipv4.addresses 192.168.0.210/24 gw4 192.168.0.1
+   ipv4.addresses 192.168.1.156/24 gw4 192.168.1.1
 sudo nmcli con modify 'enp0s3' ipv4.dns 8.8.8.8
 </code></pre>
-<h4>3.2.3. Restart Network Adapter</h4>
+<h4>3.2.3. Restart Network Connection</h4>
 <pre><code>sudo nmcli con down 'enp0s3' &amp;&amp; sudo nmcli con up 'enp0s3'
 </code></pre>
 <h3>3.3. Installing LAMP Stack</h3>
-<p>As you might expect package names are different in RHEL (e.g. httpd  instead of apache2).</p>
-<h4>3.3.1. Install packages</h4>
+<p>Note: Package names differ from Debian/Ubuntu (e.g., <code>httpd</code> instead of <code>apache2</code>).</p>
+<h4>3.3.1. Install Packages</h4>
 <pre><code>sudo dnf -y install httpd mariadb-server php php-mysqlnd
 </code></pre>
-<h4>3.3.2. Enable and Start Apache and Mariadb</h4>
+<h4>3.3.2. Enable and Start Services</h4>
 <pre><code>sudo systemctl enable --now httpd
-sudo systemctl start httpd
 sudo systemctl enable --now mariadb
-sudo systemctl start mariadb
 </code></pre>
-<h4>3.3.3. Opening Firewall Ports</h4>
-<p>RHEL activates firewall by default. We have to open http and https ports  permanently.</p>
+<h4>3.3.3. Configure Firewall</h4>
+<p>RHEL enables the firewall by default. Open HTTP and HTTPS ports:</p>
 <pre><code>sudo firewall-cmd --add-service=http --add-service=https
 sudo firewall-cmd --add-service=http --add-service=https --permanent
 </code></pre>
 <h4>3.3.4. Test</h4>
-<p>You can use the test scenario at 1.3.2 to test RHEL LAMP stack. For RHEL  8, you should run "sudo mysql" instead of "sudo mariadb".</p>
+<p>Use the test scenario from section 1.3.2. Note: For RHEL 9, use <code>sudo mysql</code> instead of <code>sudo mariadb</code>.</p>
 <h3>3.4. Service Management</h3>
-<p>Unlike Debian and derivatives, RHEL and derivatives does not enable and start services by default.</p>
-<h4>3.4.1. Status of a Service</h4>
+<p>Unlike Debian-based systems, RHEL does not automatically enable or start services after installation.</p>
+<h4>3.4.1. Check Service Status</h4>
 <pre><code>systemctl status httpd
 </code></pre>
 <h4>3.4.2. Start/Stop a Service</h4>
 <pre><code>sudo systemctl stop httpd
 sudo systemctl start httpd
 </code></pre>
-<p>To force to stop</p>
+<p>Force stop:</p>
 <pre><code>sudo systemctl kill httpd
 </code></pre>
 <h4>3.4.3. Reload a Service</h4>
-<p>Reads configuration file again</p>
 <pre><code>sudo systemctl reload httpd
 </code></pre>
 <h4>3.4.4. Restart a Service</h4>
@@ -1244,60 +1225,59 @@ sudo systemctl disable httpd
 </details>
 <details>
 <summary>
-4. Alpine Linux 3.17 3.18 &amp; 3.19
+4. Alpine Linux 3.23
 </summary>
 <hr />
 <h3>4.1. Package Management</h3>
-<p>Commands require root or sudo.</p>
+<p>Commands require root or sudo privileges.</p>
 <h4>4.1.1. Update Cache</h4>
-<pre><code>apk update
+<pre><code>sudo apk update
 </code></pre>
 <h4>4.1.2. Upgrade Packages</h4>
-<pre><code>apk upgrade
+<pre><code>sudo apk upgrade
 </code></pre>
 <h4>4.1.3. Install a Package</h4>
-<pre><code>apk add apache2
+<pre><code>sudo apk add apache2
 </code></pre>
 <h4>4.1.4. Remove a Package</h4>
-<pre><code>apt del apache2
+<pre><code>sudo apk del apache2
 </code></pre>
-<h4>4.1.5. Search a Package</h4>
-<pre><code>apk search apache2
+<h4>4.1.5. Search for a Package</h4>
+<pre><code>sudo apk search apache2
 </code></pre>
 <h4>4.1.6. Clean Unused Packages</h4>
-<p>Not available as much as I know.</p>
-<h4>4.1.7. Show Package Info</h4>
-<pre><code>apk info apache2
+<p>Not available in Alpine's package manager.</p>
+<h4>4.1.7. Show Package Information</h4>
+<pre><code>sudo apk info apache2
 </code></pre>
 <h3>4.2. Network Configuration</h3>
-<h4>4.2.1. Get the name of the network adapter</h4>
-<p>The name of the network adapter will be something like eth0, but we need  the exact name. </p>
-<p>The following command lists the network interface name(s). The one in  eth* format should be the name of your network adapter.</p>
+<h4>4.2.1. Identify Network Adapter Name</h4>
+<p>Alpine typically uses <code>eth0</code> style names:</p>
 <pre><code>ls /sys/class/net
 </code></pre>
-<p>In any case you cannot get the name, you can try to following command:</p>
+<p>or</p>
 <pre><code>ip a
 </code></pre>
 <h4>4.2.2. IP and DNS Configuration</h4>
-<p>I assume that your network adapter name is eth0, otherwise change it. </p>
-<p>Change IP address and Gateway:</p>
+<p>Edit network interfaces (replace <code>eth0</code> with your interface name):</p>
 <pre><code>sudo nano /etc/network/interfaces
 </code></pre>
 <p>File contents will be like below</p>
 <pre><code>auto lo
 iface lo inet loopback
+
 #auto eth0
 #iface eth0 inet dhcp
 auto eth0
 iface eth0 inet static
-        address 192.168.0.247/24
-        gateway 192.168.0.1
+        address 192.168.1.172/24
+        gateway 192.168.1.1
         hostname alpine
+
 </code></pre>
-<p>Change DNS Addresses:</p>
+<p>Configure DNS:</p>
 <pre><code>sudo nano /etc/resolv.conf
 </code></pre>
-<p>File contents will be like below</p>
 <pre><code>nameserver 192.168.0.1
 nameserver 8.8.8.8
 </code></pre>
@@ -1308,9 +1288,9 @@ nameserver 8.8.8.8
 <h4>4.3.1. Install Packages</h4>
 <pre><code>sudo apk add apache2 php php-mysqli php-apache2 mariadb mariadb-client
 </code></pre>
-<h4>4.3.2. Enable Apache</h4>
+<h4>4.3.2. Enable and Start Apache</h4>
 <pre><code>sudo rc-update add apache2 default
-sudo rc-service apache2 restart
+sudo rc-service apache2 start
 </code></pre>
 <h4>4.3.3. Initialize and Enable Mariadb</h4>
 <pre><code>sudo mysql_install_db --user=mysql --datadir=/var/lib/mysql
@@ -1318,11 +1298,10 @@ sudo rc-update add mariadb default
 sudo rc-service mariadb start
 </code></pre>
 <h4>4.3.4. Test</h4>
-<p>You can use the test scenario at 1.3.2 to test Alpine Linux LAMP stack. </p>
-<p>Just remember, default web site directory is /var/www/localhost/htdocs in  Alpine.</p>
+<p>Use the test scenario from section 1.3.2. Note: Alpine's default web directory is <code>/var/www/localhost/htdocs</code>.</p>
 <h3>4.4. Service Management</h3>
-<p>Alpine Linux uses OpenRC as the init system. </p>
-<h4>4.4.1. Status of a Service</h4>
+<p>Alpine uses OpenRC as its init system.</p>
+<h4>4.4.1. Check Service Status</h4>
 <pre><code>rc-service apache2 status
 </code></pre>
 <h4>4.4.2. Start/Stop a Service</h4>
@@ -1330,11 +1309,9 @@ sudo rc-service mariadb start
 sudo rc-service apache2 start
 </code></pre>
 <h4>4.4.3. Reload a Service</h4>
-<p>Reads configuration file again</p>
 <pre><code>sudo rc-service apache2 reload
 </code></pre>
 <h4>4.4.4. Restart a Service</h4>
-<p>Stops and Starts</p>
 <pre><code>sudo rc-service apache2 restart
 </code></pre>
 <h4>4.4.5. Enable/Disable a Service</h4>
@@ -1345,88 +1322,82 @@ sudo rc-update del apache2 default
 </details>
 <details>
 <summary>
-5. Devuan 5 &amp; 4
+5. Devuan 6 &amp; 5
 </summary>
 <hr />
-<p>Devuan is a derivative of Debian without systemd. Devuan 5 &amp; 4 are based  on Debian 12 &amp; 11.</p>
+<p>Devuan is a Debian derivative without systemd. Devuan 6 &amp; 5 are based on Debian 13 &amp; 12.</p>
 <h3>5.1. Package Management</h3>
-<p>Commands require root or sudo.</p>
+<p>Commands require root or sudo privileges.</p>
 <h4>5.1.1. Update Cache</h4>
-<pre><code>apt update
+<pre><code>sudo apt update
 </code></pre>
 <h4>5.1.2. Upgrade Packages</h4>
-<pre><code>apt upgrade
+<pre><code>sudo apt upgrade
 </code></pre>
 <h4>5.1.3. Install a Package</h4>
-<pre><code>apt install apache2
+<pre><code>sudo apt install apache2
 </code></pre>
 <h4>5.1.4. Remove a Package</h4>
-<pre><code>apt remove apache2
+<pre><code>sudo apt remove apache2
 </code></pre>
-<h4>5.1.5. Search a Package</h4>
-<pre><code>apt search apache2
+<h4>5.1.5. Search for a Package</h4>
+<pre><code>sudo apt search apache2
 </code></pre>
 <h4>5.1.6. Clean Unused Packages</h4>
-<pre><code>apt autoremove
+<pre><code>sudo apt autoremove
 </code></pre>
-<h4>5.1.7. Show Package Info</h4>
-<pre><code>apt show apache2
+<h4>5.1.7. Show Package Information</h4>
+<pre><code>sudo apt show apache2
 </code></pre>
 <h3>5.2. Network Configuration</h3>
-<h4>5.2.1. Get the name of the network adapter</h4>
-<p>The name of the network adapter will be something like enp0s3, but we  need the exact name. </p>
-<p>The following command lists the network interface name(s). The one in  eth* format should be the name of your network adapter.</p>
+<h4>5.2.1. Identify Network Adapter Name</h4>
+<p>Devuan typically uses <code>eth0</code> style names:</p>
 <pre><code>ls /sys/class/net
 </code></pre>
-<p>In any case you cannot get the name, you can try to following command:</p>
+<p>or</p>
 <pre><code>ip a
 </code></pre>
 <h4>5.2.2. IP configuration.</h4>
+<p>Edit network interfaces (replace <code>eth0</code> with your interface name):</p>
 <pre><code>sudo nano /etc/network/interfaces
 </code></pre>
-<p>I assume that your network adapter name is eth0, otherwise change it.</p>
-<p>Fill the file like below (change to your IP addresses)</p>
+<p><strong>Static IP:</strong></p>
 <pre><code>auto eth0
 iface eth0 inet static
-address 192.168.0.3/24
-broadcast 192.168.0.255
-network 192.168.0.0
-gateway 192.168.0.1
+   address 192.168.1.176/24
+   broadcast 192.168.1.255
+   network 192.168.1.0
+   gateway 192.168.1.1
 </code></pre>
-<p>If you want to use DHCP, fill the file as below</p>
+<p><strong>DHCP:</strong></p>
 <pre><code>auto eth0
 iface eth0 inet dhcp
 </code></pre>
-<h4>5.2.3. DNS Addresses</h4>
+<h4>5.2.3. DNS Configuration</h4>
 <pre><code>sudo nano /etc/resolv.conf
 </code></pre>
-<p>Add your DNS addresses as below</p>
 <pre><code>nameserver 46.196.235.35
 nameserver 178.233.140.110
 nameserver 46.197.15.60
 </code></pre>
 <h4>5.2.4. Restart Network Adapter</h4>
-<p>Assuming your network adapter name is enp0s3</p>
 <pre><code>sudo ifdown eth0 &amp;&amp; sudo ifup eth0
 </code></pre>
-<p>If you are connecting through SSH, your connection would break up. You  need to connect with the new IP again.</p>
+<p><strong>Note:</strong> SSH connections may drop; reconnect using the new IP.</p>
 <h3>5.3. Installing LAMP Stack</h3>
-<h4>5.3.1. Install packages</h4>
+<h4>5.3.1. Install Packages</h4>
 <pre><code>sudo apt update
 sudo apt install --yes apache2 mariadb-server php libapache2-mod-php php-mysql
 </code></pre>
 <h4>5.3.2. Test LAMP</h4>
-<p>You can use the test scenario at 1.3.2 to test Devuan Linux LAMP stack.</p>
+<p>Use the test scenario from section 1.3.2.</p>
 <h3>5.4. Service Management</h3>
-<p>Conventionally, when a package with a service is installed on Devuan, it is enabled and started by default.</p>
-<p>At Devuan installation, user can choose from 3 init systems:</p>
-<ul>
-<li>sysvinit (default option)</li>
-<li>runit</li>
-<li>OpenRC</li>
-</ul>
-<p>At this tutorial, I assume our Devuan server has sysvinit system.</p>
-<h4>5.4.1. Status of a Service</h4>
+<p>Devuan services are typically enabled and started automatically. During installation, you can choose from three init systems:
+- sysvinit (default)
+- runit
+- OpenRC</p>
+<p>This tutorial assumes sysvinit.</p>
+<h4>5.4.1. Check Service Status</h4>
 <pre><code>sudo service apache2 status 
 </code></pre>
 <h4>5.4.2. Start/Stop a Service</h4>
@@ -1434,11 +1405,9 @@ sudo apt install --yes apache2 mariadb-server php libapache2-mod-php php-mysql
 sudo service apache2 start
 </code></pre>
 <h4>5.4.3. Reload a Service</h4>
-<p>Reads configuration file again</p>
 <pre><code>sudo service apache2 reload
 </code></pre>
 <h4>5.4.4. Restart a Service</h4>
-<p>Stops and Starts</p>
 <pre><code>sudo service apache2 restart
 </code></pre>
 <h4>5.4.5. Enable/Disable a Service</h4>
