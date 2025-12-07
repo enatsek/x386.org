@@ -36,7 +36,7 @@
 
 - [**Other Linuxes:**](otherlinuxes.html) Basic management of Debian, Ubuntu, Red Hat, Alpine and Devuan distributions.
 
-- [**Ubuntu Postgresql:**](postgresbuntu.html) Postgresql installation and basic configuration on Ubuntu. Includes some user management, cluster management, backup and restore.
+- [**Ubuntu Postgresql:**](postgresubuntu.html) Postgresql installation and basic configuration on Ubuntu. Includes some user management, cluster management, backup and restore.
 
 - [**Debian Postgresql:**](postgresdebian.html) Postgresql installation and basic configuration on Debian. Includes some user management, cluster management, backup and restore.
  
