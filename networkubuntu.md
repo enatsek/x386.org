@@ -1,4 +1,4 @@
-##### NetworkOnUbuntu 
+##### Network On Ubuntu 
 # Network Configuration On Ubuntu Server
 </details>
 
@@ -11,21 +11,22 @@
 ### 0.0. Info
 Network configuration examples on Ubuntu 22.04 LTS and 24.04 LTS Servers.
 
-Tried to be as thorough much as possible: single nic, multi nics, multi networks.
+Tried to be as thorough as possible: single NIC, multiple NICs, multiple networks.
 
-Debian and Ubuntu network configurations are very different so there are different tutorials for Debian and Ubuntu.
+Debian and Ubuntu network configurations are very different, so there are separate tutorials for Debian and Ubuntu.
 
 ### 0.1. Configuration Files
-Ubuntu 22.04 and 24.04 LTS Servers use Systemd-Networkd and Netplan over it for network configuration.
+Ubuntu 22.04 and 24.04 LTS Servers use Systemd-Networkd and Netplan for network configuration.
 
-Configuration files reside as yaml files in /etc/netplan dir. A good practice would be to have one configuration file there.
+Configuration files reside as YAML files in the `/etc/netplan` directory. A good practice is to have one configuration file there.
 
-This configuration file consists all network configuration including the name servers.
+This configuration file contains all network configurations, including name servers.
 
 ### 0.2. Sources
-[netplan.io](https://netplan.io/)  
-[netplan.readthedocs.io](https://netplan.readthedocs.io/en/stable/)  
-ChatGPT
+- [netplan.io](https://netplan.io/)
+- [netplan.readthedocs.io](https://netplan.readthedocs.io/en/stable/)
+- [Deepseek](https://www.deepseek.com/)
+- [ChatGPT](https://chatgpt.com/)
 
 <br>
 </details>
@@ -37,7 +38,7 @@ ChatGPT
 
 ---
 ### 1.1. DHCP Configuration
-Our nic is enp0s3
+Our NIC is enp0s3.
 
 ```
 sudo nano /etc/netplan/50-cloud-init.yaml
@@ -59,7 +60,7 @@ sudo netplan apply
 ```
 
 ### 1.2. Static IP Configuration
-Our nic is enp0s3
+Our NIC is enp0s3.
 
 ```
 sudo nano /etc/netplan/50-cloud-init.yaml
@@ -91,7 +92,7 @@ sudo netplan apply
 ```
 
 ### 1.3. Static IP Configuration with 2 IPs
-Our nic is enp0s3
+Our NIC is enp0s3.
 
 ```
 sudo nano /etc/netplan/50-cloud-init.yaml
@@ -124,7 +125,7 @@ sudo netplan apply
 ```
 
 ### 1.4. Static IP Configuration with 2 NICs
-Our nics are enp0s3 enp0s8
+Our NICs are enp0s3 and enp0s8.
 
 ```
 sudo nano /etc/netplan/50-cloud-init.yaml
@@ -168,28 +169,34 @@ sudo netplan apply
 
 ---
 ### 2.0. Specs
-We have 2 separate networks (192.168.1.X and 10.X.X.X). Some hosts from one network need to reach to the hosts from the other network.
+We have 2 separate networks (192.168.1.X and 10.X.X.X). Some hosts from one network need to reach hosts in the other network.
 
-We are going to install a new host to act as a router between the networks.
+We will install a new host to act as a router between the networks.
 
-The host will have 2 NICs (1 in each network), and we'll enable ip routing on it.
+The host will have 2 NICs (one in each network), and we'll enable IP routing on it.
 
-This way, hosts in one network could be able to reach to the hosts in the other network. This will be possible by defining ip routes on the hosts to use the server with 2 nics as a router to the other network.
+This way, hosts in one network will be able to reach hosts in the other network. This will be possible by defining IP routes on the hosts to use the server with 2 NICs as a router to the other network.
 
-Hosts in 192.168.1.X network use 192.168.1.1 as the default gateway, hosts in 10.X.X.X network use 10.1.1.1 as the default gateway.
+Hosts in the 192.168.1.X network use 192.168.1.1 as the default gateway; hosts in the 10.X.X.X network use 10.1.1.1 as the default gateway.
 
-Our router will have 2 NICs, one with the IP 192.168.1.216 and the other with the IP 10.1.1.216.
+Our router will have 2 NICs: one with IP 192.168.1.216 and the other with IP 10.1.1.216.
 
-The hosts in 192.168.1.X network will use 192.168.1.216 to reach the 10.X.X.X network. The hosts in 10.X.X.X network will use 10.1.1.216 to reach the 192.168.1.X network. 
+Hosts in the 192.168.1.X network will use 192.168.1.216 to reach the 10.X.X.X network. Hosts in the 10.X.X.X network will use 10.1.1.216 to reach the 192.168.1.X network.
 
-We are going to configure the router (192.168.1.216 & 10.1.1.216), the host in the first network (192.168.1.217), and the host in the second network (10.1.1.218), and check connectivity between them.
+We will configure:
+
+- The router (192.168.1.216 & 10.1.1.216)
+- The host in the first network (192.168.1.217)
+- The host in the second network (10.1.1.218)
+
+Then we'll check connectivity between them.
 
 ### 2.1. Configuration of the Router
-We have 2 NICs (enp0s3 - 192.168.1.X network, and enp0s8 -10.X.X.X network).
+e have 2 NICs (enp0s3 - 192.168.1.X network, and enp0s8 - 10.X.X.X network).
 
-Configure NICs
-- (enp0s3): 192.168.1.216/24
-- (enp0s8): 10.1.1.216/8
+Configure NICs:
+- enp0s3: 192.168.1.216/24
+- enp0s8: 10.1.1.216/8
 
 ```
 sudo nano /etc/netplan/50-cloud-init.yaml
@@ -219,25 +226,25 @@ network:
         - 10.1.1.216/8
 ```
 
-Restart Networking (Your SSH connection may break, reconnect)
+Restart networking (your SSH connection may break; reconnect if needed):
 
 ```
 sudo netplan apply
 ```
 
-Enable IP Forwarding
+Enable IP forwarding:
 
 ```
 sudo nano /etc/sysctl.conf
 ```
 
-Add the following line to the end
+Add the following line to the end:
 
 ```
 net.ipv4.ip_forward = 1
 ```
 
-Activate
+Activate:
 
 ```
 sudo sysctl -p
@@ -273,7 +280,7 @@ network:
           via: 192.168.1.216
 ```
 
-Restart Networking (Your SSH connection may break, reconnect)
+Restart networking (your SSH connection may break; reconnect if needed):
 
 ```
 sudo netplan apply
@@ -309,7 +316,7 @@ network:
           via: 10.1.1.216
 ```
 
-Restart Networking (Your SSH connection may break, reconnect)
+Restart networking (your SSH connection may break; reconnect if needed):
 
 ```
 sudo netplan apply
@@ -330,7 +337,7 @@ Try on the second host (10.1.1.218)
 ping 192.168.1.217
 ```
 
-For a host to connect to another host on the other network, routing must be defined on the both hosts.
+For a host to connect to another host on the other network, routing must be defined on both hosts.
 
 <br>
 </details>
@@ -341,10 +348,11 @@ For a host to connect to another host on the other network, routing must be defi
 </summary>
 
 ---
-I tried NIC Bonding on Ubuntu, but unfortunately I wasn't successful. 
+I tried NIC bonding on Ubuntu, but unfortunately I wasn't successful.
 
-That might be because of Virtualbox, Netplan, or Networkd. So I gave up. Maybe next time.
+This might be because of VirtualBox, Netplan, or Networkd. So I gave up. Maybe next time.
 
-I was able to create the bond interface, it got IP address too, but it can not connect to anywhere on the network. Even working on Networkd directly didn't help.
+I was able to create the bond interface, and it got an IP address too, but it could not connect to anywhere on the network. Even working with Networkd directly didn't help.
+
 </summary>
 

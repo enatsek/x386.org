@@ -836,7 +836,7 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<summary>Copyright (C) 2020 - 2025 Exforge exforge@x386.org</summary>
 <hr />
 <p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
 <p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
@@ -846,346 +846,263 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <!-- Copyright End -->
 
 <!-- Header End -->
-<h5>FileCompressionOnDebianUbuntu</h5>
-<h1>File Compression and Packaging on Debian And Ubuntu</h1>
+<h5>Network On Ubuntu</h5>
+<h1>Network Configuration On Ubuntu Server</h1>
+</details>
 <details>
 <summary>
 0. Specs
 </summary>
 <hr />
 <h3>0.0. Info</h3>
-<p>When sharing files with other people, you may need to package and compress them. </p>
-<p>There are very good tools for them:</p>
+<p>Network configuration examples on Ubuntu 22.04 LTS and 24.04 LTS Servers.</p>
+<p>Tried to be as thorough as possible: single NIC, multiple NICs, multiple networks.</p>
+<p>Debian and Ubuntu network configurations are very different, so there are separate tutorials for Debian and Ubuntu.</p>
+<h3>0.1. Configuration Files</h3>
+<p>Ubuntu 22.04 and 24.04 LTS Servers use Systemd-Networkd and Netplan for network configuration.</p>
+<p>Configuration files reside as YAML files in the <code>/etc/netplan</code> directory. A good practice is to have one configuration file there.</p>
+<p>This configuration file contains all network configurations, including name servers.</p>
+<h3>0.2. Sources</h3>
 <ul>
-<li>gzip </li>
-<li>bzip2 </li>
-<li>xz </li>
-<li>tar </li>
-<li>zip</li>
-</ul>
-<h3>0.1. Abstract</h3>
-<p>Package and compress the contents of a directory (including subdirs):</p>
-<pre><code>tar -czvf archive.tar.gz /tmp/testdir
-</code></pre>
-<p>Decompress and unpackage the archive:</p>
-<pre><code>tar -xzvf archive.tar.gz
-</code></pre>
-<h3>0.2. Create Test Environment</h3>
-<p>All commands are tested on Debian 11 &amp; 12 and Ubuntu Server 22.04 &amp; 24.04 LTS</p>
-<p>Create a temporary test directory</p>
-<pre><code>mkdir /tmp/testdir
-</code></pre>
-<p>Create 3 more directories d1, d2, d3</p>
-<pre><code>mkdir /tmp/testdir/d{1..3}
-</code></pre>
-<p>Create 3 files at each directory</p>
-<pre><code>touch /tmp/testdir/d1/f1{1..3}
-touch /tmp/testdir/d2/f2{1..3}
-touch /tmp/testdir/d3/f3{1..3}
-</code></pre>
-<p>Fill the files with random data with the given size</p>
-<pre><code>&lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c1M &gt; /tmp/testdir/d1/f11
-&lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c2M &gt; /tmp/testdir/d1/f12
-&lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c3M &gt; /tmp/testdir/d1/f13
-&lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c4M &gt; /tmp/testdir/d2/f21
-&lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c5M &gt; /tmp/testdir/d2/f22
-&lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c6M &gt; /tmp/testdir/d2/f23
-&lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c7M &gt; /tmp/testdir/d3/f31
-&lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c8M &gt; /tmp/testdir/d3/f32
-&lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c9M &gt; /tmp/testdir/d3/f33
-</code></pre>
-<p>Final tree</p>
-<pre><code>├── d1
-│   ├── f11
-│   ├── f12
-│   └── f13
-├── d2
-│   ├── f21
-│   ├── f22
-│   └── f23
-└── d3
-    ├── f31
-    ├── f32
-    └── f33
-</code></pre>
-<h3>0.3. Sources</h3>
-<p>Man pages, the commands with --help option, and ChatGPT as always.<br />
-<strong>Never trust ChatGPT, check everything it says.</strong><br />
-<a href="https://linuxconfig.org/create-a-random-character-text-file-using-linux-shell">linuxconfig.org</a></p>
-<p><br></p>
-</details>
-<details>
-<summary>
-1. gzip
-</summary>
-<hr />
-<h3>1.1. Info</h3>
-<p>Installation (Most probably, it is already installed).</p>
-<pre><code>sudo apt update
-sudo apt install gzip
-</code></pre>
-<p>gzip compresses (and decompresses) only 1 file, it is not used to prepare a package of files. But it can be combined with tar to make a compressed  package of files.</p>
-<h3>1.2. Usage</h3>
-<p>Compress a file<br />
-(Original file is removed, a new file is created there with .gz extension)</p>
-<pre><code>gzip /tmp/testdir/d1/f11
-</code></pre>
-<p>Decompress a file<br />
-(.gz file is removed, a new file is created there without .gz extension)</p>
-<pre><code>gzip -d /tmp/testdir/d1/f11.gz
-gunzip /tmp/testdir/d1/f11.gz
-</code></pre>
-<p>Compress a file, keep the original file</p>
-<pre><code>gzip -k /tmp/testdir/d1/f11
-</code></pre>
-<p>Decompress a file, keep the .gz file</p>
-<pre><code>gzip -kd /tmp/testdir/d1/f11.gz
-</code></pre>
-<p>Compress all files in a directory<br />
-(All files are removed, new files are created there with .gz extensions)</p>
-<pre><code>gzip /tmp/testdir/d1/*
-</code></pre>
-<p>Decompress all files in a directory</p>
-<pre><code>gzip -d /tmp/testdir/d1/*
-gunzip /tmp/testdir/d1/*
-</code></pre>
-<p>Compress all files recursively (including subdirectories)</p>
-<pre><code>gzip -r /tmp/testdir
-</code></pre>
-<p>Decompress all files recursively (including subdirectories)</p>
-<pre><code>gzip -rd /tmp/testdir
-</code></pre>
-<p>Some useful options:</p>
-<ul>
-<li>-l --list: List compressed file contents</li>
-<li>-q --quiet: Suppress all warnings</li>
-<li>-1 --fast: Compress faster</li>
-<li>-9 --best: Compress better</li>
+<li><a href="https://netplan.io/">netplan.io</a></li>
+<li><a href="https://netplan.readthedocs.io/en/stable/">netplan.readthedocs.io</a></li>
+<li><a href="https://www.deepseek.com/">Deepseek</a></li>
+<li><a href="https://chatgpt.com/">ChatGPT</a></li>
 </ul>
 <p><br></p>
 </details>
 <details>
 <summary>
-2. bzip2
+1. Example Configurations
 </summary>
 <hr />
-<h3>2.1. Info</h3>
-<p>Installation (Most probably, it is already installed).</p>
-<pre><code>sudo apt update
-sudo apt install bzip2
+<h3>1.1. DHCP Configuration</h3>
+<p>Our NIC is enp0s3.</p>
+<pre><code>sudo nano /etc/netplan/50-cloud-init.yaml
 </code></pre>
-<p>bzip2 compresses (and decompresses) only 1 file, it is not used to prepare a package of files. But it can be combined with tar to make a compressed  package of files.</p>
-<p>Provides higher compression ratios compared to gzip, but may be slower.</p>
-<h3>2.2. Usage</h3>
-<p>Compress a file<br />
-(Original file is removed, a new file is created there with .bz2 extension)</p>
-<pre><code>bzip2 /tmp/testdir/d1/f11
+<p>Fill as below:</p>
+<pre><code>network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s3:
+      dhcp4: true
 </code></pre>
-<p>Decompress a file<br />
-(.bz2 file is removed, a new file is created there without .bz2 extension)</p>
-<pre><code>bzip2 -d /tmp/testdir/d1/f11.bz2
-bunzip2 /tmp/testdir/d1/f11.bz2
+<pre><code>sudo netplan apply
 </code></pre>
-<p>Compress a file, keep the original file</p>
-<pre><code>bzip2 -k /tmp/testdir/d1/f11
+<h3>1.2. Static IP Configuration</h3>
+<p>Our NIC is enp0s3.</p>
+<pre><code>sudo nano /etc/netplan/50-cloud-init.yaml
 </code></pre>
-<p>Decompress a file, keep the .bz2 file</p>
-<pre><code>bzip2 -kd /tmp/testdir/d1/f11.bz2
+<p>Fill as below:</p>
+<pre><code>network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s3:
+      addresses:
+        - 192.168.1.221/24
+      nameservers:
+        search:
+          - &quot;x386.org&quot;
+        addresses:
+          - 8.8.8.8
+          - 8.8.4.4
+      routes:
+        - to: default
+          via: 192.168.1.1
 </code></pre>
-<p>Compress all files in a directory<br />
-(All files are removed, new files are created there with .bz2 extensions)</p>
-<pre><code>bzip2 /tmp/testdir/d1/*
+<pre><code>sudo netplan apply
 </code></pre>
-<p>Decompress all files in a directory</p>
-<pre><code>bzip2 -d /tmp/testdir/d1/*
-bunzip2 /tmp/testdir/d1/*
+<h3>1.3. Static IP Configuration with 2 IPs</h3>
+<p>Our NIC is enp0s3.</p>
+<pre><code>sudo nano /etc/netplan/50-cloud-init.yaml
 </code></pre>
-<p>Some useful options:</p>
-<ul>
-<li>-q --quiet: Suppress all warnings</li>
-<li>-1 --fast: Compress faster</li>
-<li>-9 --best: Compress better</li>
-</ul>
+<p>Fill as below:</p>
+<pre><code>network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s3:
+      addresses:
+        - 192.168.1.221/24
+        - 10.1.1.1/8
+      nameservers:
+        search:
+          - &quot;x386.org&quot;
+        addresses:
+          - 8.8.8.8
+          - 8.8.4.4
+      routes:
+        - to: default
+          via: 192.168.1.1
+</code></pre>
+<pre><code>sudo netplan apply
+</code></pre>
+<h3>1.4. Static IP Configuration with 2 NICs</h3>
+<p>Our NICs are enp0s3 and enp0s8.</p>
+<pre><code>sudo nano /etc/netplan/50-cloud-init.yaml
+</code></pre>
+<p>Fill as below:</p>
+<pre><code>network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s3:
+      addresses:
+        - 192.168.1.221/24
+      nameservers:
+        search:
+          - &quot;x386.org&quot;
+        addresses:
+          - 8.8.8.8
+          - 8.8.4.4
+      routes:
+        - to: default
+          via: 192.168.1.1
+    enp0s8:
+      addresses:
+        - 10.1.1.1/8
+</code></pre>
+<pre><code>sudo netplan apply
+</code></pre>
 <p><br></p>
 </details>
 <details>
 <summary>
-3. xz
+2. Case Study - Multiple Networks
 </summary>
 <hr />
-<h3>3.1. Info</h3>
-<p>Installation (Most probably, it is already installed).</p>
-<pre><code>sudo apt update
-sudo apt install xz-utils
-</code></pre>
-<p>xz compresses (and decompresses) only 1 file, it is not used to prepare  a package of files. But it can be combined with tar to make a compressed  package of files.</p>
-<h3>3.2. Usage</h3>
-<p>Compress a file<br />
-(Original file is removed, a new file is created there with .xz extension)</p>
-<pre><code>xz /tmp/testdir/d1/f11
-</code></pre>
-<p>Decompress a file<br />
-(.gz file is removed, a new file is created there without .gz extension)</p>
-<pre><code>xz -d /tmp/testdir/d1/f11.xz
-unxz /tmp/testdir/d1/f11.xz
-</code></pre>
-<p>Compress a file, keep the original file</p>
-<pre><code>xz -k /tmp/testdir/d1/f11
-</code></pre>
-<p>Decompress a file, keep the .xz file</p>
-<pre><code>xz -kd /tmp/testdir/d1/f11.xz
-</code></pre>
-<p>Compress all files in a directory<br />
-(All files are removed, new files are created there with .xz extensions)</p>
-<pre><code>xz /tmp/testdir/d1/*
-</code></pre>
-<p>Decompress all files in a directory</p>
-<pre><code>xz -d /tmp/testdir/d1/*
-unxz /tmp/testdir/d1/*
-</code></pre>
-<p>Some useful options:</p>
+<h3>2.0. Specs</h3>
+<p>We have 2 separate networks (192.168.1.X and 10.X.X.X). Some hosts from one network need to reach hosts in the other network.</p>
+<p>We will install a new host to act as a router between the networks.</p>
+<p>The host will have 2 NICs (one in each network), and we'll enable IP routing on it.</p>
+<p>This way, hosts in one network will be able to reach hosts in the other network. This will be possible by defining IP routes on the hosts to use the server with 2 NICs as a router to the other network.</p>
+<p>Hosts in the 192.168.1.X network use 192.168.1.1 as the default gateway; hosts in the 10.X.X.X network use 10.1.1.1 as the default gateway.</p>
+<p>Our router will have 2 NICs: one with IP 192.168.1.216 and the other with IP 10.1.1.216.</p>
+<p>Hosts in the 192.168.1.X network will use 192.168.1.216 to reach the 10.X.X.X network. Hosts in the 10.X.X.X network will use 10.1.1.216 to reach the 192.168.1.X network.</p>
+<p>We will configure:</p>
 <ul>
-<li>-l --list: List compressed file contents</li>
-<li>-q --quiet: Suppress all warnings</li>
-<li>-0: Compress faster</li>
-<li>-9: Compress better</li>
+<li>The router (192.168.1.216 &amp; 10.1.1.216)</li>
+<li>The host in the first network (192.168.1.217)</li>
+<li>The host in the second network (10.1.1.218)</li>
 </ul>
+<p>Then we'll check connectivity between them.</p>
+<h3>2.1. Configuration of the Router</h3>
+<p>e have 2 NICs (enp0s3 - 192.168.1.X network, and enp0s8 - 10.X.X.X network).</p>
+<p>Configure NICs:
+- enp0s3: 192.168.1.216/24
+- enp0s8: 10.1.1.216/8</p>
+<pre><code>sudo nano /etc/netplan/50-cloud-init.yaml
+</code></pre>
+<p>Fill as below:</p>
+<pre><code>network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s3:
+      addresses:
+        - 192.168.1.216/24
+      nameservers:
+        search:
+          - &quot;x386.org&quot;
+        addresses:
+          - 8.8.8.8
+          - 8.8.4.4
+      routes:
+        - to: default
+          via: 192.168.1.1
+    enp0s8:
+      addresses:
+        - 10.1.1.216/8
+</code></pre>
+<p>Restart networking (your SSH connection may break; reconnect if needed):</p>
+<pre><code>sudo netplan apply
+</code></pre>
+<p>Enable IP forwarding:</p>
+<pre><code>sudo nano /etc/sysctl.conf
+</code></pre>
+<p>Add the following line to the end:</p>
+<pre><code>net.ipv4.ip_forward = 1
+</code></pre>
+<p>Activate:</p>
+<pre><code>sudo sysctl -p
+</code></pre>
+<h3>2.2. Configuration of the First Host</h3>
+<p>We have 1 NIC (enp0s3 - 192.168.1.X network).</p>
+<pre><code>sudo nano /etc/netplan/50-cloud-init.yaml
+</code></pre>
+<p>Fill as below:</p>
+<pre><code>network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s3:
+      addresses:
+        - 192.168.1.217/24
+      nameservers:
+        search:
+          - &quot;x386.org&quot;
+        addresses:
+          - 8.8.8.8
+          - 8.8.4.4
+      routes:
+        - to: default
+          via: 192.168.1.1
+        - to: 10.0.0.0/8
+          via: 192.168.1.216
+</code></pre>
+<p>Restart networking (your SSH connection may break; reconnect if needed):</p>
+<pre><code>sudo netplan apply
+</code></pre>
+<h3>2.3. Configuration of the Second Host</h3>
+<p>We have 1 NIC (enp0s3 - 192.168.1.X network).</p>
+<pre><code>sudo nano /etc/netplan/50-cloud-init.yaml
+</code></pre>
+<p>Fill as below:</p>
+<pre><code>network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s3:
+      addresses:
+        - 10.1.1.218/8
+      nameservers:
+        search:
+          - &quot;x386.org&quot;
+        addresses:
+          - 8.8.8.8
+          - 8.8.4.4
+      routes:
+        - to: default
+          via: 10.1.1.1
+        - to: 192.168.1.0/24
+          via: 10.1.1.216
+</code></pre>
+<p>Restart networking (your SSH connection may break; reconnect if needed):</p>
+<pre><code>sudo netplan apply
+</code></pre>
+<h3>2.4. Notes</h3>
+<p>The host in the first network can ping the host in the other network now, and vice versa.</p>
+<p>Try on the first host (192.168.1.217)</p>
+<pre><code>ping 10.1.1.218
+</code></pre>
+<p>Try on the second host (10.1.1.218)</p>
+<pre><code>ping 192.168.1.217
+</code></pre>
+<p>For a host to connect to another host on the other network, routing must be defined on both hosts.</p>
 <p><br></p>
 </details>
 <details>
 <summary>
-4. tar
+3. NIC Bonding
 </summary>
 <hr />
-<h4>4.1. Info</h4>
-<p>Installation (Most probably, it is already installed)</p>
-<pre><code>sudo apt update
-sudo apt install tar
-</code></pre>
-<p>tar actually is an archiving utility, it is used to package files. It can  package many files to a file. It can also transparently be combined with gzip bzip2 and xz tools to compress files. </p>
-<h3>4.2. Usage</h3>
-<h4>4.2.1. With Compression</h4>
-<p>Package and compress (with gzip) the contents of a directory (including subdirectories).<br />
-Archive file is created in the current directory.</p>
-<pre><code>tar -czvf archive.tar.gz /tmp/testdir
-</code></pre>
-<p>Decompress and unpackage the archive<br />
-Creates the directory structure under current directory</p>
-<pre><code>tar -xzvf archive.tar.gz
-</code></pre>
-<p>(package) compress &amp; decompress (unpackage) with bzip2</p>
-<pre><code>tar -cjvf archive.tar.bz2 /tmp/testdir
-tar -xjvf archive.tar.bz2
-</code></pre>
-<p>(package) compress &amp; decompress (unpackage) with xz</p>
-<pre><code>tar -cJvf archive.tar.xz /tmp/testdir
-tar -xJvf archive.tar.xz
-</code></pre>
-<p>See the contents of an archive</p>
-<pre><code>tar -tvf archive.tar.gz
-tar -tvf archive.tar.bz2
-tar -tvf archive.tar.xz
-</code></pre>
-<p>Extract files to another directory<br />
-Directory must exist.</p>
-<pre><code>tar -xzvf archive.tar.gz -C /tmp
-tar -xjvf archive.tar.bz2 -C /tmp
-tar -xJvf archive.tar.xz -C /tmp
-</code></pre>
-<h4>4.2.2. Without Compression (Archiving)</h4>
-<p>Tar can be used without compressing too, actually it is the main usage of  the tar command.</p>
-<p>All the conditions apply in 4.2.1., if you skip compression options (-z, -j, -J) then you get an archive without compression. This time you can add files to it, or remove files from it.</p>
-<p>Archive a directory (and subdirectories)</p>
-<pre><code>tar -cvf archive.tar /tmp/testdir
-</code></pre>
-<p>List the contents</p>
-<pre><code>tar -tvf archive.tar
-</code></pre>
-<p>Unarchive it</p>
-<pre><code>tar -xvf archive.tar
-</code></pre>
-<p>Add a file to the archive</p>
-<pre><code>tar -rvf archive.tar test.txt
-</code></pre>
-<p>Remove a file from the archive</p>
-<pre><code>tar -vf archive.tar --delete test.txt
-</code></pre>
-<h4>4.2.3. Options</h4>
-<p>Tar has tons of options. You can list them all by:</p>
-<pre><code>tar --help
-</code></pre>
-<p>Some selected options:</p>
-<ul>
-<li>-c: Create a new archive.</li>
-<li>-t: List the contents of the archive.    </li>
-<li>-x: Extract files from the archive.</li>
-<li>-v: Verbose mode (show the progress and file names).</li>
-<li>-f: Specify the archive file name.</li>
-<li>-z: Use gzip compression.</li>
-<li>-j: Use bzip2 compression.</li>
-<li>-J: Use xz compression.</li>
-<li>-C: Change to the specified directory before extracting.</li>
-<li>-r: Append files to the end of an archive</li>
-<li>-a: use archive suffix to determine the compression program.</li>
-<li>--delete: delete from the archive</li>
-<li>--exclude=PATTERN: exclude files, given as a PATTERN</li>
-<li>--overwrite: overwrite existing files when extracting</li>
-<li>--remove-files: remove files after adding them to the archive</li>
-</ul>
-<p><br></p>
-</details>
-<details>
-<summary>
-5. zip
+<p>I tried NIC bonding on Ubuntu, but unfortunately I wasn't successful.</p>
+<p>This might be because of VirtualBox, Netplan, or Networkd. So I gave up. Maybe next time.</p>
+<p>I was able to create the bond interface, and it got an IP address too, but it could not connect to anywhere on the network. Even working with Networkd directly didn't help.</p>
 </summary>
-<hr />
-<h3>5.1. Info</h3>
-<p>Although gzip, bzip2, xz, and tar is more than enough for compression and archiving; sometimes you may need to exchange files with the unlucky people using Wind*ws. zip tool may be helpful then.</p>
-<p>Installation</p>
-<pre><code>sudo apt update
-sudo apt install zip
-</code></pre>
-<h3>5.2. Usage</h3>
-<p>Compress a file
-(File zip file is created in the current dir, original file stays there)</p>
-<pre><code>zip f11.zip /tmp/testdir/d1/f11
-</code></pre>
-<p>Decompress a file
-(Decompress to the current dir by creating the directory structure in zip file, zip file stays where it is).</p>
-<pre><code>unzip f11.zip
-</code></pre>
-<p>Compress all the files in a directory</p>
-<pre><code>zip d1.zip /tmp/testdir/d1/*
-</code></pre>
-<p>Compress all the files in a directory including subdirectories</p>
-<pre><code>zip -r test.zip /tmp/testdir/
-</code></pre>
-<p>Compress and encrypt</p>
-<pre><code>zip -er test.zip /tmp/testdir/
-</code></pre>
-<p>List the contents of a zip file</p>
-<pre><code>unzip -l test.zip
-</code></pre>
-<p>Add new files to a zip file</p>
-<pre><code>zip -u d1.zip /tmp/testdir/d2/*
-</code></pre>
-<p>Some options:</p>
-<ul>
-<li>-u: update; only changed or new files</li>
-<li>-d: delete entries in zipfile</li>
-<li>-m: move into zipfile (delete OS files)</li>
-<li>-r: recurse into directories</li>
-<li>-j: junk (don't record) directory names</li>
-<li>-1: compress faster</li>
-<li>-9: compress better</li>
-<li>-q: quiet operation</li>
-<li>-v: verbose operation/print version info</li>
-<li>-x: exclude the following names</li>
-<li>-i: include only the following names</li>
-<li>-e: encrypt</li>
-</ul>
-</details>
-</summary><!-- HTML Footer Start -->
+</details><!-- HTML Footer Start -->
 
 </body>
 </html>

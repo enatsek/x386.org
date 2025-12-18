@@ -846,29 +846,36 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <!-- Copyright End -->
 
 <!-- Header End -->
-<h5>LVMOnDebianUbuntu</h5>
+<h5>LVM</h5>
 <h1>Logical Volume Manager on Debian and Ubuntu Server</h1>
 <details>
 <summary>
 0. Specs
 </summary>
 <hr />
-<h3>0.1. Info</h3>
-<p>LVM, or Logical Volume Manager allows for more flexible and dynamic  management of disk space compared to traditional partitioning schemes. </p>
-<p>It enables features such as resizing volumes, creating snapshots, and managing multiple physical storage devices more effectively.</p>
-<p>To get the best of LVM, it must be defined when the OS is installed. That  way we can use LVM for (nearly) all of our disk space (boot partition can not be in LVM).</p>
-<p>It is possible to install the OS without LVM and add it later too. But to use LVM on the / (root) partition, we need to install it when we install the OS.</p>
-<h3>0.2. Test Environment</h3>
-<p>Tested on the following environments:</p>
+<h3>0.1. The What</h3>
+<p>Logical Volume Manager (LVM) is a powerful tool for managing disk storage in Linux. It allows system administrators to create, resize, and manage disk partitions more flexibly than traditional partitioning methods.</p>
+<p>LVM enables features such as volume resizing, snapshot creation, and effective management of multiple physical storage devices.</p>
+<p><strong>Note:</strong> For optimal use, LVM should be configured during OS installation. This allows LVM to manage nearly all disk space (except the boot partition, which cannot be in LVM).</p>
+<p>It is also possible to install the OS without LVM and add it later. However, to use LVM for the <code>/</code> (root) partition, it must be set up during OS installation.</p>
+<p>If the OS was installed without LVM, you can install the LVM package as follows:</p>
+<pre><code>sudo apt update
+sudo apt -y install lvm2
+</code></pre>
+<h3>0.2. Environment</h3>
+<p>Tested on the following distributions:</p>
 <ul>
-<li>Debian 11</li>
 <li>Debian 12</li>
+<li>Debian 13</li>
 <li>Ubuntu 22.04 LTS Server</li>
 <li>Ubuntu 24.04 LTS Server</li>
 </ul>
 <h3>0.3. Sources</h3>
-<p><a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/configuring_and_managing_logical_volumes/index">Red Hat Documentation</a><br />
-ChatGPT</p>
+<ul>
+<li><a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/configuring_and_managing_logical_volumes/index">Red Hat Documentation</a>  </li>
+<li><a href="https://www.deepseek.com/">Deepseek</a></li>
+<li><a href="https://chatgpt.com/">ChatGPT</a></li>
+</ul>
 <p><br></p>
 </details>
 <details>
@@ -877,56 +884,36 @@ ChatGPT</p>
 </summary>
 <hr />
 <h3>1.0. Abstract</h3>
-<ul>
-<li>Physical Volumes (PV) are defined from disks or partitions.</li>
-<li>Volume Groups (VG) are defined by combining PVs.</li>
-<li>Logical Volumes are defined within VGs.</li>
-</ul>
+<p>LVM is structured in three layers:</p>
+<ol>
+<li><strong>Physical Volumes (PV)</strong> – Created from disks or partitions.</li>
+<li><strong>Volume Groups (VG)</strong> – Formed by combining PVs.</li>
+<li><strong>Logical Volumes (LV)</strong> – Defined within VGs.</li>
+</ol>
 <h3>1.1. Physical Volumes (PV)</h3>
-<p>Storage devices or partitions that LVM uses as a building block.</p>
-<p>Could be a complete hard drive, a disk partition, or even a RAID array.</p>
+<p>Storage devices or partitions used by LVM as building blocks. These can be:</p>
+<ul>
+<li>A complete hard drive</li>
+<li>A disk partition</li>
+<li>A RAID array</li>
+</ul>
 <h3>1.2. Volume Groups (VG)</h3>
-<p>Collections of one or more physical volumes.</p>
-<p>Act as a pool that aggregates the storage space from multiple physical volumes.</p>
-<p>Logical volumes are created within volume groups.</p>
+<p>Collections of one or more physical volumes. VGs act as a storage pool, aggregating space from multiple PVs. Logical volumes are created within volume groups.</p>
 <h3>1.3. Logical Volumes (LV)</h3>
-<p>An abstraction that represents a portion of a volume group.</p>
-<p>Similar to partitions in traditional disk management.</p>
-<p>Can be resized and moved without affecting the data stored on them.</p>
-<p>There are 6 main LV types.</p>
+<p>Abstract representations of a portion of a volume group, similar to partitions in traditional disk management. LVs can be resized and moved without affecting stored data.</p>
+<p>There are six main types of logical volumes:</p>
 <h4>1.3.1. Linear Logical Volume</h4>
-<p>Default logical volume type.</p>
-<p>Data is stored sequentially.</p>
-<pre><code>lvcreate -n mylv -L 10G myvg
-</code></pre>
+<p>The default logical volume type. Data is stored sequentially.</p>
 <h4>1.3.2. Mirrored Logical Volume</h4>
-<p>Provides data redundancy with multiple copies (mirrors) of the data.</p>
-<p>Offers fault tolerance; if one mirror fails, the remaining mirrors can be  used.</p>
-<pre><code>lvcreate --type mirror --mirrors 2 -n mymirroredlv -L 10G myvg
-</code></pre>
+<p>Provides data redundancy by maintaining multiple copies (mirrors) of the data. Offers fault tolerance: if one mirror fails, the others remain usable.</p>
 <h4>1.3.3. Snapshot Logical Volume</h4>
-<p>Creates a point-in-time copy (snapshot) of an existing logical volume.</p>
-<p>Useful for backup purposes or creating consistent images of a volume for  testing.</p>
-<pre><code>lvcreate --type snapshot -n mysnapshotlv -L 5G --snapshot /dev/myvg/mylv
-</code></pre>
+<p>Creates a point-in-time copy (snapshot) of an existing logical volume. Useful for backups or creating consistent volume images for testing.</p>
 <h4>1.3.4. Thin Logical Volume</h4>
-<p>Enables efficient storage allocation by using thin provisioning.</p>
-<p>Allocates space only as needed, allowing for more flexible use of storage resources.</p>
-<pre><code>lvcreate --type thin-pool -n mythinpool -L 100G myvg
-lvcreate --type thin -n mythinvolume -V 50G --thinpool myvg/mythinpool
-</code></pre>
+<p>Enables efficient storage allocation through thin provisioning. Space is allocated only as needed, allowing more flexible use of storage resources.</p>
 <h4>1.3.5. Cache Logical Volume</h4>
-<p>Used to cache data for another logical volume, providing improved  performance.</p>
-<p>Typically used with SSDs to cache data from slower spinning disks.</p>
-<pre><code>lvcreate --type writeback --size 100M --name mycachelv myvg
-lvconvert --type writecache --cachevol myvg/mycachelv \
-     --name mycachedlv myvg/myoriginalvolume
-</code></pre>
+<p>Used to cache data for another logical volume, improving performance. Typically used with SSDs to cache data from slower spinning disks.</p>
 <h4>1.3.6. Striped Logical Volume</h4>
-<p>Stripes data evenly across multiple physical volumes to enhance I/O  performance. </p>
-<p>Allows parallel read and write operations.</p>
-<pre><code>lvcreate --type striped -i 2 -I 4M -L 200G -n striped_lv myvg
-</code></pre>
+<p>Stripes data evenly across multiple physical volumes to enhance I/O performance. Allows parallel read and write operations.</p>
 <p><br></p>
 </details>
 <details>
@@ -935,21 +922,21 @@ lvconvert --type writecache --cachevol myvg/mycachelv \
 </summary>
 <hr />
 <h3>2.1. pvs</h3>
-<p>Provides physical volume information in a configurable form, displaying one line per physical volume</p>
+<p>Displays physical volume information in a configurable format, showing one line per physical volume.</p>
 <pre><code>sudo pvs
 sudo pvs /dev/sdb
 </code></pre>
 <h3>2.2. pvscan</h3>
-<p>Scans all supported LVM block devices in the system for physical volumes.</p>
+<p>Scans all supported LVM block devices for physical volumes.</p>
 <pre><code>sudo pvscan
 </code></pre>
-<p>Locates and identifies the physical volumes on the system and updates the metadata cache used by LVM.</p>
+<p>Locates and identifies physical volumes on the system and updates the LVM metadata cache.</p>
 <h3>2.3. pvdisplay</h3>
 <p>Provides a verbose multi-line output for each physical volume.</p>
 <pre><code>sudo pvdisplay
 sudo pvdisplay /dev/sdb
 </code></pre>
-<p>Display a mapping of the physical extents to the corresponding logical volumes.</p>
+<p>Display a mapping of physical extents to corresponding logical volumes:</p>
 <pre><code>sudo pvdisplay -m /dev/sdb
 </code></pre>
 <h3>2.4. pvcreate</h3>
@@ -957,38 +944,36 @@ sudo pvdisplay /dev/sdb
 <pre><code>sudo pvcreate /dev/sdb
 sudo pvcreate /dev/sdb1
 </code></pre>
-<p>Make sure the device or partition is not used. It will be erased.</p>
-<p>After initializing, you can create or extend volume groups using the
-vgcreate or vgextend commands, respectively.</p>
+<p><strong>Warning:</strong> Ensure the device or partition is not in use, as it will be erased.</p>
+<p>After initialization, you can create or extend volume groups using <code>vgcreate</code> or <code>vgextend</code>, respectively.</p>
 <h3>2.5. pvremove</h3>
 <p>Removes LVM metadata from a physical volume.</p>
 <pre><code>sudo pvremove /dev/sdb
 sudo pvremove /dev/sdb1
 </code></pre>
-<p>Make sure you are not removing a used PV. </p>
-<p>Remove any logical volumes and volume groups associated with the physical volume before running <code>pvremove</code>.</p>
-<p>After pvremove, you can repurpose the device or partition for other uses, like creating a new partition, filesystem, etc.</p>
+<p><strong>Warning:</strong> Ensure you are not removing a PV that is still in use. Remove any associated logical volumes and volume groups before running <code>pvremove</code>.</p>
+<p>After removal, the device or partition can be repurposed (e.g., for a new partition or filesystem).</p>
 <h3>2.6. pvmove</h3>
-<p>Move allocated physical extents from one physical volume to another within the same volume group.</p>
-<p>Move all the data in /dev/sda1 to /dev/sdb1. They must be in the same VG</p>
+<p>Moves allocated physical extents from one physical volume to another within the same volume group.</p>
+<p>Move all data from <code>/dev/sda1</code> to <code>/dev/sdb1</code> (both must be in the same VG):</p>
 <pre><code>sudo pvmove /dev/sda1 /dev/sdb1
 </code></pre>
 <h3>2.7. pvresize</h3>
-<p>Resize a physical volume</p>
+<p>Resizes a physical volume.</p>
 <pre><code>sudo pvresize /dev/sdb1
 </code></pre>
-<p>Must be used when the underlying block device is resized.</p>
+<p>Used when the underlying block device has been resized.</p>
 <h3>2.8. pvchange</h3>
-<p>Changes the properties (allocatable, uuid, tags etc) of a physical volume.</p>
-<p>Make the physical volume /dev/sdb1 allocatable</p>
+<p>Changes properties (allocatable, UUID, tags, etc.) of a physical volume.</p>
+<p>Make <code>/dev/sdb1</code> allocatable:</p>
 <pre><code>sudo pvchange -x y /dev/sdb1
 </code></pre>
-<p>Deactivate (disable) the physical volume in verbose mode.</p>
+<p>Deactivate (disable) the physical volume in verbose mode:</p>
 <pre><code>sudo pvchange -x y /dev/sdb1
 </code></pre>
 <h3>2.9. pvck</h3>
-<p>Checks and repairs LVM metadata on PVs</p>
-<p>Check a PV</p>
+<p>Checks and repairs LVM metadata on physical volumes.</p>
+<p>Check a PV:</p>
 <pre><code>sudo pvck /dev/sdb1
 </code></pre>
 <p><br></p>
@@ -999,81 +984,71 @@ sudo pvremove /dev/sdb1
 </summary>
 <hr />
 <h3>3.1. vgs</h3>
-<p>Provides volume group information in a configurable form, displaying one line per volume group</p>
+<p>This command provides volume group information in a configurable form, displaying one line per volume group.</p>
 <pre><code>sudo vgs
 sudo vgs myvg
 </code></pre>
 <h3>3.2. vgscan</h3>
-<p>Scans all supported LVM block devices in the system for volume groups.</p>
+<p>Scans all supported LVM block devices in the system for volume groups and updates the LVM metadata cache.</p>
 <pre><code>sudo vgscan
 </code></pre>
-<p>Updates the metadata cache used by LVM. This cache maintains information about the volume groups on the system.</p>
 <h3>3.3. vgdisplay</h3>
-<p>Displays volume group properties such as size, extents, number of physical volumes, and other options in a fixed form.</p>
+<p>Displays volume group properties such as size, extents, number of physical volumes, and other details in a fixed format.</p>
 <pre><code>sudo vgdisplay
 sudo vgdisplay myvg
 </code></pre>
 <h3>3.4. vgcreate</h3>
 <p>Creates a new volume group.</p>
-<p>Create a new volume group named myvg using the physical volume /dev/sdb1</p>
+<p>Create a new volume group named <code>myvg</code> using the physical volume <code>/dev/sdb1</code>:</p>
 <pre><code>sudo vgcreate myvg /dev/sdb1
 </code></pre>
-<p>Before vgcreate, physical volumes must be initialized with pvcreate.</p>
-<p>Volume group names are case-sensitive.</p>
-<p>When creating a volume group, LVM considers the total size of the physical volumes.</p>
-<p>After creating a volume group with vgcreate, you can proceed to create logical volumes.</p>
+<p><strong>Prerequisite:</strong> The specified physical volumes must be initialized with <code>pvcreate</code>.</p>
+<p><strong>Note:</strong> Volume group names are case-sensitive. The new volume group's total capacity will be the sum of the capacities of the specified physical volumes. After creation, you can proceed to create logical volumes within it.</p>
 <h3>3.5. vgextend</h3>
 <p>Adds physical volumes to an existing volume group.</p>
-<p>Add physical volume /dev/sdb2 to the volume group myvg</p>
+<p>Add physical volume <code>/dev/sdb2</code> to the volume group <code>myvg</code>:</p>
 <pre><code>sudo vgextend myvg /dev/sdb2
 </code></pre>
-<p>Before using vgextend, ensure that the physical volumes you specify are initialized with pvcreate.</p>
-<p>After extending a volume group with vgextend, you can use the additional storage space to either extend existing logical volumes or create new ones within the extended volume group.</p>
+<p><strong>Prerequisite:</strong> The physical volumes to be added must already be initialized using <code>pvcreate</code>. After extending a volume group, you can use the additional space to extend existing logical volumes or create new ones.</p>
 <h3>3.6. vgreduce</h3>
-<p>Remove one or more physical volumes from a volume group. </p>
-<p>Remove /dev/sdb2 from volume group myvg</p>
+<p>Removes one or more physical volumes from a volume group.</p>
+<p>Remove <code>/dev/sdb2</code> from volume group <code>myvg</code>:</p>
 <pre><code>sudo vgreduce myvg /dev/sdb1
 </code></pre>
-<p>When removing a physical volume, the data on that physical volume is moved to other available physical volumes in the volume group.</p>
-<p>Removing a physical volume from a volume group is a significant operation and can impact data availability. Ensure that you have proper backups before performing such operations.</p>
+<p><strong>Note:</strong> You must first ensure the PV contains no allocated extents (use <code>pvmove</code> to relocate data). Otherwise, the command will fail unless forced, which can lead to data loss.</p>
 <h3>3.7. vgremove</h3>
 <p>Removes a volume group.</p>
 <pre><code>sudo vgremove myvg
 </code></pre>
-<p>Before using <code>vgremove</code>, ensure that there are no logical volumes or other dependencies associated with the volume group.</p>
-<p>Remove any logical volumes within the volume group using lvremove before using vgremove.</p>
-<p>Ensure that any filesystems mounted from logical volumes within the volume group are unmounted before attempting to remove the volume group.</p>
-<p>After removing a volume group with vgremove, the physical volumes that were part of the volume group become unallocated, and you can repurpose them for other uses.</p>
+<p><strong>Prerequisites:</strong> You must first remove all logical volumes within the volume group using <code>lvremove</code>. Also, ensure any filesystems mounted from those logical volumes are unmounted. After removal, the physical volumes become unallocated and can be repurposed.</p>
 <h3>3.8. vgchange</h3>
-<p>Change the attributes of a volume group.</p>
-<p>Activate (enable) the volume group myvg.</p>
+<p>Changes the attributes of a volume group.</p>
+<p>Activate (enable) the volume group <code>myvg</code>:</p>
 <pre><code>sudo vgchange -a y myvg
 </code></pre>
-<ul>
-<li>"-a y" or "-a n": Activates (-a y) or deactivates (-a n) the volume group.</li>
-</ul>
+<p><em>( <code>-a y</code> activates; <code>-a n</code> deactivates the volume group.)</em></p>
 <h3>3.9. vgrename</h3>
 <p>Renames a volume group.</p>
 <pre><code>sudo vgrename oldvg newvg
 </code></pre>
 <h3>3.10. vgck</h3>
-<p>Checks the consistency of volume groups</p>
+<p>Checks the consistency of volume group metadata.</p>
 <pre><code>sudo vgck
 </code></pre>
-<p>Rewrite VG metadata to correct problems.</p>
+<p>The <code>--updatemetadata</code> flag rewrites VG metadata to correct inconsistencies:</p>
 <pre><code>sudo vgck --updatemetadata myvg -v
 </code></pre>
-<h3>3.11. Other Commands:</h3>
+<h3>3.11. Other Commands</h3>
 <ul>
-<li>vgcfgbackup: Backup volume group configurations.</li>
-<li>vgcfgrestore: Restore volume group configuration</li>
-<li>vgconvert: Change volume group metadata format.</li>
-<li>vgexport: Unregister volume group(s) from the system.</li>
-<li>vgimport: Register exported volume group with system.</li>
-<li>vgimportclone: Import a VG from cloned PVs.</li>
-<li>vgmerge: Merge volume groups.</li>
-<li>vgmknodes: Create the special files for volume group devices in /dev.</li>
-<li>vgsplit: Move PVs into a new or existing volume group</li>
+<li><code>vgcfgbackup</code>: Backs up volume group configurations.</li>
+<li><code>vgcfgrestore</code>: Restores volume group configuration.</li>
+<li><code>vgconvert</code>: Changes volume group metadata format.</li>
+<li><code>vgexport</code>: Unregisters volume group(s) from the system.</li>
+<li><code>vgimport</code>: Registers an exported volume group with the system.</li>
+<li><code>vgimportclone</code>: Imports a VG from cloned PVs.</li>
+<li><code>vgmerge</code>: Merges volume groups.</li>
+<li><code>vgmknodes</code>: Creates the special device files for volume groups in <code>/dev</code>.</li>
+<li><code>vgsplit</code>: Moves PVs into a new or existing volume group.</li>
 </ul>
 <p><br></p>
 </details>
@@ -1083,57 +1058,55 @@ sudo vgdisplay myvg
 </summary>
 <hr />
 <h3>4.1. lvs</h3>
-<p>Provides logical volume information in a configurable form, displaying one line per logical volume</p>
+<p>Provides logical volume information in a configurable form, displaying one line per logical volume.</p>
 <pre><code>sudo lvs
 sudo lvs /dev/vg_name/lv_name
 sudo lvs /dev/myvg/mylv
 </code></pre>
-<p>All LVs in a VG</p>
+<p>To list all LVs in a specific VG:</p>
 <pre><code>sudo lvs /dev/vg_name
 sudo lvs /dev/myvg
 </code></pre>
 <h3>4.2. lvscan</h3>
-<p>Scans for all logical volumes in the system and lists them.</p>
+<p>Scans for and lists all logical volumes in the system.</p>
 <pre><code>sudo lvscan
 </code></pre>
 <h3>4.3. lvdisplay</h3>
-<p>Displays logical volume properties, such as size, layout, and mapping in a fixed format</p>
+<p>Displays logical volume properties, such as size, layout, and mapping, in a fixed format.</p>
 <pre><code>sudo lvdisplay
 sudo lvdisplay myvg/mylv
 </code></pre>
-<p>Specify units in megabytes</p>
+<p>To display sizes in megabytes:</p>
 <pre><code>sudo lvdisplay --unit m myvg/mylv
 </code></pre>
 <h3>4.4. lvcreate</h3>
 <p>Creates a new logical volume within a volume group.</p>
-<p>Create a new LV named mylv in myvg VG with size 11 GB</p>
+<p>Create a new LV named <code>mylv</code> in the <code>myvg</code> volume group with a size of 11 GB:</p>
 <pre><code>sudo lvcreate -L 11G -n mylv myvg
 </code></pre>
-<p>Format created logical volume:</p>
+<p>Format the newly created logical volume:</p>
 <pre><code>sudo mkfs -t ext4 /dev/myvg/mylv
 </code></pre>
-<p>Mount it</p>
+<p>Mount it:</p>
 <pre><code>sudo mkdir /mnt/point
 sudo mount /dev/myvg/mylv /mnt/point
 </code></pre>
-<p>Unmount it</p>
+<p>Unmount it:</p>
 <pre><code>sudo umount /mnt/point
 </code></pre>
 <h3>4.5. lvextend</h3>
 <p>Extends the size of a logical volume.</p>
-<p>Extend mylv logical volume by 2 GB</p>
+<p>Extend the <code>mylv</code> logical volume by 2 GB:</p>
 <pre><code>sudo lvextend -L +2G myvg/mylv
 </code></pre>
-<p>Or extend the mylv logical volume to maximum available</p>
-<pre><code>sudo lvextend -l +100%FREE  myvg/mylv
-</code></pre>
-<p>Resize the file system</p>
+<p>Resize the filesystem to use the new space:</p>
 <pre><code>sudo resize2fs /dev/myvg/mylv
 </code></pre>
-<p><code>xfs_growfs</code> is used for XFS.</p>
+<p><strong>Note:</strong> <code>resize2fs</code> may require a clean filesystem. If prompted, run <code>sudo e2fsck -f /dev/myvg/mylv</code> first.</p>
+<p>For XFS filesystems, use <code>xfs_growfs</code> instead of <code>resize2fs</code>.</p>
 <h3>4.6. lvreduce</h3>
 <p>Reduces the size of a logical volume.</p>
-<p>Reduce the logical volume mylv in the volume group myvg by 2 GB.</p>
+<p>Reduce the logical volume mylv in the volume group myvg by 1 GB:</p>
 <pre><code>sudo lvreduce -L -1G myvg/mylv
 </code></pre>
 <p>Resize the file system (you may need to unmount the LV)</p>
@@ -1141,69 +1114,68 @@ sudo mount /dev/myvg/mylv /mnt/point
 </code></pre>
 <h3>4.7. lvremove</h3>
 <p>Removes a logical volume.</p>
-<p>Remove the logical volume mylv in the volume group myvg.</p>
+<p>Remove the logical volume <code>mylv</code> in the volume group <code>myvg</code>:</p>
 <pre><code>sudo lvremove myvg/mylv
 </code></pre>
-<p>The command permanently deletes the data.</p>
-<p>Ensure that any filesystems mounted from the logical volume are unmounted before attempting to remove it.</p>
+<p><strong>Warning:</strong> This action is irreversible and will permanently destroy all data on the logical volume. Ensure any filesystems mounted from it are unmounted first.</p>
 <h3>4.8. lvchange</h3>
-<p>Changes the attributes and status of a logical volume. Activate or  deactivate a logical volume, modify its permission flags, or change its  allocation policy.  </p>
-<p>Deactivate (or sets to "no") the activation of the logical volume mylv in the volume group myvg.</p>
+<p>Changes the attributes and status of a logical volume, such as activation state or permission flags.</p>
+<p>Deactivate the logical volume <code>mylv</code> in the volume group <code>myvg</code>:</p>
 <pre><code>sudo lvchange -a n myvg/mylv
 </code></pre>
-<p>Activate it</p>
+<p>Activate it:</p>
 <pre><code>sudo lvchange -a y myvg/mylv
 </code></pre>
-<p>Sets the read-only permission in a logical volume</p>
+<p>Set the logical volume to read-only:</p>
 <pre><code>sudo lvchange -p r myvg/mylv
 </code></pre>
-<p>Sets back the read/write permission in a logical volume</p>
+<p>Set it back to read/write:</p>
 <pre><code>sudo lvchange -p rw myvg/mylv
 </code></pre>
 <h3>4.9. lvrename</h3>
-<p>Renames a logical volume name</p>
+<p>Renames a logical volume.</p>
 <pre><code>sudo lvrename myvg mylv mynewlv2
 </code></pre>
 <h3>4.10. Other Commands</h3>
 <ul>
-<li>lvconvert: Change logical volume layout.</li>
-<li>lvresize: Resize a logical volume.</li>
+<li><code>lvconvert</code>: Changes logical volume layout (e.g., to/from mirrored, snapshot).</li>
+<li><code>lvresize</code>: A combined command that can extend or reduce a logical volume (use with the same caution as <code>lvreduce</code>).</li>
 </ul>
 <p><br></p>
 </details>
 <details>
 <summary>
 5. Case Study 1 - Installing LVM and Manipulating Disks, PVs, VGs, LVs
----
 </summary>
+<hr />
 <h3>5.0. Specs</h3>
 <p>We have a system installed without LVM. </p>
 <ul>
-<li>Add a 20 GB disk and use it as a LV</li>
-<li>Add a 30 GB disk and extend the LV</li>
-<li>Add a 50 GB disk, extend the VG and move data to this disk</li>
+<li>Add a 20 GB disk and use it as a LV.</li>
+<li>Add a 30 GB disk and extend the LV.</li>
+<li>Add a 50 GB disk, extend the VG and move data to this disk.</li>
 <li>Remove 20 GB and 30 GB disks.</li>
 </ul>
-<p>The steps:</p>
+<p><strong>The steps:</strong></p>
 <ol>
-<li>Install LVM</li>
-<li>Add 20 GB disk</li>
-<li>Create a PV from the disk</li>
-<li>Create a VG from the PV</li>
-<li>Create a LV within the VG</li>
-<li>Create a Filesystem in the LV</li>
-<li>Mount the FS </li>
-<li>Add 30 GB disk</li>
-<li>Create a PV from the 2nd disk</li>
-<li>Extend the VG with this PV</li>
-<li>Extend the LV</li>
-<li>Extend the Filesystem</li>
-<li>Add 50 GB disk</li>
-<li>Create a PV from the 3rd disk</li>
-<li>Extend the VG with this PV</li>
-<li>Move data from 20 GB and 30 GB disks to 50 GB disk</li>
-<li>Remove 20 GB and 30 GB disks as PV</li>
-<li>Remove 20 GB and 30 GB disks from the system and check everything</li>
+<li>Install LVM.</li>
+<li>Add a 20 GB disk.</li>
+<li>Create a PV from the disk.</li>
+<li>Create a VG from the PV.</li>
+<li>Create an LV within the VG.</li>
+<li>Create a filesystem on the LV.</li>
+<li>Mount the filesystem.</li>
+<li>Add a 30 GB disk.</li>
+<li>Create a PV from the 2nd disk.</li>
+<li>Extend the VG with this PV.</li>
+<li>Extend the LV.</li>
+<li>Extend the filesystem.</li>
+<li>Add a 50 GB disk.</li>
+<li>Create a PV from the 3rd disk.</li>
+<li>Extend the VG with this PV.</li>
+<li>Move data from the 20 GB and 30 GB disks to the 50 GB disk.</li>
+<li>Remove the 20 GB and 30 GB disks as PVs.</li>
+<li>Physically remove the 20 GB and 30 GB disks and verify everything works.</li>
 </ol>
 <h3>5.1. Install LVM Packages</h3>
 <pre><code>sudo apt update
@@ -1217,9 +1189,9 @@ sda      8:0    0 22.9G  0 disk
 |-sda2   8:2    0    1K  0 part 
 `-sda5   8:5    0  976M  0 part [SWAP]
 </code></pre>
-<p>For physical servers, you need to add a disk to the hardware. For virtual servers you have to define it and attach it to the VM.</p>
+<p><strong>For physical servers</strong>, you need to add the disk to the hardware. <strong>For virtual servers</strong>, you need to define it and attach it to the VM.</p>
 <p>I'm adding a 20 GB disk to my VM.</p>
-<p>Output of <code>lsblk -i</code> command after adding the disk:</p>
+<p>Output of the <code>lsblk -i</code> command after adding the disk:</p>
 <pre><code>NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda      8:0    0 22.9G  0 disk 
 |-sda1   8:1    0   22G  0 part /
@@ -1227,41 +1199,40 @@ sda      8:0    0 22.9G  0 disk
 `-sda5   8:5    0  976M  0 part [SWAP]
 sdb      8:16   0   20G  0 disk 
 </code></pre>
-<p>That means, my new disk is /dev/sdb.</p>
-<p>At the following steps, you need to change /dev/sdb to your disk device  name.</p>
+<p>This means my new disk is <code>/dev/sdb</code>. <strong>In the following steps, change <code>/dev/sdb</code> to your actual disk device name.</strong></p>
 <h3>5.3. Create a PV from the Disk</h3>
-<p>Mark /dev/sdb as a PV</p>
+<p>Mark <code>/dev/sdb</code> as a Physical Volume:</p>
 <pre><code>sudo pvcreate /dev/sdb
 </code></pre>
 <h3>5.4. Create a VG from the PV</h3>
-<p>Create a VG named "myvg" using /dev/sdb</p>
+<p>Create a Volume Group named <code>myvg</code> using <code>/dev/sdb</code>:</p>
 <pre><code>sudo vgcreate myvg /dev/sdb
 </code></pre>
-<h3>5.5. Create a LV Within the VG</h3>
-<p>Create the LV using the maximum available size with name mylv</p>
+<h3>5.5. Create a LV within the VG</h3>
+<p>Create the Logical Volume using the maximum available space and name it <code>mylv</code>:</p>
 <pre><code>sudo lvcreate -l +100%FREE -n mylv myvg
 </code></pre>
 <h3>5.6. Create a Filesystem in the LV</h3>
-<p>Format as Ext4</p>
+<p>Format it as Ext4:</p>
 <pre><code>sudo mkfs -t ext4 /dev/myvg/mylv
 </code></pre>
 <h3>5.7. Mount the FS</h3>
-<p>Create a mount point</p>
+<p>Create a mount point:</p>
 <pre><code>sudo mkdir /mnt/mylv
 </code></pre>
-<p>Mount mylv to the mount point /mnt/mylv</p>
+<p>Mount <code>mylv</code> to the mount point <code>/mnt/mylv</code>:</p>
 <pre><code>sudo mount /dev/myvg/mylv /mnt/mylv
 </code></pre>
-<p>If you want the mount to be persistent, add to the end of /etc/fstab</p>
+<p>To make the mount persistent, add it to <code>/etc/fstab</code>:</p>
 <pre><code>sudo nano /etc/fstab
 </code></pre>
-<p>Add to the end of the file</p>
+<p>Add this line to the end of the file:</p>
 <pre><code>/dev/myvg/mylv    /mnt/mylv    ext4    defaults    0 0
 </code></pre>
-<p>Check with lsblk</p>
+<p>Check with <code>lsblk</code>:</p>
 <pre><code>lsblk -i
 </code></pre>
-<p>Output of the command</p>
+<p>Output:</p>
 <pre><code>NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda           8:0    0 22.9G  0 disk 
 |-sda1        8:1    0   22G  0 part /
@@ -1270,10 +1241,10 @@ sda           8:0    0 22.9G  0 disk
 sdb           8:16   0   20G  0 disk 
 `-myvg-mylv 254:0    0   20G  0 lvm  /mnt/mylv
 </code></pre>
-<p>Check with df -h</p>
+<p>Check with <code>df -h</code>:</p>
 <pre><code>df -h
 </code></pre>
-<p>Output of the command</p>
+<p>Output:</p>
 <pre><code>Filesystem             Size  Used Avail Use% Mounted on
 udev                   457M     0  457M   0% /dev
 tmpfs                   97M  544K   96M   1% /run
@@ -1283,24 +1254,24 @@ tmpfs                  5.0M     0  5.0M   0% /run/lock
 /dev/mapper/myvg-mylv   20G   44K   19G   1% /mnt/mylv
 tmpfs                   97M     0   97M   0% /run/user/1000
 </code></pre>
-<p>Create some big files in the filesystem<br />
-Create a directory for files</p>
+<p><strong>Create some large files in the filesystem:</strong></p>
+<p>Create a directory for files:</p>
 <pre><code>sudo mkdir /mnt/mylv/tmp
 </code></pre>
-<p>Make it writable for everyone</p>
+<p>Make it writable for everyone:</p>
 <pre><code>sudo chmod 777 /mnt/mylv/tmp
 </code></pre>
-<p>Create 3 files of 500 MB each</p>
+<p>Create 3 files of 500 MB each:</p>
 <pre><code>&lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c500M &gt; /mnt/mylv/tmp/file1
 &lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c500M &gt; /mnt/mylv/tmp/file2
 &lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c500M &gt; /mnt/mylv/tmp/file3
 </code></pre>
-<p>Check contents</p>
+<p>Check the contents:</p>
 <pre><code>ls -al /mnt/mylv/tmp
 </code></pre>
-<h3>5.8. Add 30 GB disk</h3>
+<h3>5.8. Add 30 GB Disk</h3>
 <p>I'm adding a 30 GB disk to my VM.</p>
-<p>Output of <code>lsblk -i</code> command after adding the disk:</p>
+<p>Output of <code>lsblk -i</code> after adding the disk:</p>
 <pre><code>NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda           8:0    0 22.9G  0 disk 
@@ -1311,27 +1282,27 @@ sdb           8:16   0   20G  0 disk
 `-myvg-mylv 254:0    0   20G  0 lvm  /mnt/mylv
 sdc           8:32   0   30G  0 disk 
 </code></pre>
-<p>That means, my new disk is /dev/sdc.</p>
-<p>At the following steps, you need to change /dev/sdc to your disk device  name.</p>
+<p>This means my new disk is <code>/dev/sdc</code>. <strong>Change <code>/dev/sdc</code> to your actual disk device name in the following steps.</strong></p>
 <h3>5.9. Create a PV from the Second Disk</h3>
-<p>Mark /dev/sdc as a PV</p>
+<p>Mark <code>/dev/sdc</code> as a Physical Volume:</p>
 <pre><code>sudo pvcreate /dev/sdc
 </code></pre>
-<h3>5.10. Extend the VG with this PV</h3>
-<p>Add /dev/sdc to VG myvg</p>
+<h3>5.10. Extend the VG with This PV</h3>
+<p>Add <code>/dev/sdc</code> to the Volume Group <code>myvg</code>:</p>
 <pre><code>sudo vgextend myvg /dev/sdc
 </code></pre>
 <h3>5.11. Extend the LV</h3>
-<p>Extend mylv LV to maximum</p>
+<p>Extend the <code>mylv</code> Logical Volume to use all available free space:</p>
 <pre><code>sudo lvextend -l +100%FREE  myvg/mylv
 </code></pre>
 <h3>5.12. Extend the Filesystem</h3>
+<p>Resize the filesystem to use the new space:</p>
 <pre><code>sudo resize2fs /dev/myvg/mylv
 </code></pre>
-<p>Check "df -h" command to check the new size</p>
+<p>Check the new size with <code>df -h</code>:</p>
 <pre><code>df -h
 </code></pre>
-<p>Output of the command</p>
+<p>Output:</p>
 <pre><code>Filesystem             Size  Used Avail Use% Mounted on
 udev                   457M     0  457M   0% /dev
 tmpfs                   97M  548K   96M   1% /run
@@ -1340,15 +1311,15 @@ tmpfs                  481M     0  481M   0% /dev/shm
 tmpfs                  5.0M     0  5.0M   0% /run/lock
 /dev/mapper/myvg-mylv   50G  1.5G   46G   4% /mnt/mylv
 </code></pre>
-<p>Add another big file</p>
+<p>Add another large file:</p>
 <pre><code>&lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c500M &gt; /mnt/mylv/tmp/file4
 </code></pre>
-<p>Check contents</p>
+<p>Check the contents:</p>
 <pre><code>ls -al /mnt/mylv/tmp
 </code></pre>
-<h3>5.13. Add 50 GB disk</h3>
+<h3>5.13. Add 50 GB Disk</h3>
 <p>I'm adding a 50 GB disk to my VM.</p>
-<p>Output of <code>lsblk -i</code> command after adding the disk:</p>
+<p>Output of <code>lsblk -i</code> after adding the disk:</p>
 <pre><code>NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda           8:0    0 22.9G  0 disk 
 |-sda1        8:1    0   22G  0 part /
@@ -1360,36 +1331,35 @@ sdc           8:32   0   30G  0 disk
 `-myvg-mylv 254:0    0   30G  0 lvm  /mnt/mylv
 sdd           8:48   0   50G  0 disk 
 </code></pre>
-<p>That means, my new disk is /dev/sdd.</p>
-<p>At the following steps, you need to change /dev/sdd to your disk device  name.</p>
-<h3>5.14. Create a PV from the 3rd disk</h3>
-<p>Mark /dev/sdd as a PV</p>
+<p>This means my new disk is <code>/dev/sdd</code>. <strong>Change <code>/dev/sdd</code> to your actual disk device name in the following steps.</strong></p>
+<h3>5.14. Create a PV from the 3rd Disk</h3>
+<p>Mark <code>/dev/sdd</code> as a Physical Volume:</p>
 <pre><code>sudo pvcreate /dev/sdd
 </code></pre>
-<h3>5.15. Extend the VG with this PV</h3>
-<p>Add /dev/sdd to VG myvg</p>
+<h3>5.15. Extend the VG with This PV</h3>
+<p>Add <code>/dev/sdd</code> to the Volume Group <code>myvg</code>:</p>
 <pre><code>sudo vgextend myvg /dev/sdd
 </code></pre>
-<h3>5.16. Move data from 20 GB and 30 GB disks to 50 GB disk</h3>
-<p>Move from 20 GB disk to 50 GB disk</p>
+<h3>5.16. Move Data from the 20 GB and 30 GB Disks to the 50 GB Disk</h3>
+<p>Move data from the 20 GB disk (<code>sdb</code>) to the 50 GB disk (<code>sdd</code>):</p>
 <pre><code>sudo pvmove /dev/sdb /dev/sdd
 </code></pre>
-<p>Move from 30 GB disk to 50 GB disk</p>
+<p>Move data from the 30 GB disk (<code>sdc</code>) to the 50 GB disk (<code>sdd</code>):</p>
 <pre><code>sudo pvmove /dev/sdc /dev/sdd
 </code></pre>
-<p>These may take some time</p>
-<h3>5.17. Remove 20 GB and 30 GB disks as PV</h3>
-<p>First remove them from the VG</p>
+<p><strong>Note:</strong> These operations may take some time, depending on the amount of data.</p>
+<h3>5.17. Remove the 20 GB and 30 GB Disks as PVs</h3>
+<p>First, remove them from the Volume Group:</p>
 <pre><code>sudo vgreduce myvg /dev/sdb
 sudo vgreduce myvg /dev/sdc
 </code></pre>
-<p>Now remove PVs (unmark them as PV)</p>
+<p>Now, remove the Physical Volume metadata from the disks:</p>
 <pre><code>sudo pvremove /dev/sdb
 sudo pvremove /dev/sdc
 </code></pre>
-<h3>5.18. Remove 20 GB and 30 GB disks from the system and check everything</h3>
-<p>At this step we physically remove (or unattach 20 GB and 30 GB disks)</p>
-<p>Output of <code>lsblk -i</code> command after removing the disks</p>
+<h3>5.18. Physically Remove the 20 GB and 30 GB Disks and Verify</h3>
+<p>At this step, we physically remove (or detach) the 20 GB and 30 GB disks from the system.</p>
+<p>Output of <code>lsblk -i</code> after removing the disks:</p>
 <pre><code>NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda           8:0    0 22.9G  0 disk 
 |-sda1        8:1    0   22G  0 part /
@@ -1398,8 +1368,8 @@ sda           8:0    0 22.9G  0 disk
 sdb           8:16   0   50G  0 disk 
 `-myvg-mylv 254:0    0   30G  0 lvm  /mnt/mylv
 </code></pre>
-<p>As you can see, /dev/sdd became /dev/sdb but there is no problem. Our LVM is still working.</p>
-<p>Check contents</p>
+<p>As you can see, <code>/dev/sdd</code> has become <code>/dev/sdb</code>, but this is not a problem. Our LVM configuration is still working correctly.</p>
+<p>Check the contents to confirm data integrity:</p>
 <pre><code>ls -al /mnt/mylv/tmp
 </code></pre>
 <p><br></p>
@@ -1408,36 +1378,33 @@ sdb           8:16   0   50G  0 disk
 <summary>
 6. Case Study 2 - LVM and Snapshot
 </summary>
-<p>When we take a snapshot, we create a place to save the original states of the files that are changed after the snapshot.</p>
-<p>That way, those original states can be used to revert to the snapshot.</p>
-<p>Because only the originals of the changed data is backed up, snapshots do not require a lot of place.</p>
-<p>If a snapshot is full, the snapshot becomes invalid because it can no longer track changes on the original volume. </p>
-<p>Snapshots are resizable.</p>
+<hr />
+<p>A snapshot creates a point-in-time copy of a Logical Volume (LV). When files are changed on the original volume after the snapshot is taken, the original data blocks are preserved in the snapshot space. This allows you to revert to the snapshot state if needed.</p>
+<p>Because only changed data blocks are stored, snapshots typically require much less space than the original volume.</p>
+<p><strong>Important:</strong> If a snapshot becomes full (runs out of space to track changes), it becomes invalid and is automatically dropped, which can lead to data loss. Snapshots are resizable to prevent this.</p>
 <h3>6.0. Specs</h3>
-<p>We have a system installed with LVM. </p>
-<ul>
-<li>Add a 20 GB disk and use it to extend the system disk</li>
-<li>Add a 30 GB disk and create a new VG with it</li>
-<li>Create a snapshot using the 30 GB disk</li>
-<li>Change the system dramatically and revert to the snapshot</li>
-</ul>
-<p>The steps:</p>
+<p>We have a system installed with LVM.
+- Add a 20 GB disk and use it to extend the system (<code>/</code>) disk.
+- Add a 30 GB disk and add it to the existing Volume Group.
+- Create a snapshot of the root filesystem using space from the new 30 GB disk.
+- Make significant changes to the system and revert using the snapshot.</p>
+<p><strong>The steps:</strong></p>
 <ol>
-<li>Add 20 GB disk</li>
-<li>Create a PV from the disk</li>
-<li>Extend the VG with this PV</li>
-<li>Extend the LV</li>
-<li>Extend the Filesystem</li>
-<li>Add 30 GB disk</li>
-<li>Create a PV from the disk</li>
-<li>Create a new VG with this PV</li>
-<li>Create a snapshot of the system disk</li>
-<li>Make some changes on the system disk</li>
-<li>Mount the Snapshot and Check Its Content</li>
-<li>Extend the Snapshot</li>
-<li>Revert to the snapshot</li>
+<li>Add a 20 GB disk.</li>
+<li>Create a PV from the disk.</li>
+<li>Extend the VG with this PV.</li>
+<li>Extend the root LV.</li>
+<li>Extend the filesystem.</li>
+<li>Add a 30 GB disk.</li>
+<li>Create a PV from the disk.</li>
+<li>Extend the VG with this PV.</li>
+<li>Create a snapshot of the system (root) disk.</li>
+<li>Make some changes to the system disk.</li>
+<li>Mount the snapshot and check its content.</li>
+<li>Extend the snapshot.</li>
+<li>Revert to the snapshot.</li>
 </ol>
-<h3>6.1. Add 20 GB disk</h3>
+<h3>6.1. Add 20 GB Disk</h3>
 <p>Output of <code>lsblk -i</code> command before adding the disk:</p>
 <pre><code>NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda               8:0    0   20G  0 disk 
@@ -1447,19 +1414,18 @@ sda               8:0    0   20G  0 disk
   |-myvg-root   254:0    0 18.6G  0 lvm  /
   `-myvg-swap_1 254:1    0  980M  0 lvm  [SWAP]
 </code></pre>
-<p><strong>Note:</strong> </p>
-<p>When installing LVM at the install time, Debian lets you choose the VG name, as I choose it as myvg. Debian chooses the LV name as root.</p>
-<p>Ubuntu doesn't let us choosing VG and LV names, they are given as ubuntu-vg and root.</p>
-<p>At this section, you need to change myvg to your Volume Group name (ubuntu-vg for Ubuntu) for all the commands.</p>
-<p>Output of "pvs" before adding the disk</p>
+<p><strong>Note on Naming:</strong></p>
+<p>When installing with LVM, Debian lets you choose the VG name (I chose <code>myvg</code>). Debian names the root LV <code>root</code>. Ubuntu uses <code>ubuntu-vg</code> and <code>lv-root</code> by default.</p>
+<p><strong>In this section, replace <code>myvg</code> with your actual Volume Group name (<code>ubuntu-vg</code> for Ubuntu) in all commands.</strong></p>
+<p>Output of <code>sudo pvs</code> before adding the disk:</p>
 <pre><code>  PV         VG   Fmt  Attr PSize   PFree
   /dev/sda5  myvg lvm2 a--  &lt;19.52g    0 
 </code></pre>
-<p>Output of "lvscan" before adding the disk</p>
+<p>Output of <code>sudo lvscan</code> before adding the disk:</p>
 <pre><code>  ACTIVE            '/dev/myvg/root' [18.56 GiB] inherit
   ACTIVE            '/dev/myvg/swap_1' [980.00 MiB] inherit
 </code></pre>
-<p>Output of "df -h" before adding the disk</p>
+<p>Output of <code>df -h</code> before adding the disk:</p>
 <pre><code>Filesystem             Size  Used Avail Use% Mounted on
 udev                   458M     0  458M   0% /dev
 tmpfs                   97M  544K   96M   1% /run
@@ -1469,9 +1435,9 @@ tmpfs                  5.0M     0  5.0M   0% /run/lock
 /dev/sda1              455M   98M  333M  23% /boot
 tmpfs                   97M     0   97M   0% /run/user/1000
 </code></pre>
-<p>For physical servers, you need to add a disk to the hardware. For virtual servers you have to define it and attach it to the VM.</p>
+<p><strong>For physical servers</strong>, add the disk to the hardware. <strong>For virtual servers</strong>, define and attach it to the VM.</p>
 <p>I'm adding a 20 GB disk to my VM.</p>
-<p>Output of <code>lsblk -i</code> command after adding the disk:</p>
+<p>Output of <code>lsblk -i</code> after adding the disk:</p>
 <pre><code>NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda               8:0    0   20G  0 disk 
 |-sda1            8:1    0  487M  0 part /boot
@@ -1481,24 +1447,24 @@ sda               8:0    0   20G  0 disk
   `-myvg-swap_1 254:1    0  980M  0 lvm  [SWAP]
 sdb               8:16   0   20G  0 disk 
 </code></pre>
-<p>That means, my new disk is /dev/sdb.</p>
-<p>At the following steps, you need to change /dev/sdb to your disk device  name.</p>
-<h3>6.2. Create a PV from the disk</h3>
-<p>Mark /dev/sdb as a PV</p>
+<p>This means my new disk is <code>/dev/sdb</code>. <strong>Change <code>/dev/sdb</code> to your actual disk device name in the following steps.</strong></p>
+<h3>6.2. Create a PV from the Disk</h3>
+<p>Mark <code>/dev/sdb</code> as a Physical Volume:</p>
 <pre><code>sudo pvcreate /dev/sdb
 </code></pre>
-<h3>6.3. Extend the VG with this PV</h3>
-<p>Add /dev/sdb to VG myvg</p>
+<h3>6.3. Extend the VG with This PV</h3>
+<p>Add <code>/dev/sdb</code> to the Volume Group <code>myvg</code>:</p>
 <pre><code>sudo vgextend myvg /dev/sdb
 </code></pre>
 <h3>6.4. Extend the LV</h3>
-<p>Extend the root LV (LV defined at the system install) to maximum</p>
+<p>Extend the root LV to use all available free space:</p>
 <pre><code>sudo lvextend -l +100%FREE  myvg/root
 </code></pre>
 <h3>6.5. Extend the Filesystem</h3>
+<p>Resize the filesystem to use the new space:</p>
 <pre><code>sudo resize2fs /dev/myvg/root
 </code></pre>
-<p>Output of <code>df -h</code> after expanding the disk</p>
+<p>Output of <code>df -h</code> after expanding:</p>
 <pre><code>Filesystem             Size  Used Avail Use% Mounted on
 udev                   458M     0  458M   0% /dev
 tmpfs                   97M  548K   96M   1% /run
@@ -1508,7 +1474,7 @@ tmpfs                  5.0M     0  5.0M   0% /run/lock
 /dev/sda1              455M   98M  333M  23% /boot
 tmpfs                   97M     0   97M   0% /run/user/1000
 </code></pre>
-<h3>6.6. Add 30 GB disk</h3>
+<h3>6.6. Add 30 GB Disk</h3>
 <p>I'm adding a 30 GB disk to my VM.</p>
 <p>Output of <code>lsblk -i</code> command after adding the disk:</p>
 <pre><code>sda               8:0    0   20G  0 disk 
@@ -1521,50 +1487,55 @@ sdb               8:16   0   20G  0 disk
 `-myvg-root     254:0    0 38.6G  0 lvm  /
 sdc               8:32   0   30G  0 disk 
 </code></pre>
-<p>That means, my new disk is /dev/sdc.</p>
-<p>At the following steps, you need to change /dev/sdc to your disk device  name.</p>
-<h3>6.7. Create a PV from the disk</h3>
-<p>Mark /dev/sdc as a PV</p>
+<p>This means my new disk is <code>/dev/sdc</code>. <strong>Change <code>/dev/sdc</code> to your actual disk device name in the following steps.</strong></p>
+<h3>6.7. Create a PV from the Disk</h3>
+<p>Mark <code>/dev/sdc</code> as a Physical Volume:</p>
 <pre><code>sudo pvcreate /dev/sdc
 </code></pre>
-<h3>6.8. Extend the VG with this PV</h3>
+<h3>6.8. Extend the VG with This PV</h3>
+<p>Add <code>/dev/sdc</code> to the Volume Group <code>myvg</code>:</p>
 <pre><code>sudo vgextend myvg /dev/sdc
 </code></pre>
-<p>Snapshots must be in the same VG as the original LV</p>
-<h3>6.9. Create a snapshot of the system disk</h3>
-<p>Create a snapshot named mysnapshot of LV root from VG myvg. Size is 2 GB.</p>
+<p><strong>Important:</strong> Snapshots must be created within the same Volume Group as the original Logical Volume.</p>
+<h3>6.9. Create a Snapshot of the System Disk</h3>
+<p>Create a 2 GB snapshot named <code>mysnapshot</code> of the <code>root</code> LV:</p>
 <pre><code>sudo lvcreate --type snapshot -n mysnapshot -L 2G --snapshot /dev/myvg/root
 </code></pre>
-<h3>6.10. Make some changes on the system disk</h3>
-<p>Well, the idea is to change the data on the myvg/root LV. I'll try  installing some software.</p>
+<p><strong>Tip:</strong> Monitor snapshot usage with <code>sudo lvs -o lv_name,lv_size,snap_percent,origin</code>. If the usage nears 100%, extend it immediately.</p>
+<h3>6.10. Make Changes to the System Disk</h3>
+<p>To demonstrate the snapshot, we'll make significant changes by installing software:</p>
 <pre><code>sudo apt update
-sudo apt install apache2 mariadb-server
+sudo apt install -y apache2 mariadb-server
 </code></pre>
-<p>Let's check our Snapshot</p>
+<p>Check the snapshot status to see if it's tracking changes:</p>
 <pre><code>sudo lvs -o lv_name,lv_size,origin
 </code></pre>
 <h3>6.11. Mount the Snapshot and Check Its Content</h3>
-<p>Create a temporary mount point</p>
+<p>Create a temporary mount point:</p>
 <pre><code>sudo mkdir /mnt/mysnapshot
 </code></pre>
-<p>Mount the snapshot to the mount point</p>
-<pre><code>sudo mount /dev/myvg/mysnapshot /mnt/mysnapshot
+<p>Mount the snapshot (read-only is safer for inspection):</p>
+<pre><code>sudo mount -o ro /dev/myvg/mysnapshot /mnt/mysnapshot
 </code></pre>
-<p>In /mnt/mysnapshot, you'll see the changed folders and files</p>
-<p>Unmount it</p>
+<p>Browse <code>/mnt/mysnapshot</code> to see the state of the root filesystem at the time the snapshot was taken (you won't see the newly installed packages).</p>
+<p>Unmount it:</p>
 <pre><code>sudo umount /mnt/mysnapshot
 </code></pre>
 <h3>6.12. Extend the Snapshot</h3>
-<p>We may extend the snapshot to allow more changes on the origin LV</p>
+<p>If the snapshot is running low on space (check with <code>sudo lvs</code>), extend it to allow more changes to be tracked:</p>
 <pre><code>sudo lvextend -L+1G /dev/myvg/mysnapshot
 </code></pre>
 <h3>6.13. Revert to the Snapshot</h3>
-<p>When we are done, we can revert to the snapshot. </p>
-<p>Normally, reverting to a snapshot requires the original volume to be  unmounted. But since we cannot unmount the root volume, we are going to need to reboot the system.</p>
+<p>Reverting merges the snapshot back into the original volume, restoring it to the snapshot's state.</p>
+<p><strong>⚠️ Critical for Root Volume:</strong> Since the root (<code>/</code>) filesystem cannot be unmounted while the system is running, the merge is scheduled for the next boot.</p>
+<p>Schedule the merge:</p>
 <pre><code>sudo lvconvert --merge myvg/mysnapshot
-sudo reboot
 </code></pre>
-<p>Our snapshot LV is gone after the merge.</p>
+<p>You will see a message like: <em>"Delayed merge scheduled for activation after next activation."</em></p>
+<p>Reboot the system. The merge will occur during the early boot process:</p>
+<pre><code>sudo reboot
+</code></pre>
+<p><strong>Note:</strong> The snapshot LV (<code>mysnapshot</code>) will no longer exist after a successful merge.</p>
 <p><br></p>
 </details>
 <details>
@@ -1572,111 +1543,54 @@ sudo reboot
 7. Case Study 3 - Export and Import of LVM
 </summary>
 <hr />
-<p>It is possible to export and import Volume Groups with their Logical Volumes.</p>
-<p>LVs are unmounted, VG is deactivated and exported, physical disks are moved, VG is imported and activated, and finally LVs are mounted.</p>
+<p>It is possible to export and import entire Volume Groups (with their Logical Volumes) between systems. The process involves: unmounting the LVs, deactivating and exporting the VG, moving the physical disks to the new system, then importing, activating, and remounting the VG.</p>
 <h3>7.0. Specs</h3>
-<p>We have 2 systems installed without LVM, srva and srvb. We will install  a LV on srva, fill it with data, and we will move the LV to srvb.</p>
+<p>We have two systems installed without LVM: <strong>srva</strong> and <strong>srvb</strong>. We will create an LVM setup on <strong>srva</strong>, fill it with data, and then move the entire setup to <strong>srvb</strong>.</p>
 <ul>
-<li><strong>A. Prepare the first system</strong></li>
-<li>
-<ol>
-<li>Install LVM to srva</li>
-</ol>
+<li><strong>A. Prepare the first system (srva)</strong><ul>
+<li>-1. Install LVM on srva.</li>
+<li>-2. Add 20 GB disk to srva.</li>
+<li>-3. Create a PV from the disk.</li>
+<li>-4. Create a VG from the PV.</li>
+<li>-5. Create 2 LVs within the VG.</li>
+<li>-6. Create filesystems in the LV.</li>
+<li>-7. Mount the filesystems.</li>
+<li>-8. Put test data on the filesystems. </li>
+</ul>
 </li>
-<li>
-<ol>
-<li>Add 20 GB disk to srva</li>
-</ol>
+<li>B. <strong>Export</strong><ul>
+<li>-9. Unmount the logical volumes.</li>
+<li>-10. Deactivate all logical volumes in the VG.</li>
+<li>-11. Export the VG and Unplug the disk.</li>
+</ul>
 </li>
-<li>
-<ol>
-<li>Create a PV from the disk</li>
-</ol>
+<li>C. <strong>Prepare the second system (srvb)</strong><ul>
+<li>-12. Install LVM on srvb.</li>
+<li>-13. Plug the disk into srvb.</li>
+</ul>
 </li>
-<li>
-<ol>
-<li>Create a VG from the PV</li>
-</ol>
-</li>
-<li>
-<ol>
-<li>Create 2 LVs within the VG</li>
-</ol>
-</li>
-<li>
-<ol>
-<li>Create 2 Filesystems in the LV</li>
-</ol>
-</li>
-<li>
-<ol>
-<li>Mount the filesystems</li>
-</ol>
-</li>
-<li>
-<ol>
-<li>Put test data on the filesystems </li>
-</ol>
-</li>
-<li>B. <strong>Export</strong></li>
-<li>
-<ol>
-<li>Unmount logical volumes</li>
-</ol>
-</li>
-<li>
-<ol>
-<li>Deactivate all logical volumes in the VG</li>
-</ol>
-</li>
-<li>
-<ol>
-<li>Export the VG and Unplug the disk</li>
-</ol>
-</li>
-<li>C. <strong>Prepare the second system</strong></li>
-<li>
-<ol>
-<li>Install LVM to srvb</li>
-</ol>
-</li>
-<li>
-<ol>
-<li>Plug the disk to srvb</li>
-</ol>
-</li>
-<li>D. <strong>Import</strong></li>
-<li>
-<ol>
-<li>Import the volume group</li>
-</ol>
-</li>
-<li>
-<ol>
-<li>Activate the volume group</li>
-</ol>
-</li>
-<li>
-<ol>
-<li>Mount the logical volumes</li>
-</ol>
+<li>D. <strong>Import</strong><ul>
+<li>-14. Import the volume group.</li>
+<li>-15. Activate the volume group.</li>
+<li>-16. Mount the logical volumes.</li>
+</ul>
 </li>
 </ul>
-<h3>7.1. Install LVM to srva</h3>
+<h3>7.1. Install LVM on srva</h3>
 <pre><code>sudo apt update
 sudo apt -y install lvm2
 </code></pre>
-<h3>7.2. Add 20 GB disk to srva</h3>
-<p>Output of <code>lsblk -i</code> command before adding the disk:</p>
+<h3>7.2. Add 20 GB Disk to srva</h3>
+<p>Output of <code>lsblk -i</code> before adding the disk:</p>
 <pre><code>NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda      8:0    0 22.9G  0 disk 
 |-sda1   8:1    0   22G  0 part /
 |-sda2   8:2    0    1K  0 part 
 `-sda5   8:5    0  976M  0 part [SWAP]
 </code></pre>
-<p>For physical servers, you need to add a disk to the hardware. For virtual  servers you have to define it and attach it to the VM.</p>
+<p><strong>For physical servers</strong>, add the disk to the hardware. <strong>For virtual servers</strong>, define and attach it to the VM.</p>
 <p>I'm adding a 20 GB disk to my VM.</p>
-<p>Output of <code>lsblk -i</code> command after adding the disk:</p>
+<p>Output of <code>lsblk -i</code> after adding the disk:</p>
 <pre><code>NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda      8:0    0 22.9G  0 disk 
 |-sda1   8:1    0   22G  0 part /
@@ -1684,90 +1598,88 @@ sda      8:0    0 22.9G  0 disk
 `-sda5   8:5    0  976M  0 part [SWAP]
 sdb      8:16   0   20G  0 disk 
 </code></pre>
-<p>That means, my new disk is /dev/sdb.</p>
-<p>At the following steps, you need to change /dev/sdb to your disk device  name.</p>
-<h3>7.3. Create a PV from the disk</h3>
-<p>Mark /dev/sdb as a PV</p>
+<p>This means my new disk is <code>/dev/sdb</code>. <strong>Change <code>/dev/sdb</code> to your actual disk device name in the following steps.</strong></p>
+<h3>7.3. Create a PV from the Disk</h3>
+<p>Mark <code>/dev/sdb</code> as a Physical Volume:</p>
 <pre><code>sudo pvcreate /dev/sdb
 </code></pre>
 <h3>7.4. Create a VG from the PV</h3>
-<p>Create a VG named "myvg" using /dev/sdb</p>
+<p>Create a Volume Group named <code>myvg</code> using <code>/dev/sdb</code>:</p>
 <pre><code>sudo vgcreate myvg /dev/sdb
 </code></pre>
 <h3>7.5. Create 2 LVs within the VG</h3>
-<p>First LV is 10 GB</p>
+<p>First LV is 10 GB:</p>
 <pre><code>sudo lvcreate -L 10G -n mylv1 myvg
 </code></pre>
-<p>Second LV is the rest (~10GB)</p>
+<p>Second LV uses the remaining space (~10 GB):</p>
 <pre><code>sudo lvcreate -l +100%FREE -n mylv2 myvg
 </code></pre>
 <h3>7.6. Create Filesystems in the LVs</h3>
 <pre><code>sudo mkfs -t ext4 /dev/myvg/mylv1
 sudo mkfs -t ext4 /dev/myvg/mylv2
 </code></pre>
-<h3>7.7. Mount the filesystems</h3>
-<p>Create mount points</p>
+<h3>7.7. Mount the Filesystems</h3>
+<p>Create mount points:</p>
 <pre><code>sudo mkdir /mnt/mylv1
 sudo mkdir /mnt/mylv2
 </code></pre>
-<p>Mount </p>
+<p>Mount the LVs:</p>
 <pre><code>sudo mount /dev/myvg/mylv1 /mnt/mylv1
 sudo mount /dev/myvg/mylv2 /mnt/mylv2
 </code></pre>
-<h3>7.8. Put test data on the filesystems</h3>
-<p>Make them writable for everyone</p>
+<h3>7.8. Put Test Data on the Filesystems</h3>
+<p>Make the mount points writable for everyone (for testing):</p>
 <pre><code>sudo chmod 777 /mnt/mylv1
 sudo chmod 777 /mnt/mylv2
 </code></pre>
-<p>Create 2 files of 100 MB for each LV</p>
+<p>Create 2 files of 100 MB for each LV:</p>
 <pre><code>&lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c100M &gt; /mnt/mylv1/d1f1
 &lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c100M &gt; /mnt/mylv1/d1f2
 &lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c100M &gt; /mnt/mylv2/d2f1
 &lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c100M &gt; /mnt/mylv2/d2f2
 </code></pre>
-<p>Check the contents of the LVs</p>
+<p>Check the contents:</p>
 <pre><code>ls -al /mnt/mylv1
 ls -al /mnt/mylv2
 </code></pre>
-<h3>7.9. Unmount logical volumes</h3>
+<h3>7.9. Unmount Logical Volumes</h3>
 <pre><code>sudo umount /mnt/mylv1
 sudo umount /mnt/mylv2
 </code></pre>
-<h3>7.10. Deactivate all logical volumes in the VG</h3>
+<h3>7.10. Deactivate All Logical Volumes in the VG</h3>
+<p>Deactivate the entire Volume Group:</p>
 <pre><code>sudo vgchange -an myvg
 </code></pre>
-<p>Check with pvscan</p>
+<p>Verify with <code>pvscan</code> (it should show the PV as belonging to <code>myvg</code> but not active):</p>
 <pre><code>sudo pvscan
 </code></pre>
-<h3>7.11. Export the VG and Unplug the disk</h3>
-<p>Export the VG</p>
+<h3>7.11. Export the VG and Unplug the Disk</h3>
+<p>Export the Volume Group (this removes it from the system's LVM metadata cache):</p>
 <pre><code>sudo vgexport myvg
 </code></pre>
-<p>Now it is time to unplug the 20 GB disk.</p>
-<p>Output of <code>lsblk -i</code> command after removing the disk:</p>
+<p>Now you can safely unplug or detach the 20 GB disk from <strong>srva</strong>.</p>
+<p>Output of <code>lsblk -i</code> after removing the disk from <strong>srva</strong>:</p>
 <pre><code>NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda      8:0    0 22.9G  0 disk 
 |-sda1   8:1    0   22G  0 part /
 |-sda2   8:2    0    1K  0 part 
 `-sda5   8:5    0  976M  0 part [SWAP]
 </code></pre>
-<h3>7.12. Install LVM to srvb</h3>
+<h3>7.12. Install LVM on srvb</h3>
 <pre><code>sudo apt update
 sudo apt -y install lvm2
 </code></pre>
-<h3>7.13. Plug the disk to srvb</h3>
-<ul>
-<li>Output of <code>lsblk -i</code> command before adding the disk:</li>
-</ul>
+<h3>7.13. Plug the Disk into srvb</h3>
+<p>Output of <code>lsblk -i</code> on <strong>srvb</strong> before adding the disk:</p>
 <pre><code>NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda      8:0    0 22.9G  0 disk 
 |-sda1   8:1    0   22G  0 part /
 |-sda2   8:2    0    1K  0 part 
 `-sda5   8:5    0  976M  0 part [SWAP]
 </code></pre>
-<p>For physical servers, you need to add a disk to the hardware. For virtual  servers you have to define it and attach it to the VM.</p>
-<p>I'm adding a 20 GB disk to my VM.</p>
-<p>Output of <code>lsblk -i</code> command after adding the disk:</p>
+<p><strong>For physical servers</strong>, add the disk to the hardware. <strong>For virtual servers</strong>, define and attach it to the VM.</p>
+<p>I'm adding the 20 GB disk to my <strong>srvb</strong> VM.</p>
+<p>Output of <code>lsblk -i</code> after adding the disk to <strong>srvb</strong>:</p>
 <pre><code>NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda      8:0    0 22.9G  0 disk 
 |-sda1   8:1    0   22G  0 part /
@@ -1775,19 +1687,22 @@ sda      8:0    0 22.9G  0 disk
 `-sda5   8:5    0  976M  0 part [SWAP]
 sdb      8:16   0   20G  0 disk 
 </code></pre>
-<p>That means, my new disk is /dev/sdb.</p>
-<h3>7.14. Import the volume group</h3>
+<p>This means the disk is now <code>/dev/sdb</code> on <strong>srvb</strong>.</p>
+<h3>7.14. Import the Volume Group</h3>
+<p>Scan for and import the exported Volume Group <code>myvg</code>:</p>
 <pre><code>sudo vgimport myvg
 </code></pre>
-<h3>7.15. Activate the volume group</h3>
+<h3>7.15. Activate the Volume Group</h3>
+<p>Activate the Volume Group and its logical volumes:</p>
 <pre><code>sudo vgchange -ay myvg
 </code></pre>
-<h3>7.16. Mount the logical volumes</h3>
+<h3>7.16. Mount the Logical Volumes</h3>
+<p>Create mount points and mount the LVs:</p>
 <pre><code>sudo mkdir /mnt/mylv1 /mnt/mylv2
 sudo mount /dev/myvg/mylv1 /mnt/mylv1
 sudo mount /dev/myvg/mylv2 /mnt/mylv2
 </code></pre>
-<p>Check the contents of the LVs</p>
+<p>Verify the data is intact:</p>
 <pre><code>ls -al /mnt/mylv1
 ls -al /mnt/mylv2
 </code></pre>
@@ -1798,16 +1713,15 @@ ls -al /mnt/mylv2
 8. Uncovered Subjects
 </summary>
 <hr />
-<p>The following subjects are not covered in this tutorial:</p>
+<p>The following LVM subjects are not covered in this tutorial:</p>
 <ul>
 <li>Striped logical volumes</li>
 <li>RAID logical volumes</li>
 <li>Thin-provisioned logical volumes</li>
-<li>Cache volumes</li>
-<li>Using shared storage</li>
-<li>Logical volume activation</li>
-<li>Controlling All
-ocation</li>
+<li>Cache logical volumes</li>
+<li>Using shared storage (e.g., with iSCSI or Fibre Channel)</li>
+<li>Fine-grained control of logical volume activation</li>
+<li>Controlling physical extent allocation policies</li>
 <li>LVM object tags</li>
 </ul>
 </details><!-- HTML Footer Start -->

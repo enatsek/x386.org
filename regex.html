@@ -836,7 +836,7 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<summary>Copyright (C) 2020 - 2025 Exforge exforge@x386.org</summary>
 <hr />
 <p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
 <p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
@@ -846,528 +846,250 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <!-- Copyright End -->
 
 <!-- Header End -->
-<h5>NetworkOnDebian</h5>
-<h1>Network Configuration On Debian</h1>
+<h5>Regex</h5>
+<h1>Regular Expressions Tutorial</h1>
 <details>
 <summary>
 0. Specs
 </summary>
 <hr />
-<h3>0.0. Info</h3>
-<p>Network configuration examples on Debian 11 and 12.</p>
-<p>Tried to be as thorough much as possible: single nic, multi nics, multi networks, nic bonding.</p>
-<p>Debian and Ubuntu network configurations are very different so there are different tutorials for Debian and Ubuntu.</p>
-<h4>0.1. Configuration Files</h4>
-<p>Debian 11 &amp; 12 use ifupdown for network configuration.</p>
-<p>Main configuration file is /etc/network/interfaces. This file includes all the files in /etc/network/interfaces.d/ dir. </p>
-<p>It is a good practice to keep /etc/network/interfaces as below and create a config file for each nic in /etc/network/interfaces.d/ dir. </p>
-<pre><code>sudo nano /etc/network/interfaces
-</code></pre>
-<pre><code># This file describes the network interfaces available on your system
-# and how to activate them. For more information, see interfaces(5).
-source /etc/network/interfaces.d/*
-#
-# The loopback network interface
-auto lo
-iface lo inet loopback
-</code></pre>
-<h3>0.3. Name Server Configuration</h3>
-<p>Name server configuration file is /etc/resolv.conf. It can be as simple as below:</p>
-<pre><code>nameserver 192.168.1.1
-</code></pre>
-<p>Or may have some detailed configuration as below:</p>
-<pre><code># /etc/resolv.conf
-# Primary DNS server
-nameserver 8.8.8.8
-# Secondary DNS server
-nameserver 8.8.4.4
-# Tertiary DNS server (optional)
-#nameserver 1.1.1.1
-# Search domains (optional)
-# If a domain name is provided without a fully qualified domain name (FQDN),
-# the system appends these search domains to the provided domain to perform 
-# DNS lookups.
-# For example, if &quot;example.com&quot; is provided in a lookup, and &quot;search 
-# localdomain&quot; is configured, the system will also try to resolve 
-# example.com.localdomain&quot;.
-search localdomain
-</code></pre>
-<h3>0.4. Configuration Commands</h3>
-<p>Stop a nic</p>
-<pre><code>sudo ifdown enp0s3
-</code></pre>
-<p>Start a nic</p>
-<pre><code>sudo ifup enp0s3
-</code></pre>
-<p>To restart a nic, stop it and start it again</p>
-<pre><code>sudo ifdown enp0s3
-sudo ifup enp0s3
-</code></pre>
-<p>Restart networking (restart all nics and other networking software)</p>
-<pre><code>sudo systemctl restart networking
-</code></pre>
-<h3>0.5. Sources</h3>
-<p><a href="https://www.mybluelinux.com/debian-permanent-static-routes/">www.mybluelinux.com</a><br />
-<a href="https://wiki.debian.org/NetworkConfiguration">Debian Wiki</a><br />
-<a href="https://www.debian.org/doc/manuals/debian-handbook/sect.network-config">www.debian.org</a><br />
-ChatGPT</p>
-<p><br></p>
-</details>
-<details>
-<summary>
-1. Example Configurations
-</summary>
-<hr />
-<h3>1.1. DHCP Configuration</h3>
-<p>Our nic is enp0s3</p>
-<pre><code>sudo nano /etc/network/interfaces.d/enp0s3
-</code></pre>
-<p>Fill as below:</p>
-<pre><code>auto enp0s3
-iface enp0s3 inet dhcp
-</code></pre>
-<p>Restart networking:</p>
-<pre><code>sudo systemctl restart networking
-</code></pre>
-<h3>1.2. Static IP Configuration</h3>
-<p>Our nic is enp0s3</p>
-<pre><code>sudo nano /etc/network/interfaces.d/enp0s3
-</code></pre>
-<p>Fill as below:</p>
-<pre><code>auto enp0s3
-iface enp0s3 inet static
-  address 192.168.1.196/24
-  broadcast 192.168.1.255
-  network 192.168.1.0
-  gateway 192.168.1.1
-</code></pre>
-<pre><code>sudo systemctl restart networking
-</code></pre>
-<h3>1.3. Static IP Configuration with 2 IPs</h3>
-<p>Our nic is enp0s3</p>
-<pre><code>sudo nano /etc/network/interfaces.d/enp0s3
-</code></pre>
-<p>Fill as below:</p>
-<pre><code>auto enp0s3
-iface enp0s3 inet static
-  address 192.168.1.196/24
-  broadcast 192.168.1.255
-  network 192.168.1.0
-  gateway 192.168.1.1
-iface enp0s3 inet static
-  address 10.1.1.1/8
-</code></pre>
-<pre><code>sudo systemctl restart networking
-</code></pre>
-<h3>1.4. Static IP Configuration with 2 NICs</h3>
-<p>Our nics are enp0s3 enp0s8</p>
-<p>First nic:</p>
-<pre><code>sudo nano /etc/network/interfaces.d/enp0s3
-</code></pre>
-<p>Fill as below:</p>
-<pre><code>auto enp0s3
-iface enp0s3 inet static
-  address 192.168.1.196/24
-  broadcast 192.168.1.255
-  network 192.168.1.0
-  gateway 192.168.1.1
-</code></pre>
-<p>Second nic:</p>
-<pre><code>sudo nano /etc/network/interfaces.d/enp0s8
-</code></pre>
-<p>Fill as below:</p>
-<pre><code>auto enp0s8
-iface enp0s8 inet static
-  address 10.1.1.1/8
-  broadcast 10.255.255.255
-  network 10.0.0.0
-</code></pre>
-<p>Restart networking:</p>
-<pre><code>sudo systemctl restart networking
-</code></pre>
-<p><br></p>
-</details>
-<details>
-<summary>
-2. Case Study - Multiple Networks
-</summary>
-<hr />
-<h3>2.0. Specs</h3>
-<p>We have 2 separate networks (192.168.1.X and 10.X.X.X). Some hosts from one network need to reach to the hosts from the other network.</p>
-<p>We are going to install a new host to act as a router between the networks.</p>
-<p>The host will have 2 NICs (1 in each network), and we'll enable ip routing on it.</p>
-<p>This way, hosts in one network could be able to reach to the hosts in the other network. This will be possible by defining ip routes on the hosts to use the server with 2 nics as a router to the other network.</p>
-<p>Hosts in 192.168.1.X network use 192.168.1.1 as the default gateway, hosts in 10.X.X.X network use 10.1.1.1 as the default gateway.</p>
-<p>Our router will have 2 NICs, one with the IP 192.168.1.196 and the other with the IP 10.1.1.196.</p>
-<p>The hosts in 192.168.1.X network will use 192.168.1.196 to reach the 10.X.X.X network. The hosts in 10.X.X.X network will use 10.1.1.196 to reach the 192.168.1.X network. </p>
-<p>We are going to configure the router (192.168.1.196 &amp; 10.1.1.196), the host in the first network (192.168.1.197), and the host in the second network (10.1.1.198), and check connectivity between them.</p>
-<h3>2.1. Configuration of the Router</h3>
-<p>We have 2 NICs (enp0s3 - 192.168.1.X network, and enp0s8 -10.X.X.X network).</p>
-<p>Clean /etc/network/interfaces file</p>
-<pre><code>sudo nano /etc/network/interfaces
-</code></pre>
-<p>Set as below</p>
-<pre><code>source /etc/network/interfaces.d/*
-auto lo
-iface lo inet loopback
-</code></pre>
-<p>Configure NICs</p>
-<p>(enp0s3): 192.168.1.196/24</p>
-<pre><code>sudo nano /etc/network/interfaces.d/enp0s3
-</code></pre>
-<p>Fill as below:</p>
-<pre><code>auto enp0s3
-iface enp0s3 inet static
-  address 192.168.1.196/24
-  broadcast 192.168.1.255
-  network 192.168.1.0
-  gateway 192.168.1.1
-</code></pre>
-<p>(enp0s8): 10.1.1.196/8</p>
-<pre><code>sudo nano /etc/network/interfaces.d/enp0s8
-</code></pre>
-<p>Fill as below:</p>
-<pre><code>auto enp0s8
-iface enp0s8 inet static
-  address 10.1.1.196/8
-  broadcast 10.255.255.255
-  network 10.0.0.0
-</code></pre>
-<p>Restart Networking (Your SSH connection may break, reconnect)</p>
-<pre><code>sudo systemctl restart networking
-</code></pre>
-<p>Enable IP Forwarding</p>
-<pre><code>sudo nano /etc/sysctl.conf
-</code></pre>
-<p>Add the following line to the end</p>
-<pre><code>net.ipv4.ip_forward = 1
-</code></pre>
-<p>Activate</p>
-<pre><code>sudo sysctl -p
-</code></pre>
-<p>Set Name Server (if not already)</p>
-<pre><code>sudo nano /etc/resolv.conf
-</code></pre>
-<pre><code>nameserver 8.8.8.8
-nameserver 8.8.4.4
-</code></pre>
-<h3>2.2. Configuration of the First Host</h3>
-<p>We have 1 NIC (enp0s3 - 192.168.1.X network).</p>
-<p>Clear /etc/network/interfaces file</p>
-<pre><code>sudo nano /etc/network/interfaces
-</code></pre>
-<p>Set as below</p>
-<pre><code>source /etc/network/interfaces.d/*
-auto lo
-iface lo inet loopback
-</code></pre>
-<p>Configure NIC</p>
-<p>(enp0s3): 192.168.1.197/24</p>
-<pre><code>sudo nano /etc/network/interfaces.d/enp0s3
-</code></pre>
-<pre><code>auto enp0s3
-iface enp0s3 inet static
-  address 192.168.1.197/24
-  broadcast 192.168.1.255
-  network 192.168.1.0
-  gateway 192.168.1.1
-</code></pre>
-<p>Define Route</p>
-<p>Create a script file to add the route when the interface becomes up</p>
-<pre><code>sudo nano /etc/network/if-up.d/routes
-</code></pre>
-<p>Fill as below</p>
-<pre><code>#!/bin/sh
-if [ &quot;$IFACE&quot; = &quot;enp0s3&quot; ]; then
-  ip route del 10.0.0.0/8 via 192.168.1.196 dev enp0s3 
-  ip route add 10.0.0.0/8 via 192.168.1.196 dev enp0s3 
-fi
-</code></pre>
-<p>Make the script executable</p>
-<pre><code>sudo chmod 750 /etc/network/if-up.d/routes
-</code></pre>
-<p>Restart Networking (Your SSH connection may break, reconnect)</p>
-<pre><code>sudo systemctl restart networking
-</code></pre>
-<p>Set Name Server (if not already)</p>
-<pre><code>sudo nano /etc/resolv.conf
-</code></pre>
-<pre><code>nameserver 8.8.8.8
-nameserver 8.8.4.4
-</code></pre>
-<h3>2.3. Configuration of the Second Host</h3>
-<p>We have 1 NIC (enp0s3 - 10.X.X.X network).</p>
-<p>Clear /etc/network/interfaces file</p>
-<pre><code>sudo nano /etc/network/interfaces
-</code></pre>
-<p>Set as below</p>
-<pre><code>source /etc/network/interfaces.d/*
-auto lo
-iface lo inet loopback
-</code></pre>
-<p>Configure NIC</p>
-<p>(enp0s3): 10.1.1.198/8</p>
-<pre><code>sudo nano /etc/network/interfaces.d/enp0s3
-</code></pre>
-<pre><code>auto enp0s3
-iface enp0s3 inet static
-  address 10.1.1.198/8
-  broadcast 10.255.255.255
-  network 10.0.0.0
-  gateway 10.1.1.1
-</code></pre>
-<p>Define Route</p>
-<p>Create a script file to add the route when the interface becomes up</p>
-<pre><code>sudo nano /etc/network/if-up.d/routes
-</code></pre>
-<p>Fill as below</p>
-<pre><code>#!/bin/sh
-if [ &quot;$IFACE&quot; = &quot;enp0s3&quot; ]; then
-  ip route del 192.168.1.0/24 via 10.1.1.196 dev enp0s3 
-  ip route add 192.168.1.0/24 via 10.1.1.196 dev enp0s3 
-fi
-</code></pre>
-<p>Make the script executable</p>
-<pre><code>sudo chmod 750 /etc/network/if-up.d/routes
-</code></pre>
-<p>Restart Networking (Your SSH connection may break, reconnect)</p>
-<pre><code>sudo systemctl restart networking
-</code></pre>
-<p>Set Name Servers (if not already)</p>
-<pre><code>sudo nano /etc/resolv.conf
-</code></pre>
-<pre><code>nameserver 8.8.8.8
-nameserver 8.8.4.4
-</code></pre>
-<h3>2.4. Notes</h3>
-<p>The host in the first network can ping the host in the other network now, and vice versa.</p>
-<p>Try on the first host (192.168.1.197)</p>
-<pre><code>ping 10.1.1.198
-</code></pre>
-<p>Try on the second host (10.1.1.198)</p>
-<pre><code>ping 192.168.1.197
-</code></pre>
-<p>For a host to connect to another host on the other network, routing must be defined on the both hosts.</p>
-<p><br></p>
-</details>
-<details>
-<summary>
-3. NIC Bonding
-</summary>
-<hr />
-<p>Network interface card bonding simply means using 2 (or more) NICs together to achive redundancy and/or increased throughput. </p>
-<p>There are many types of bonding, some most useds are:</p>
+<h3>0.1. The What</h3>
+<p>Regular expressions, often abbreviated as regex or regexp, are sequences of characters that define search patterns in text. They are widely used in programming and text processing for tasks like searching, replacing, and validating input.</p>
+<h3>0.2. The Environment</h3>
+<p>Regex and its usage are independent of operating systems. I tested these patterns on Debian and Ubuntu, but they should work on any Linux, Unix-like, or other operating systems that support standard regex syntax.</p>
+<h3>0.3. Resources:</h3>
 <ul>
-<li>
-<p><strong>Active Backup:</strong> Also known as failover mode. In this mode, one interface is active while the other interfaces remain in standby mode. If the active interface fails, one of the standby interfaces takes over. It provides redundancy but does not offer load balancing.</p>
-</li>
-<li>
-<p><strong>Balance-rr (Round-Robin):</strong> Packets are transmitted sequentially across the bonded interfaces in a round-robin fashion. Provides load balancing and increased throughput, but it does not provide fault tolerance.</p>
-</li>
-<li>
-<p><strong>Balance-xor:</strong> Combines the MAC addresses of the interfaces and applies an XOR operation to determine the outgoing interface. It provides load balancing and fault tolerance, but it requires switch support for optimal performance.</p>
-</li>
-<li>
-<p><strong>Broadcast:</strong> All packets are sent on all interfaces. It's typically used in situations where the switch does not support any of the other bonding modes. It doesn't provide load balancing but offers fault tolerance.</p>
-</li>
+<li>Book: 978-0-13-475706-3 <em>Learning Regular Expressions</em> by Ben Forta</li>
+<li>Book: 978-1-4842-3875-2 <em>Regex Quick Syntax Reference</em> by Zsolt Nagy</li>
+<li>Book: 978-1-449-31943-4 <em>Regular Expressions Cookbook</em> by Jan Goyvaerts and Steven Levithan</li>
 </ul>
-<p>To use NIC bonding, ifenslave package must be installed:</p>
-<pre><code>sudo apt update
-sudo apt install ifenslave
+<p><br></p>
+</details>
+<details>
+<summary>
+1. Basics
+</summary>
+<hr />
+<h3>1.1. A String Itself</h3>
+<p>Obviously, every string is a match for itself.
+- Pattern: <code>go</code> → Matches: <code>go</code>
+- Pattern: <code>dog</code> → Matches: <code>dog</code></p>
+<h3>1.2. OR Operator: <code>|</code> or <code>[]</code></h3>
+<ul>
+<li><code>(c|b|t)ook</code> → <code>cook</code></li>
+<li><code>(c|b|t)ook</code> → <code>book</code></li>
+<li><code>(c|b|t)ook</code> → <code>took</code></li>
+<li><code>[cbt]ook</code> → <code>cook</code></li>
+<li><code>[cbt]ook</code> → <code>book</code></li>
+<li><code>[cbt]ook</code> → <code>took</code></li>
+</ul>
+<h3>1.3. Ranges</h3>
+<ul>
+<li><code>[a-z]</code> → any lowercase letter</li>
+<li><code>[A-Z]</code> → any uppercase letter</li>
+<li><code>[0-9]</code> → any single digit number, including 0</li>
+<li><code>[d-g]</code> → <code>d</code>, <code>e</code>, <code>f</code>, or <code>g</code> (just one of them)</li>
+<li><code>[M-R]</code> → <code>M</code>, <code>N</code>, <code>O</code>, <code>P</code>, <code>Q</code>, or <code>R</code> (just one of them)</li>
+<li><code>[a-zA-Z]</code> → any letter (lowercase or uppercase)</li>
+<li><code>[a-zA-Z0-9]</code> → any letter or number (single digit)</li>
+<li><code>[0-9a-fA-F]</code> → a hexadecimal digit</li>
+</ul>
+<h3>1.4. Negation (Exception)</h3>
+<ul>
+<li><code>[^a-z]</code> → any character except a lowercase letter</li>
+<li><code>[^A-Z]</code> → any character except an uppercase letter</li>
+<li><code>[^0-9]</code> → any character except a single digit number</li>
+</ul>
+<h3>1.5. Character Classes</h3>
+<ul>
+<li><code>.</code> → Any single character (except newline in most contexts)</li>
+<li><code>\d</code> → any digit (equivalent to <code>[0-9]</code>)</li>
+<li><code>\D</code> → any non-digit character (equivalent to <code>[^0-9]</code>)</li>
+<li><code>\w</code> → any word character (letter, digit, or underscore; equivalent to <code>[a-zA-Z0-9_]</code>)</li>
+<li><code>\W</code> → any non-word character</li>
+<li><code>\s</code> → any whitespace character (space, tab, newline, carriage return)</li>
+<li><code>\S</code> → any non-whitespace character</li>
+<li><code>\r</code> → Carriage Return (CR)</li>
+<li><code>\n</code> → Line Feed (LF)</li>
+<li><code>\t</code> → Tab</li>
+<li><code>\b</code> → Word boundary (zero-width position at the start or end of a word)</li>
+</ul>
+<h3>1.6. Escape Characters</h3>
+<p>Any operator or quantifier can be escaped with \ to resemble itself</p>
+<p>Any special character (operator or quantifier) can be escaped with <code>\</code> to match its literal value.</p>
+<ul>
+<li><code>\.</code> → <code>.</code></li>
+<li><code>\[</code> → <code>[</code></li>
+<li><code>\]</code> → <code>]</code></li>
+<li><code>\(</code> → <code>(</code></li>
+<li><code>\)</code> → <code>)</code></li>
+<li><code>\*</code> → <code>*</code></li>
+<li><code>\+</code> → <code>+</code></li>
+<li><code>\\</code> → <code>\</code></li>
+<li><code>\.</code> → <code>.</code></li>
+</ul>
+<p>When used inside a character class <code>[]</code>, the backslash is not always necessary for these characters, but it's good practice to escape them for clarity. Inside a character class, most characters lose their special meaning.</p>
+<ul>
+<li><code>[().\\]</code> → matches <code>(</code>, <code>)</code>, <code>.</code>, or <code>\</code></li>
+</ul>
+<p><br></p>
+</details>
+<details>
+<summary>
+2. Quantifiers and Boundaries
+</summary>
+<hr />
+<h3>2.1. <code>*</code> Quantifier (Zero or More)</h3>
+<p>A <code>*</code> quantifier after a character or group means <strong>0 or more occurrences</strong> of it.</p>
+<ul>
+<li><code>goal*</code> → <code>goa</code>, <code>goal</code>, <code>goall</code>, <code>goalll</code>, <code>goallll</code>...</li>
+<li><code>co(me)*</code> → <code>co</code>, <code>come</code>, <code>comeme</code>, <code>comememe</code>, <code>comemememe</code>...</li>
+<li><code>[a-zA-Z]*</code> → any string made from alphabet letters or an empty string</li>
+</ul>
+<h3>2.2. <code>+</code> Quantifier (One or More)</h3>
+<p>A <code>+</code> quantifier after a character or group means <strong>1 or more occurrences</strong> of it.</p>
+<ul>
+<li><code>goal+</code> → <code>goal</code>, <code>goall</code>, <code>goalll</code>, <code>goallll</code>... (not <code>goa</code>)</li>
+<li><code>co(me)+</code> → <code>come</code>, <code>comeme</code>, <code>comememe</code>, <code>comemememe</code>... (not <code>co</code>)</li>
+<li><code>[a-zA-Z]+</code> → any non-empty string made from alphabet letters</li>
+</ul>
+<h3>2.3. <code>?</code> Quantifier (Zero or One)</h3>
+<p>A <code>?</code> quantifier after a character or group means <strong>0 or 1 occurrence</strong> of it.</p>
+<ul>
+<li><code>goal?</code> → <code>goa</code>, <code>goal</code></li>
+<li><code>co(me)?</code> → <code>co</code>, <code>come</code></li>
+<li><code>[a-zA-Z][a-zA-Z]?</code> → any 1 or 2 alphabet letters</li>
+</ul>
+<h3>2.4. <code>{}</code> Quantifier (Exact Count or Range)</h3>
+<p>Can be in <code>{m}</code>, <code>{n,}</code>, or <code>{p,r}</code> forms, where <code>m</code>, <code>n</code>, <code>p</code>, <code>r</code> are whole numbers.</p>
+<p>They come after a character or group and mean:
+1. Exactly <code>m</code> occurrences
+2. <code>n</code> or more occurrences
+3. <code>p</code> to <code>r</code> occurrences (inclusive)</p>
+<ul>
+<li><code>set{3}</code> → <code>settt</code> (exactly 3 't's)</li>
+<li><code>set{3,}</code> → <code>settt</code>, <code>setttt</code>, <code>settttt</code>... (3 or more 't's)</li>
+<li><code>se{2,5}</code> → <code>sett</code>, <code>settt</code>, <code>setttt</code>, <code>settttt</code> (2 to 5 't's)</li>
+<li><code>[a-zA-Z]{3}[0-9]{1,3}</code> → any 3 letters followed by 1 to 3 digits</li>
+</ul>
+<h3>2.5. Greedy vs. Lazy Quantifiers</h3>
+<p>By default, quantifiers are <strong>greedy</strong>—they match as many characters as possible.</p>
+<p>For example, with the regex:</p>
+<pre><code>\(.*\)
 </code></pre>
-<p>All of our examples will have 2 nics (enp0s3 and enp0s8) in the same network (192.168.1.X)</p>
-<h3>3.1. Active Backup Bonding</h3>
-<p>Install ifenslave package (if not installed already)</p>
-<pre><code>sudo apt update
-sudo apt install ifenslave -y
+<p>(applied to find anything in parentheses) on the text:</p>
+<pre><code>abc(def)ghi(jkl)mno
 </code></pre>
-<p>Ensure bonding kernel module is loaded</p>
-<pre><code>sudo modprobe bonding
+<p>To make quantifiers <strong>lazy</strong> (matching the minimum possible), add <code>?</code> after the quantifier:</p>
+<pre><code>\(.*?\)
 </code></pre>
-<p>Ensure loading kernel module at the startup</p>
-<pre><code>sudo nano /etc/modules
+<p>This regex will match <code>(def)</code> and <code>(jkl)</code> separately.</p>
+<p>Lazy versions of quantifiers:
+- <code>*</code> → <code>*?</code>
+- <code>+</code> → <code>+?</code>
+- <code>{n,}</code> → <code>{n,}?</code></p>
+<h3>2.6. Word Boundary: <code>\b</code></h3>
+<p><code>\b</code> denotes a zero-width position at the beginning or end of a word (where word characters are adjacent to non-word characters).</p>
+<ul>
+<li><code>\bget</code> → words starting with "get" (e.g., "get", "getting", but not "forget")</li>
+<li><code>get\b</code> → words ending with "get" (e.g., "get", "forget", but not "getting")</li>
+<li><code>\bget\b</code> → "get" as a whole word</li>
+</ul>
+<h3>2.7. Line Boundaries: <code>^</code> and <code>$</code></h3>
+<p><code>^</code> defines the start of a line.<br />
+<code>$</code> defines the end of a line.</p>
+<ul>
+<li><code>^Log:[\s\w]+</code> → All lines starting with "Log:"</li>
+<li><code>^[0-9]{3}</code> → All lines starting with 3 digits</li>
+<li><code>.*END$</code> → All lines ending with "END"</li>
+<li><code>^Begin[\s\w]+End$</code> → All lines starting with "Begin" and ending with "End"</li>
+</ul>
+<p><br></p>
+</details>
+<details>
+<summary>
+3. Subexpressions and Backreferences
+</summary>
+<hr />
+<h3>3.1. Subexpressions</h3>
+<p>A subexpression is a group of characters or operators in parentheses. They are used to apply quantifiers to entire expressions or for capturing.</p>
+<ul>
+<li><code>dis(like)</code> → matches "dislike"</li>
+<li><code>dis(like)*</code> → matches "dis", "dislike", "dislikelike", "dislikelikelike"...</li>
+<li><code>dis(like)+</code> → matches "dislike", "dislikelike", "dislikelikelike"...</li>
+<li><code>dis(like)?</code> → matches "dis" and "dislike"</li>
+<li><code>dis(like){2}</code> → matches "dislikelike"</li>
+<li><code>dis(like){2,}</code> → matches "dislikelike", "dislikelikelike"...</li>
+<li><code>dis(like){2,4}</code> → matches "dislikelike", "dislikelikelike", "dislikelikelikelike"</li>
+</ul>
+<p>Subexpressions can be nested:</p>
+<ul>
+<li><code>log((in)|(out))</code> → matches "login" and "logout"</li>
+</ul>
+<h3>3.2. Backreferences</h3>
+<p>A backreference is in the format of a backslash followed by a digit, like <code>\1</code>, <code>\2</code>, <code>\3</code>. It refers to the text matched by a previous capturing group (subexpression).</p>
+<p>For example, this regex matches repeating words:</p>
+<pre><code>[\s]+(\w+)[\s]+\1[\s]+
 </code></pre>
-<p>Add to the end of the file (if it does not exist)</p>
-<pre><code>bonding
+<ul>
+<li><code>[\s]+(\w+)[\s]+</code> matches: one or more spaces, followed by one or more word characters (captured as group 1), followed by one or more spaces.</li>
+<li><code>\1</code> matches exactly the same text that was captured by the first group <code>(\w+)</code>.</li>
+</ul>
+<p>Another example would be matching repeating word couples:</p>
+<pre><code>[\s]+(\w+)[\s]+(\w+)[\s]+\1[\s]+\2[\s]+
 </code></pre>
-<p>Clear /etc/network/interfaces file</p>
-<pre><code>sudo nano /etc/network/interfaces
+<p>Here, <code>\1</code> refers to the first word, and <code>\2</code> refers to the second word.</p>
+<p>Backreferences are particularly useful in find-and-replace operations. In the repeating word example, to replace duplicate words with a single instance, you would use <code>\1</code> as the replacement pattern.</p>
+<p><br></p>
+</details>
+<details>
+<summary>
+4. Regex Examples
+</summary>
+<hr />
+<p>Please note: these examples are not perfect. You may find or write more robust versions for production use.</p>
+<h3>4.1. Email Address: <code>abc.def@email.duck.com.nz</code></h3>
+<pre><code>\w+[\w\.]*@\w+[\w\.]*\.\w+
 </code></pre>
-<p>Set as below:</p>
-<pre><code>source /etc/network/interfaces.d/*
-auto lo
-iface lo inet loopback
+<p><strong>Name Part:</strong></p>
+<ul>
+<li>Starts with a letter or digit: <code>\w+</code></li>
+<li>May be followed by any number of letters, digits, or dots: <code>[\w\.]*</code></li>
+<li>Then the <code>@</code> symbol</li>
+</ul>
+<p><strong>Domain Part:</strong></p>
+<ul>
+<li>Starts with a letter or digit: <code>\w+</code></li>
+<li>May be followed by any number of letters, digits, or dots: <code>[\w\.]*</code></li>
+<li>Then a literal dot: <code>\.</code></li>
+<li>Ends with the TLD: <code>\w+</code></li>
+</ul>
+<h3>4.2. Date Format: <code>02/02/2020</code>, <code>1\5\12</code>, <code>1-11-1995</code>, <code>31.12.2020</code></h3>
+<pre><code>\d{1,2}[-\/.]\d{1,2}[-\/.]\d{2,4}
 </code></pre>
-<p>Configure the bond</p>
-<pre><code>sudo nano /etc/network/interfaces.d/bond
+<ul>
+<li>1 or 2 digit day field: <code>\d{1,2}</code></li>
+<li>Separator <code>-</code>, <code>/</code>, or <code>.</code>: <code>[-\/.]</code></li>
+<li>1 or 2 digit month field: <code>\d{1,2}</code></li>
+<li>Separator <code>-</code>, <code>/</code>, or <code>.</code>: <code>[-\/.]</code></li>
+<li>2 to 4 digit year field: <code>\d{2,4}</code></li>
+</ul>
+<h3>4.3. Basic IP Address: <code>192.168.1.110</code></h3>
+<pre><code>(\d{1,3}\.){3}\d{1,3}
 </code></pre>
-<p>Fill as below:</p>
-<pre><code>auto enp0s3
-iface enp0s3 inet manual
-    bond-master bond0
-auto enp0s8
-iface enp0s8 inet manual
-    bond-master bond0
-auto bond0
-iface bond0 inet static
-    address 192.168.1.196/24
-    netmask 255.255.255.0
-    network 192.168.1.0
-    gateway 192.168.1.1
-    slaves enp0s3 enp0s8
-    bond-mode active-backup
-    bond-primary enp0s3
+<ul>
+<li>3 repetitions of (1 to 3 digits followed by a dot): <code>(\d{1,3}\.){3}</code></li>
+<li>Followed by 1 to 3 digits: <code>\d{1,3}</code></li>
+</ul>
+<p><strong>Note:</strong> This regex matches invalid IP addresses too, like <code>300.288.11.11</code>, since it doesn't validate that each octet is between 0-255.</p>
+<h3>4.4. Better IP Address (Validates 0-255 Range)</h3>
+<pre><code>((25[0-5]|2[0-4]\d|1\d{2}|\d{1,2})\.){3}(25[0-5]|2[0-4]\d|1\d{2}|\d{1,2})
 </code></pre>
-<p>Restart Networking</p>
-<pre><code>sudo systemctl restart networking
-</code></pre>
-<p>Set Name Servers (if not already)</p>
-<pre><code>sudo nano /etc/resolv.conf
-</code></pre>
-<pre><code>nameserver 8.8.8.8
-nameserver 8.8.4.4
-</code></pre>
-<p>Check the status of the bond</p>
-<pre><code>sudo cat /proc/net/bonding/bond0
-</code></pre>
-<h3>3.2. Balance-RR Bonding</h3>
-<p>Install ifenslave package (if not installed already)</p>
-<pre><code>sudo apt update
-sudo apt install ifenslave -y
-</code></pre>
-<p>Ensure bonding kernel module is loaded</p>
-<pre><code>sudo modprobe bonding
-</code></pre>
-<p>Ensure loading kernel module at the startup</p>
-<pre><code>sudo nano /etc/modules
-</code></pre>
-<p>Add to the end of the file (if it does not exist)</p>
-<pre><code>bonding
-</code></pre>
-<p>Clear /etc/network/interfaces file</p>
-<pre><code>sudo nano /etc/network/interfaces
-</code></pre>
-<p>Set as below:</p>
-<pre><code>source /etc/network/interfaces.d/*
-auto lo
-iface lo inet loopback
-</code></pre>
-<p>Configure the bond</p>
-<pre><code>sudo nano /etc/network/interfaces.d/bond
-</code></pre>
-<pre><code>auto enp0s3
-iface enp0s3 inet manual
-    bond-master bond0
-auto enp0s8
-iface enp0s8 inet manual
-    bond-master bond0
-auto bond0
-iface bond0 inet static
-    address 192.168.1.196/24
-    netmask 255.255.255.0
-    network 192.168.1.0
-    gateway 192.168.1.1
-    bond-slaves enp0s3 enp0s8
-    bond-mode balance-rr
-</code></pre>
-<p>Restart Networking</p>
-<pre><code>sudo systemctl restart networking
-</code></pre>
-<p>Check the status of the bond</p>
-<pre><code>sudo cat /proc/net/bonding/bond0
-</code></pre>
-<h3>3.3. Balance-XOR Bonding</h3>
-<p>Install ifenslave package (if not installed already)</p>
-<pre><code>sudo apt update
-sudo apt install ifenslave -y
-</code></pre>
-<p>Ensure bonding kernel module is loaded</p>
-<pre><code>sudo modprobe bonding
-</code></pre>
-<p>Ensure loading kernel module at the startup</p>
-<pre><code>sudo nano /etc/modules
-</code></pre>
-<p>Add to the end of the file (if it does not exist)</p>
-<pre><code>bonding
-</code></pre>
-<p>Clear /etc/network/interfaces file</p>
-<pre><code>sudo nano /etc/network/interfaces
-</code></pre>
-<p>Set as below</p>
-<pre><code>source /etc/network/interfaces.d/*
-auto lo
-iface lo inet loopback
-</code></pre>
-<p>Configure the bond</p>
-<pre><code>sudo nano /etc/network/interfaces.d/bond
-</code></pre>
-<pre><code>auto enp0s3
-iface enp0s3 inet manual
-    bond-master bond0
-auto enp0s8
-iface enp0s8 inet manual
-    bond-master bond0
-auto bond0
-iface bond0 inet static
-    address 192.168.1.196/24
-    netmask 255.255.255.0
-    network 192.168.1.0
-    gateway 192.168.1.1
-    bond-slaves enp0s3 enp0s8
-    bond-mode balance-xor
-</code></pre>
-<p>Restart Networking</p>
-<pre><code>sudo systemctl restart networking
-</code></pre>
-<p>Check the status of the bond</p>
-<pre><code>sudo cat /proc/net/bonding/bond0
-</code></pre>
-<h3>3.4. Broadcast Bonding</h3>
-<p>Install ifenslave package (if not installed already)</p>
-<pre><code>sudo apt update
-sudo apt install ifenslave -y
-</code></pre>
-<p>Ensure bonding kernel module is loaded</p>
-<pre><code>sudo modprobe bonding
-</code></pre>
-<p>Ensure loading kernel module at the startup</p>
-<pre><code>sudo nano /etc/modules
-</code></pre>
-<p>Add to the end of the file (if it does not exist)</p>
-<pre><code>bonding
-</code></pre>
-<p>Clear /etc/network/interfaces file</p>
-<pre><code>sudo nano /etc/network/interfaces
-</code></pre>
-<p>Set as below</p>
-<pre><code>source /etc/network/interfaces.d/*
-auto lo
-iface lo inet loopback
-</code></pre>
-<p>Configure the bond</p>
-<pre><code>sudo nano /etc/network/interfaces.d/bond
-</code></pre>
-<pre><code>auto enp0s3
-iface enp0s3 inet manual
-    bond-master bond0
-auto enp0s8
-iface enp0s8 inet manual
-    bond-master bond0
-auto bond0
-iface bond0 inet static
-    address 192.168.1.196/24
-    netmask 255.255.255.0
-    network 192.168.1.0
-    gateway 192.168.1.1
-    bond-slaves enp0s3 enp0s8
-    bond-mode broadcast
-</code></pre>
-<p>Restart Networking</p>
-<pre><code>sudo systemctl restart networking
-</code></pre>
-<p>Check the status of the bond</p>
-<pre><code>sudo cat /proc/net/bonding/bond0
-</code></pre>
+<p>This pattern validates that each octet is between 0-255:
+- <code>25[0-5]</code> → 250-255
+- <code>2[0-4]\d</code> → 200-249
+- <code>1\d{2}</code> → 100-199
+- <code>\d{1,2}</code> → 0-99</p>
 </details><!-- HTML Footer Start -->
 
 </body>

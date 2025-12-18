@@ -1,5 +1,5 @@
-##### FileCompressionOnDebianUbuntu 
-# File Compression and Packaging on Debian And Ubuntu
+##### File Compression 
+# File Compression and Archiving on Debian And Ubuntu
 
 <details markdown='1'>
 <summary>
@@ -7,7 +7,7 @@
 </summary>
 
 ---
-### 0.0. Info
+### 0.1. The What
 When sharing files with other people, you may need to package and compress them. 
 
 There are very good tools for them:
@@ -18,7 +18,8 @@ There are very good tools for them:
 - tar 
 - zip
 
-### 0.1. Abstract
+### 0.2. Abstract
+
 Package and compress the contents of a directory (including subdirs):
 
 ```
@@ -31,8 +32,9 @@ Decompress and unpackage the archive:
 tar -xzvf archive.tar.gz
 ```
 
-### 0.2. Create Test Environment
-All commands are tested on Debian 11 & 12 and Ubuntu Server 22.04 & 24.04 LTS
+### 0.3. Create Test Environment
+
+All commands are tested on Debian 12 & 13 and Ubuntu Server 22.04 & 24.04 LTS
 
 Create a temporary test directory
 
@@ -85,10 +87,12 @@ Final tree
     └── f33
 ```
 
-### 0.3. Sources
-Man pages, the commands with --help option, and ChatGPT as always.  
-**Never trust ChatGPT, check everything it says.**  
-[linuxconfig.org](https://linuxconfig.org/create-a-random-character-text-file-using-linux-shell)
+### 0.4. Sources
+
+- Man pages, the commands with --help option  
+- [linuxconfig.org](https://linuxconfig.org/create-a-random-character-text-file-using-linux-shell)
+- [Deepseek](https://www.deepseek.com/)
+- [ChatGPT](https://chatgpt.com/)
 
 <br>
 </details>
@@ -100,6 +104,7 @@ Man pages, the commands with --help option, and ChatGPT as always.
 
 ---
 ### 1.1. Info
+
 Installation (Most probably, it is already installed).
 
 ```
@@ -110,6 +115,7 @@ sudo apt install gzip
 gzip compresses (and decompresses) only 1 file, it is not used to prepare a package of files. But it can be combined with tar to make a compressed  package of files.
 
 ### 1.2. Usage
+
 Compress a file  
 (Original file is removed, a new file is created there with .gz extension)
 
@@ -180,6 +186,7 @@ Some useful options:
 
 ---
 ### 2.1. Info
+
 Installation (Most probably, it is already installed).
 
 ```
@@ -192,6 +199,7 @@ bzip2 compresses (and decompresses) only 1 file, it is not used to prepare a pac
 Provides higher compression ratios compared to gzip, but may be slower.
 
 ### 2.2. Usage
+
 Compress a file  
 (Original file is removed, a new file is created there with .bz2 extension)
 
@@ -249,6 +257,7 @@ Some useful options:
 
 ---
 ### 3.1. Info
+
 Installation (Most probably, it is already installed).
 
 ```
@@ -259,6 +268,7 @@ sudo apt install xz-utils
 xz compresses (and decompresses) only 1 file, it is not used to prepare  a package of files. But it can be combined with tar to make a compressed  package of files.
 
 ### 3.2. Usage
+
 Compress a file  
 (Original file is removed, a new file is created there with .xz extension)
 
@@ -267,7 +277,7 @@ xz /tmp/testdir/d1/f11
 ```
 
 Decompress a file  
-(.gz file is removed, a new file is created there without .gz extension)
+(.xz file is removed, a new file is created there without .xz extension)
 
 ```
 xz -d /tmp/testdir/d1/f11.xz
@@ -317,6 +327,7 @@ Some useful options:
 
 ---
 #### 4.1. Info
+
 Installation (Most probably, it is already installed)
 
 ```
@@ -326,8 +337,8 @@ sudo apt install tar
 
 tar actually is an archiving utility, it is used to package files. It can  package many files to a file. It can also transparently be combined with gzip bzip2 and xz tools to compress files. 
 
-### 4.2. Usage
-#### 4.2.1. With Compression
+### 4.2. Usage With Compression
+
 Package and compress (with gzip) the contents of a directory (including subdirectories).  
 Archive file is created in the current directory.
 
@@ -373,7 +384,8 @@ tar -xjvf archive.tar.bz2 -C /tmp
 tar -xJvf archive.tar.xz -C /tmp
 ```
 
-#### 4.2.2. Without Compression (Archiving)
+### 4.3. Usage Without Compression (Archiving)
+
 Tar can be used without compressing too, actually it is the main usage of  the tar command.
 
 All the conditions apply in 4.2.1., if you skip compression options (-z, -j, -J) then you get an archive without compression. This time you can add files to it, or remove files from it.
@@ -408,7 +420,8 @@ Remove a file from the archive
 tar -vf archive.tar --delete test.txt
 ```
 
-#### 4.2.3. Options
+#### 4.4. Options
+
 Tar has tons of options. You can list them all by:
 
 ```
@@ -418,7 +431,7 @@ tar --help
 Some selected options:
 
 - -c: Create a new archive.
-- -t: List the contents of the archive.    
+- -t: List the contents of the archive.
 - -x: Extract files from the archive.
 - -v: Verbose mode (show the progress and file names).
 - -f: Specify the archive file name.
@@ -443,6 +456,7 @@ Some selected options:
 
 ---
 ### 5.1. Info
+
 Although gzip, bzip2, xz, and tar is more than enough for compression and archiving; sometimes you may need to exchange files with the unlucky people using Wind*ws. zip tool may be helpful then.
 
 Installation
@@ -453,8 +467,9 @@ sudo apt install zip
 ```
 
 ### 5.2. Usage
+
 Compress a file
-(File zip file is created in the current dir, original file stays there)
+(Zip file is created in the current dir, original file stays there)
 
 ```
 zip f11.zip /tmp/testdir/d1/f11
