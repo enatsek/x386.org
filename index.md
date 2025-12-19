@@ -4,11 +4,11 @@
 
 - [**Site-to-site VPN:**](s2svpn.html) Site-to-site VPN tutorial using wireguard on Debian and Ubuntu servers.
 
-- [**Node.js:**](Nodejs.html) Simple Node.js tutorial on Debian and Ubuntu servers.
+- [**Node.js:**](nodejs.html) Simple Node.js tutorial on Debian and Ubuntu servers.
 
-- [**Nginx 2nd Ed.:**](Nginx2ndEd.html) Nginx http server on Debian and Ubuntu servers. With sample configurations, SSL support and LEMP Stack.
+- [**Nginx 2nd Ed.:**](nginx.html) Nginx http server on Debian and Ubuntu servers. With sample configurations, SSL support and LEMP Stack.
 
-- [**Apache 2nd Ed.:**](Apache2ndEd.html) Apache http server on Debian and Ubuntu servers. With sample configurations and SSL support.
+- [**Apache 2nd Ed.:**](apache.html) Apache http server on Debian and Ubuntu servers. With sample configurations and SSL support.
 
 - [**Etc Folder:**](etcfolder.html) Contents of /etc/ folder on Debian & Ubuntu.
 

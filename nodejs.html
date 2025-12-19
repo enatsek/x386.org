@@ -836,7 +836,7 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<summary>Copyright (C) 2020 - 2025 Exforge exforge@x386.org</summary>
 <hr />
 <p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
 <p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
@@ -846,550 +846,153 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <!-- Copyright End -->
 
 <!-- Header End -->
-<h5>NginxOnDebianUbuntu</h5>
-<h1>Basic Nginx Configuration On Debian and Ubuntu</h1>
+<h5>Node.js</h5>
+<h1>Node.js Tutorial for Debian and Ubuntu</h1>
 <details>
 <summary>
 0. Specs
 </summary>
 <hr />
-<p>Basic Nginx configuration, installation, SSL, LEMP stack, sample site  configurations, </p>
-<p>Server: Debian 12/11 or Ubuntu 24.04/22.04 LTS Server</p>
-<p>srv1, srv2, srv3, srv4 all has the server's IP address.</p>
-<p>Sources:
-<strong>Mastering Ubuntu Server 4th Ed.</strong> by Jay LaCroix<br />
-<a href="https://nginx.org/en/docs/">nginx.org</a><br />
-<a href="https://www.geeksforgeeks.org/how-to-retrieve-data-from-mysql-database-using-php/">www.geeksforgeeks.org</a></p>
+<h3>0.0. The What</h3>
+<p>Node.js is an open-source, cross-platform JavaScript runtime environment that enables JavaScript execution on the server side.</p>
+<p>As system administrators, we may not write Node.js applications daily, but we frequently encounter them in various scenarios—whether running web applications, managing microservices, or troubleshooting performance issues.</p>
+<h3>0.1. Environment</h3>
+<p>I used Debian and Ubuntu server editions, namely Debian 12 &amp; 13, Ubuntu 22.04 &amp; 24.04 LTS Servers.</p>
+<h3>0.2. Sources</h3>
+<ul>
+<li><a href="https://chatgpt.com/">ChatGPT</a></li>
+<li><a href="https://nodejs.org/">Node.js</a></li>
+<li><a href="https://www.npmjs.com/">Npm.js</a></li>
+<li><a href="https://www.deepseek.com/">Deepseek</a></li>
+</ul>
 <p><br></p>
 </details>
 <details>
 <summary>
-1. Installation and Configuration Files
+1. Installation
 </summary>
 <hr />
-<h3>1.1. Installation</h3>
-<p>Update repositories</p>
+<p>Several installation methods exist, but we'll focus on the two most common approaches.</p>
+<h3>1.1. Install System Packages (System-wide)</h3>
+<p>Installing distribution packages provides a stable but potentially older version of Node.js. This method installs Node.js system-wide, accessible to all users. Ideal for production environments.</p>
+<p>Update package repositories:</p>
 <pre><code>sudo apt update
 </code></pre>
-<p>Install nginx</p>
-<pre><code>sudo apt install nginx --yes
+<p>Install Node.js and NPM (Node Package Manager):</p>
+<pre><code>sudo apt install -y nodejs npm
 </code></pre>
-<p>A simple website is ready at http://srv1/</p>
-<h3>1.2. Configuration Files</h3>
-<p>Configuration files reside in /etc/nginx.</p>
-<p>See main configuration file:</p>
-<pre><code>sudo nano /etc/nginx/nginx.conf
+<p>Verify installation:</p>
+<pre><code>node -v 
+npm -v 
 </code></pre>
-<p>Available sites are in /etc/nginx/sites-available/</p>
-<p>They must be enabled, that is linked to /etc/nginx/sites-enabled/ </p>
-<p>To enable a site conf named mysite in /etc/nginx/sites-available/ :</p>
-<pre><code>sudo ln -s /etc/nginx/sites-available/mysite /etc/nginx/sites-enabled/mysite
-</code></pre>
-<p>And to disable it:</p>
-<pre><code>sudo rm /etc/nginx/sites-enabled/mysite
-</code></pre>
-<p>There is a default configuration which is already enabled</p>
-<pre><code>sudo nano /etc/nginx/sites-available/default
-</code></pre>
-<p>After enabling or disabling a site, we need to reload nginx:</p>
-<pre><code>sudo systemctl reload nginx
-</code></pre>
-<h3>1.3. Site enable and disable scripts</h3>
-<p>You may remember Debian &amp; Ubuntu Apache installations has a2ensite  and a2dissite scripts. We will create very (actually very very) simple  nginx scripts like them. </p>
-<h4>1.3.1. Create ~/bin Directory</h4>
-<p>This directory is in the search list of the executable files. You may  already have it. If it is so, skip this step.</p>
-<pre><code>mkdir ~/bin
-</code></pre>
-<p>You have to logoff and logon again.</p>
-<h4>1.3.2. Scripts</h4>
-<p>Create site enable script</p>
-<pre><code>nano ~/bin/ngensite
-</code></pre>
-<p>Fill it as below</p>
-<pre><code>#/bin/bash
-sudo ln -s /etc/nginx/sites-available/$1 /etc/nginx/sites-enabled/$1
-</code></pre>
-<p>Create site disable script</p>
-<pre><code>nano ~/bin/ngdissite
-</code></pre>
-<p>Fill it as below</p>
-<pre><code>#/bin/bash
-sudo rm /etc/nginx/sites-enabled/$1
-</code></pre>
-<p>Make the scripts executable</p>
-<pre><code>chmod +x ~/bin/ngensite
-chmod +x ~/bin/ngdissite
-</code></pre>
-<p>Now we can disable or enable a site with these scripts:</p>
-<pre><code>ngensite default
-ngdissite default
-</code></pre>
-<h3>1.4. Redesign Our Site</h3>
-<p>We will disable default configuration, leave it at sites-available as a  template, create a new conf with the name srv1 (my hostname) and enable  it.</p>
-<h4>1.4.1. Disable default Conf</h4>
-<pre><code>sudo rm /etc/nginx/sites-enabled/default
-</code></pre>
-<p>or simply</p>
-<pre><code>ngdissite default
-</code></pre>
-<h4>1.4.2. Create the New Conf</h4>
-<pre><code>sudo nano /etc/nginx/sites-available/srv1
-</code></pre>
-<p>Fill it as below</p>
-<pre><code>server {
-   listen 80;
-   listen [::]:80;
-   root /var/www/html;
-   index index.html index.htm index.nginx-debian.html;
-   server_name srv1;
-   location / {
-      try_files $uri $uri/ =404;
-   }
-   server_tokens off;
-}
-</code></pre>
-<p>Explanations:</p>
-<ul>
-<li>Listen IP version 4 at port 80</li>
-<li>Listen IP version 6 at port 80</li>
-<li>Root directory is /var/www/html</li>
-<li>Index file (default file) is one of the followings in order</li>
-<li>Server name is srv1 (can be more than 1 - after srv1)</li>
-<li>For the location in root (and subfolders), try the given name as a file, then as a folder, if can't find, send 404 error message.</li>
-<li>Don't display server version at error (and other) messages.</li>
-</ul>
-<h4>1.4.3. Enable the New Conf</h4>
-<pre><code>ngensite srv1
-</code></pre>
-<p>It is necessary to reload nginx</p>
-<pre><code>sudo systemctl reload nginx
-</code></pre>
-<p><br></p>
-</details>
-<details>
-<summary>
-2. SSL Configuration
-</summary>
-<hr />
-<p>We will test SSL configuration with self signed certificates. Later on  the tutorial, we are going to test getting certificates with certbot tool too.</p>
-<h3>2.1. Create a Self Signed Certificate</h3>
-<p>Create a place for the certificates</p>
-<pre><code>sudo mkdir /etc/nginx/certs
-</code></pre>
-<p>Create certificates</p>
-<pre><code>sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-  -keyout /etc/nginx/certs/srv1.key -out /etc/nginx/certs/srv1.crt
-</code></pre>
-<p>You can give default answers to all the questions.</p>
-<p>Key and certificate files are copied to /etc/nginx/certs/</p>
-<h3>2.1. Create SSL Conf</h3>
-<pre><code>sudo nano /etc/nginx/sites-available/srv1-ssl
-</code></pre>
-<p>Fill it as below</p>
-<pre><code>server {
-   listen 443 ssl;
-   listen [::]:443 ssl;
-   root /var/www/html;
-   index index.html index.htm index.nginx-debian.html;
-   server_name srv1;
-   ssl_certificate /etc/nginx/certs/srv1.crt;
-   ssl_certificate_key /etc/nginx/certs/srv1.key;
-   ssl_session_timeout 5m;
-   location / {
-      try_files $uri $uri/ =404;
-   }
-   server_tokens off;
-}
-</code></pre>
-<p>Enable it</p>
-<pre><code>ngensite srv1-ssl
-</code></pre>
-<h3>2.2. HTTPS Redirection</h3>
-<p>We have to add a redirection to srv1 conf to automatically redirect http://srv1/ to https://srv1/</p>
-<pre><code>sudo nano /etc/nginx/sites-available/srv1
-</code></pre>
-<p>Add the line below after the listen lines</p>
-<pre><code>   return 301 https://$host$request_uri;
-</code></pre>
-<p>Reload nginx</p>
-<pre><code>sudo systemctl reload nginx
-</code></pre>
-<h3>2.3. SSL Site is Ready</h3>
-<p><code>https://srv1/</code></p>
-<p>Your firefox will complain as "Warning: Potential Security Risk Ahead",  because our certificate is a self signed one. You can click "Advanced" and "Accept the Risk and Continue" to reach the SSL site.</p>
-<p><br></p>
-</details>
-<details>
-<summary>
-3. LEMP Stack
-</summary>
-<hr />
-<ul>
-<li>L: Linux (Debian or Ubuntu in our case)</li>
-<li>E: Nginx (Enginx actually)</li>
-<li>M: Mariadb (or Mysql if you love Or*cle so much)</li>
-<li>P: PHP, Python, or Perl (PHP in our case)</li>
-</ul>
-<p>So not a big deal, we'll install Mariadb and PHP and connect them with  Nginx.</p>
-<h3>3.1. Install mariadb, php, and necessary dependancies.</h3>
-<ul>
-<li>php-cli   : PHP client package</li>
-<li>php-fpm   : to run php as a cgi, nginx doesn't have a native support  </li>
-<li>php-mysql : for php to connect to mariadb</li>
-</ul>
-<pre><code>sudo apt install --yes mariadb-server php-cli php-fpm php-mysql
-</code></pre>
-<h3>3.2. Update srv1-ssl Conf for PHP</h3>
-<pre><code>sudo nano /etc/nginx/sites-available/srv1-ssl
-</code></pre>
-<p>Add the following part after the end of the location stanza.</p>
-<pre><code>   location ~ \.php$ {
-      fastcgi_pass unix:/run/php/php-fpm.sock;
-      include fastcgi.conf;
-   }
-</code></pre>
-<p>Restart nginx</p>
-<pre><code>sudo systemctl restart nginx
-</code></pre>
-<h3>3.3. Test it</h3>
-<p>We'll create a test database, a table in that database, add some rows to  the table on Mariadb. We will also create a test PHP file with the PHP  code to retrieve the data from the database and display it as HTML. </p>
-<h4>3.3.1. DB Operations</h4>
-<p>Connect to Mariadb shell</p>
-<pre><code>sudo mariadb
-</code></pre>
-<p>Create mysampledb database, connect to it, create a table, fill the  table, create a user with the access permission to that database and the  table.</p>
-<p><strong>Run on Mariadb shell</strong></p>
-<pre><code>CREATE DATABASE mysampledb;
-USE mysampledb;
-CREATE TABLE Employees (Name char(15), Age int(3), Occupation char(15));
-INSERT INTO Employees VALUES ('Joe Smith', '26', 'Ninja');
-INSERT INTO Employees VALUES ('John Doe', '33', 'Sleeper');
-INSERT INTO Employees VALUES ('Mariadb Server', '14', 'RDBM');
-GRANT ALL ON mysampledb.* TO 'appuser'@'localhost' IDENTIFIED BY 'password';
-exit
-</code></pre>
-<h4>3.3.2. Create Test PHP</h4>
-<pre><code>sudo nano /var/www/html/test.php
-</code></pre>
-<p>Fill it as below</p>
-<pre><code>&lt;?php
-   $mycon = new mysqli(&quot;localhost&quot;, &quot;appuser&quot;, &quot;password&quot;, &quot;mysampledb&quot;);
-   if ($mycon-&gt;connect_errno)
-   {
-      echo &quot;Connection Error&quot;;
-      exit();
-   }
-   $mysql = &quot;SELECT * FROM Employees&quot;;
-   $result = ($mycon-&gt;query($mysql));
-   $rows = [];
-   if ($result-&gt;num_rows &gt; 0)
-    {
-        $rows = $result-&gt;fetch_all(MYSQLI_ASSOC);
-    }
-?&gt;
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;body&gt;
-    &lt;table&gt;
-        &lt;thead&gt;
-            &lt;tr&gt;
-                &lt;th&gt;Name&lt;/th&gt;
-                &lt;th&gt;Age&lt;/th&gt;
-                &lt;th&gt;Occupation&lt;/th&gt;
-            &lt;/tr&gt;
-        &lt;/thead&gt;
-        &lt;tbody&gt;
-            &lt;?php
-               if(!empty($rows))
-               foreach($rows as $row)
-              {
-            ?&gt;
-            &lt;tr&gt;
-                &lt;td&gt;&lt;?php echo $row['Name']; ?&gt;&lt;/td&gt;
-                &lt;td&gt;&lt;?php echo $row['Age']; ?&gt;&lt;/td&gt;
-                &lt;td&gt;&lt;?php echo $row['Occupation']; ?&gt;&lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;?php } ?&gt;
-        &lt;/tbody&gt;
-    &lt;/table&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-&lt;?php
-    mysqli_close($conn);
-?&gt;
-</code></pre>
-<p>Now go to below address to see if it is working:<br />
-<code>https://srv1/test.php</code></p>
-<p><br></p>
-</details>
-<details>
-<summary>
-4. Sample Configs
-</summary>
-<hr />
-<h3>4.1. Three Sites in One Conf File</h3>
-<p>srv2, srv3, and srv4 all have their directories and served in the same  server</p>
-<pre><code>server {
-   listen 80;
-   listen [::]:80;
-   root /var/www/srv2;
-   index index.html index.htm index.nginx-debian.html;
-   server_name srv2;
-   location / {
-      try_files $uri $uri/ =404;
-   }
-}
-server {
-   listen 80;
-   listen [::]:80;
-   root /var/www/srv3;
-   index index.html index.htm index.nginx-debian.html;
-   server_name srv3;
-   location / {
-      try_files $uri $uri/ =404;
-   }
-}
-server {
-   listen 80;
-   listen [::]:80;
-   root /var/www/srv4;
-   index index.html index.htm index.nginx-debian.html;
-   server_name srv4;
-   location / {
-      try_files $uri $uri/ =404;
-   }
-}
-</code></pre>
-<h3>4.2. Site Only Allowing 2 IPs to connect</h3>
-<pre><code>server {
-   listen 80;
-   listen [::]:80;
-   root /var/www/srv2;
-   index index.html index.htm index.nginx-debian.html;
-   server_name srv2;
-   allow 192.168.1.108;
-   allow 192.168.1.109;
-   deny all;
-   location / {
-      try_files $uri $uri/ =404;
-   }
-}
-</code></pre>
-<h3>4.3. IP Access Control on One Directory Only</h3>
-<p>Site is open to all IPs. Admin folder is restricted to 1 IP.</p>
-<pre><code>server {
-   listen 80;
-   listen [::]:80;
-   root /var/www/srv2;
-   index index.html index.htm index.nginx-debian.html;
-   server_name srv2;
-   deny all;
-   location / {
-      try_files $uri $uri/ =404;
-   }
-   location /admin {
-      allow 192.168.1.108;
-      deny all;
-   }
-}
-</code></pre>
-<h3>4.4. Https Redirection with Certbot Access</h3>
-<p>Redirect to Https site except the certbot (Letsencrypt acme challenge)  accessing /.well-known/acme-challenge/. </p>
-<p>So that certbot can renew certificates by connecting to the Http site.</p>
-<pre><code>server {
-   listen 80;
-   listen [::]:80;
-   index index.html index.htm index.nginx-debian.html;
-   server_name srv1;
-   location ^~ /.well-known/acme-challenge {
-       allow all; 
-       root /var/www/html;
-   }
-    location / {
-       return 301 https://$host$request_uri;
-    }
-   server_tokens off;
-}
-</code></pre>
-<p><br></p>
-</details>
-<details>
-<summary>
-5. HTTPS With Free Let's Encrypt Certificates
-</summary>
-<hr />
-<p>This section is performed on a VPS on internet. To get free Let's Encrypt certificates, our hostname must be in a DNS in internet. </p>
-<h3>5.0. Specs</h3>
-<ul>
-<li>Server   : Debian 12/11 or Ubuntu 24.04/22.04 LTS Server</li>
-<li>Hostname : 386387.xyz</li>
-</ul>
-<p>Server is fresh install.</p>
-<p>Remember to change all the occurences of 386387.xyz and www.386387.xyz with  your server names.</p>
-<h3>5.1. Install Nginx</h3>
+<h3>1.2. Install Using NVM (Node Version Manager) - User-based</h3>
+<p>NVM allows installation of the latest Node.js versions on a per-user basis. This provides access to newer features while maintaining isolation from system packages. Ideal for development and testing.</p>
+<p>Install curl (Debian 13 doesn't include it by default):</p>
 <pre><code>sudo apt update
-sudo apt install nginx --yes
+sudo apt install -y curl
 </code></pre>
-<h3>5.2. Create ngensite and ngdissite scripts as in 1.3.</h3>
-<p>Refer to 1.3.</p>
-<h3>5.3. Disable default Site and Create a New One Named as x386387.xyz</h3>
-<pre><code>ngdissite default
-sudo nano /etc/nginx/sites-available/386387.xyz
+<p>Download and install NVM (Node Version Manager):</p>
+<pre><code>curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
 </code></pre>
-<p>Fill it as below</p>
-<pre><code>server {
-   listen 80;
-   listen [::]:80;
-   root /var/www/386387.xyz;
-   index index.html index.htm index.nginx-debian.html;
-   server_name 386387.xyz www.386387.xyz;
-   location / {
-      try_files $uri $uri/ =404;
-   }
-   server_tokens off;
-}
+<p>Either restart your shell or source the NVM script:</p>
+<pre><code>\. &quot;$HOME/.nvm/nvm.sh&quot;
 </code></pre>
-<p>Create /var/www/386387.xyz folder. Put some test HTMLs into it.</p>
-<p>Enable the new conf</p>
-<pre><code>ngensite 386387.xyz
+<p>Install the latest Node.js LTS version (22.x as of writing):</p>
+<pre><code>nvm install 22
 </code></pre>
-<p>Reload nginx</p>
-<pre><code>sudo systemctl reload nginx
+<p>Verify the installation:</p>
+<pre><code>node -v 
 </code></pre>
-<p>Your site is ready</p>
-<h3>5.4. Install certbot and Get a Free Certificate</h3>
-<p>Install certbot</p>
-<pre><code>sudo apt install certbot --yes
+<p>Check the active Node.js version:</p>
+<pre><code>nvm current 
 </code></pre>
-<p>Run certbot to get certificates. For authentication method question;  select the option 2 (Place files ...), and enter root directory (/var/www/x11.xyz for my server).  Enter an email address and accept TOS.</p>
-<pre><code>sudo certbot certonly -d 386387.xyz -d www.386387.xyz
+<p>Verify NPM version:</p>
+<pre><code>npm -v 
 </code></pre>
-<p>Certificates are installed to /etc/letsencrypt/live/386387.xyz/</p>
-<p>Certificates will auto renew, you can check the process with:</p>
-<pre><code>sudo certbot renew --dry-run
+<p>Install another version (e.g., current release 23.x):</p>
+<pre><code>nvm install 23
 </code></pre>
-<h3>5.5. Create a conf for the SSL site</h3>
-<pre><code>sudo nano /etc/nginx/sites-available/386387.xyz-ssl
+<p>Check current active version:</p>
+<pre><code>nvm current
+</code></pre>
+<p>Switch to version 22:</p>
+<pre><code>nvm use 22
+</code></pre>
+<p>List installed versions:</p>
+<pre><code>nvm ls
+</code></pre>
+<p>Set version 22 as the default:</p>
+<pre><code>nvm alias default 22
+</code></pre>
+<p>Remove version 23</p>
+<pre><code>nvm uninstall 23
+</code></pre>
+<p><br></p>
+</details>
+<details>
+<summary>
+2. Using Node.js
+</summary>
+<hr />
+<h3>2.1. Running Javascript Programs</h3>
+<p>Create a simple JavaScript program:</p>
+<pre><code>nano hello.js
 </code></pre>
 <p>Fill as below:</p>
-<pre><code>server {
-   listen 443 ssl;
-   listen [::]:443 ssl;
-   root /var/www/386387.xyz;
-   index index.html index.htm index.nginx-debian.html;
-   server_name x11.xyz www.x11.xyz;
-   ssl_certificate /etc/letsencrypt/live/386387.xyz/fullchain.pem;
-   ssl_certificate_key /etc/letsencrypt/live/386387.xyz/privkey.pem;
-   ssl_session_timeout 5m;
-   location / {
-      try_files $uri $uri/ =404;
-   }
-   server_tokens off;
-}
+<pre><code>console.log(&quot;Hello from Node.js!&quot;);
 </code></pre>
-<p>Enable it</p>
-<pre><code>ngensite 386387.xyz-ssl
+<p>Execute the program:</p>
+<pre><code>node hello.js
 </code></pre>
-<h3>5.5. Update HTTP conf</h3>
-<p>Our http conf must redirect to https site with the exception of certbot  renew process</p>
-<pre><code>sudo nano /etc/nginx/sites-available/386387.xyz
+<p>Create a more practical example:</p>
+<pre><code>nano time.js
 </code></pre>
-<p>Change as below</p>
-<pre><code>server {
-   listen 80;
-   listen [::]:80;
-   index index.html index.htm index.nginx-debian.html;
-   server_name 386387.xyz www.386387.xyz;
-   location ^~ /.well-known/acme-challenge {
-       allow all; 
-       root /var/www/x11.xyz;
-   }
-    location / {
-       return 301 https://$host$request_uri;
-    }
-   server_tokens off;
-}
+<p>Fill as below:</p>
+<pre><code>const now = new Date();
+console.log(`Time now is: ${now.toLocaleString()}`);
 </code></pre>
-<p>Reload Nginx</p>
-<pre><code>sudo systemctl reload nginx
+<p>Run the program:</p>
+<pre><code>node time.js
 </code></pre>
-<p>Your HTTPS site is ready:</p>
-<p><code>https://386387.xyz/</code></p>
+<h3>2.2. Installing/Running Packages</h3>
+<p>You can install/run packages from <code>https://www.npmjs.org/</code></p>
+<p>Run a package without permanently installing. It asks to install, you can say Y.</p>
+<pre><code>npm exec cowsay &quot;Hello world&quot;
+</code></pre>
+<p>Install a package locally, we'll use it in a script</p>
+<pre><code>npm install chalk@4
+</code></pre>
+<p>Saved to ./node_modules/</p>
+<p>Let's use it in a script</p>
+<pre><code>nano chalktest.js
+</code></pre>
+<p>Fill as below:</p>
+<pre><code>const chalk = require('chalk');
+
+console.log(chalk.green('Success message'));
+console.log(chalk.red.bold('Error message'));
+console.log(chalk.blue.underline('Info message'));
+console.log(chalk.yellow('Warning message'));
+</code></pre>
+<p>Run it:</p>
+<pre><code>node chalktest.js
+</code></pre>
+<p>Update installed packages:</p>
+<pre><code>npm update
+</code></pre>
+<p>List locally installed packages:</p>
+<pre><code>npm list
+</code></pre>
+<p>View specific package details:</p>
+<pre><code>npm list chalk
+</code></pre>
+<p>Check for outdated packages:</p>
+<pre><code>npm outdated
+</code></pre>
+<p>If you want to uninstall a package:</p>
+<pre><code>npm uninstall chalk
+</code></pre>
 <p><br></p>
-</details>
-<details>
-<summary>
-6. Nginx and Apache Together
-</summary>
-<hr />
-<p><strong>!!! This section starts with a fresh install server !!!</strong></p>
-<p>Nginx is very good at static content, Apache is very good at dynamic  content. So we can use them together for the maximum performance.</p>
-<h3>6.0. Specs</h3>
-<ul>
-<li>Nginx will run at port 80 and listen to the outside.</li>
-<li>Apache will run at port 8080 and listen to only inside. That is it can  be connected by only the localhost. So that only Nginx will listen to it.</li>
-<li>PHP and Mariadb will be connected to Apache only.</li>
-<li>All the HTML (and other static content) will be served by Nginx.</li>
-<li>All the PHP (and other dynamic content) will be served by Apache.</li>
-</ul>
-<h3>6.1. Install nginx And Reconfigure the Default Site</h3>
-<p>If you want, you may disable the default site and configure a new one too.</p>
-<p>Install nginx</p>
-<pre><code>sudo apt update
-sudo apt install nginx --yes
-</code></pre>
-<p>Backup default conf</p>
-<pre><code>sudo cp /etc/nginx/sites-available/{default,default.backup}
-</code></pre>
-<p>Update default conf</p>
-<pre><code>sudo nano /etc/nginx/sites-available/default
-</code></pre>
-<p>Fill as below</p>
-<pre><code>server {
-   listen 80;
-   listen [::]:80;
-   server_name .386387.xyz;
-   index index.html index.htm index.nginx-debian.html;
-   root /var/www/html;
-   location ~ \.php {
-      proxy_pass http://127.0.0.1:8080;
-   }
-   location / {
-      try_files $uri $uri/ =404;
-   }
-   server_tokens off;
-}
-</code></pre>
-<p>Reload nginx</p>
-<pre><code>sudo systemctl reload nginx
-</code></pre>
-<h3>6.2. Install apache2, php, mariadb, and dependencies</h3>
-<pre><code>sudo apt install --yes apache2 php mariadb-server \
-   libapache2-mod-php php-mysql
-</code></pre>
-<p>Apache doesn't start automatically, because port 80 is busy with nginx.</p>
-<p>Change Apache's default listening port from 80 to 8080:</p>
-<pre><code>sudo nano /etc/apache2/ports.conf
-</code></pre>
-<p>Change the following line from: </p>
-<pre><code>Listen 80
-</code></pre>
-<p>to as below:</p>
-<pre><code>Listen 8080
-</code></pre>
-<p>Update the default conf to listen to 8080 and only from local</p>
-<pre><code>sudo nano /etc/apache2/sites-available/000-default.conf
-</code></pre>
-<p>Change the first line from:</p>
-<pre><code>&lt;VirtualHost *:80&gt;
-</code></pre>
-<p>to as below:</p>
-<pre><code>&lt;VirtualHost 127.0.0.1:8080&gt;
-</code></pre>
-<p>Restart Apache</p>
-<pre><code>sudo systemctl restart apache2
-</code></pre>
-<p>You can test the combination using steps at 3.3.</p>
 </details><!-- HTML Footer Start -->
 
 </body>
