@@ -1,0 +1,694 @@
+<!DOCTYPE html><html lang="en" dir="ltr" data-theme="dark" data-has-toc data-has-sidebar class="astro-bguv2lll"> <head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>FHS (Filesystem Hierarchy Standard) | Debian & Ubuntu Tutorials</title><link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml"/><meta name="generator" content="Astro v5.16.6"/><meta name="generator" content="Starlight v0.37.1"/><meta property="og:title" content="FHS (Filesystem Hierarchy Standard)"/><meta property="og:type" content="article"/><meta property="og:locale" content="en"/><meta property="og:description" content="Linux filesystem structure specifications"/><meta property="og:site_name" content="Debian &#38; Ubuntu Tutorials"/><meta name="twitter:card" content="summary_large_image"/><meta name="description" content="Linux filesystem structure specifications"/><script>
+	window.StarlightThemeProvider = (() => {
+		const storedTheme =
+			typeof localStorage !== 'undefined' && localStorage.getItem('starlight-theme');
+		const theme =
+			storedTheme ||
+			(window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+		document.documentElement.dataset.theme = theme === 'light' ? 'light' : 'dark';
+		return {
+			updatePickers(theme = storedTheme || 'auto') {
+				document.querySelectorAll('starlight-theme-select').forEach((picker) => {
+					const select = picker.querySelector('select');
+					if (select) select.value = theme;
+					/** @type {HTMLTemplateElement | null} */
+					const tmpl = document.querySelector(`#theme-icons`);
+					const newIcon = tmpl && tmpl.content.querySelector('.' + theme);
+					if (newIcon) {
+						const oldIcon = picker.querySelector('svg.label-icon');
+						if (oldIcon) {
+							oldIcon.replaceChildren(...newIcon.cloneNode(true).childNodes);
+						}
+					}
+				});
+			},
+		};
+	})();
+</script><template id="theme-icons"><svg aria-hidden="true" class="light astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M5 12a1 1 0 0 0-1-1H3a1 1 0 0 0 0 2h1a1 1 0 0 0 1-1Zm.64 5-.71.71a1 1 0 0 0 0 1.41 1 1 0 0 0 1.41 0l.71-.71A1 1 0 0 0 5.64 17ZM12 5a1 1 0 0 0 1-1V3a1 1 0 0 0-2 0v1a1 1 0 0 0 1 1Zm5.66 2.34a1 1 0 0 0 .7-.29l.71-.71a1 1 0 1 0-1.41-1.41l-.66.71a1 1 0 0 0 0 1.41 1 1 0 0 0 .66.29Zm-12-.29a1 1 0 0 0 1.41 0 1 1 0 0 0 0-1.41l-.71-.71a1.004 1.004 0 1 0-1.43 1.41l.73.71ZM21 11h-1a1 1 0 0 0 0 2h1a1 1 0 0 0 0-2Zm-2.64 6A1 1 0 0 0 17 18.36l.71.71a1 1 0 0 0 1.41 0 1 1 0 0 0 0-1.41l-.76-.66ZM12 6.5a5.5 5.5 0 1 0 5.5 5.5A5.51 5.51 0 0 0 12 6.5Zm0 9a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Zm0 3.5a1 1 0 0 0-1 1v1a1 1 0 0 0 2 0v-1a1 1 0 0 0-1-1Z"/></svg><svg aria-hidden="true" class="dark astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M21.64 13a1 1 0 0 0-1.05-.14 8.049 8.049 0 0 1-3.37.73 8.15 8.15 0 0 1-8.14-8.1 8.59 8.59 0 0 1 .25-2A1 1 0 0 0 8 2.36a10.14 10.14 0 1 0 14 11.69 1 1 0 0 0-.36-1.05Zm-9.5 6.69A8.14 8.14 0 0 1 7.08 5.22v.27a10.15 10.15 0 0 0 10.14 10.14 9.784 9.784 0 0 0 2.1-.22 8.11 8.11 0 0 1-7.18 4.32v-.04Z"/></svg><svg aria-hidden="true" class="auto astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M21 14h-1V7a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v7H3a1 1 0 0 0-1 1v2a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-2a1 1 0 0 0-1-1ZM6 7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v7H6V7Zm14 10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-1h16v1Z"/></svg></template><link rel="stylesheet" href="/_astro/print.DNXP8c50.css" media="print"><link rel="stylesheet" href="/_astro/index.0vIKbS8r.css"><script type="module" src="/_astro/page.B1D-nYk3.js"></script></head> <body class="astro-bguv2lll"> <a href="#_top" class="astro-7q3lir66">Skip to content</a>  <div class="page sl-flex astro-vrdttmbt"> <header class="header astro-vrdttmbt"><div class="header astro-kmkmnagf"> <div class="title-wrapper sl-flex astro-kmkmnagf"> <a href="/" class="site-title sl-flex astro-m46x6ez3">  <span class="astro-m46x6ez3" translate="no"> Debian &amp; Ubuntu Tutorials </span> </a>  </div> <div class="sl-flex print:hidden astro-kmkmnagf"> <site-search class="astro-kmkmnagf astro-v37mnknz" data-translations="{&#34;placeholder&#34;:&#34;Search&#34;}"> <button data-open-modal disabled aria-label="Search" aria-keyshortcuts="Control+K" class="astro-v37mnknz"> <svg aria-hidden="true" class="astro-v37mnknz astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M21.71 20.29 18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a.999.999 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z"/></svg> <span class="sl-hidden md:sl-block astro-v37mnknz" aria-hidden="true">Search</span> <kbd class="sl-hidden md:sl-flex astro-v37mnknz" style="display: none;"> <kbd class="astro-v37mnknz">Ctrl</kbd><kbd class="astro-v37mnknz">K</kbd> </kbd> </button> <dialog style="padding:0" aria-label="Search" class="astro-v37mnknz"> <div class="dialog-frame sl-flex astro-v37mnknz">  <button data-close-modal class="sl-flex md:sl-hidden astro-v37mnknz"> Cancel </button> <div class="search-container astro-v37mnknz"> <div id="starlight__search" class="astro-v37mnknz"></div> </div> </div> </dialog> </site-search>  <script>
+	(() => {
+		const openBtn = document.querySelector('button[data-open-modal]');
+		const shortcut = openBtn?.querySelector('kbd');
+		if (!openBtn || !(shortcut instanceof HTMLElement)) return;
+		const platformKey = shortcut.querySelector('kbd');
+		if (platformKey && /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) {
+			platformKey.textContent = '⌘';
+			openBtn.setAttribute('aria-keyshortcuts', 'Meta+K');
+		}
+		shortcut.style.display = '';
+	})();
+</script> <script type="module" src="/_astro/Search.astro_astro_type_script_index_0_lang.cjYDvRdi.js"></script>   </div> <div class="sl-hidden md:sl-flex print:hidden right-group astro-kmkmnagf"> <div class="sl-flex social-icons astro-kmkmnagf"> <a href="https://github.com/enatsek/" rel="me" class="sl-flex astro-wy4te6ga"><span class="sr-only astro-wy4te6ga">GitHub</span><svg aria-hidden="true" class="astro-wy4te6ga astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.08 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0 0 12 .3Z"/></svg></a> </div> <starlight-theme-select>  <label style="--sl-select-width: 6.25em" class="astro-4yphtoen"> <span class="sr-only astro-4yphtoen">Select theme</span> <svg aria-hidden="true" class="icon label-icon astro-4yphtoen astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M21 14h-1V7a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v7H3a1 1 0 0 0-1 1v2a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-2a1 1 0 0 0-1-1ZM6 7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v7H6V7Zm14 10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-1h16v1Z"/></svg> <select autocomplete="off" class="astro-4yphtoen"> <option value="dark" class="astro-4yphtoen">Dark</option><option value="light" class="astro-4yphtoen">Light</option><option value="auto" selected class="astro-4yphtoen">Auto</option> </select> <svg aria-hidden="true" class="icon caret astro-4yphtoen astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M17 9.17a1 1 0 0 0-1.41 0L12 12.71 8.46 9.17a1 1 0 1 0-1.41 1.42l4.24 4.24a1.002 1.002 0 0 0 1.42 0L17 10.59a1.002 1.002 0 0 0 0-1.42Z"/></svg> </label>  </starlight-theme-select>  <script>
+	StarlightThemeProvider.updatePickers();
+</script> <script type="module">const r="starlight-theme",o=e=>e==="auto"||e==="dark"||e==="light"?e:"auto",c=()=>o(typeof localStorage<"u"&&localStorage.getItem(r));function n(e){typeof localStorage<"u"&&localStorage.setItem(r,e==="light"||e==="dark"?e:"")}const l=()=>matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";function t(e){StarlightThemeProvider.updatePickers(e),document.documentElement.dataset.theme=e==="auto"?l():e,n(e)}matchMedia("(prefers-color-scheme: light)").addEventListener("change",()=>{c()==="auto"&&t("auto")});class s extends HTMLElement{constructor(){super(),t(c()),this.querySelector("select")?.addEventListener("change",a=>{a.currentTarget instanceof HTMLSelectElement&&t(o(a.currentTarget.value))})}}customElements.define("starlight-theme-select",s);</script> <script type="module">class s extends HTMLElement{constructor(){super();const e=this.querySelector("select");e&&(e.addEventListener("change",t=>{t.currentTarget instanceof HTMLSelectElement&&(window.location.pathname=t.currentTarget.value)}),window.addEventListener("pageshow",t=>{if(!t.persisted)return;const n=e.querySelector("option[selected]")?.index;n!==e.selectedIndex&&(e.selectedIndex=n??0)}))}}customElements.define("starlight-lang-select",s);</script> </div> </div> </header> <nav class="sidebar print:hidden astro-vrdttmbt" aria-label="Main"> <starlight-menu-button class="print:hidden astro-jif73yzw"> <button aria-expanded="false" aria-label="Menu" aria-controls="starlight__sidebar" class="sl-flex md:sl-hidden astro-jif73yzw"> <svg aria-hidden="true" class="open-menu astro-jif73yzw astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M3 8h18a1 1 0 1 0 0-2H3a1 1 0 0 0 0 2Zm18 8H3a1 1 0 0 0 0 2h18a1 1 0 0 0 0-2Zm0-5H3a1 1 0 0 0 0 2h18a1 1 0 0 0 0-2Z"/></svg> <svg aria-hidden="true" class="close-menu astro-jif73yzw astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="m13.41 12 6.3-6.29a1.004 1.004 0 1 0-1.42-1.42L12 10.59l-6.29-6.3a1.004 1.004 0 0 0-1.42 1.42l6.3 6.29-6.3 6.29a1 1 0 0 0 0 1.42.998.998 0 0 0 1.42 0l6.29-6.3 6.29 6.3a.999.999 0 0 0 1.42 0 1 1 0 0 0 0-1.42L13.41 12Z"/></svg> </button> </starlight-menu-button> <script type="module">class s extends HTMLElement{constructor(){super(),this.btn=this.querySelector("button"),this.btn.addEventListener("click",()=>this.toggleExpanded());const t=this.closest("nav");t&&t.addEventListener("keyup",e=>this.closeOnEscape(e))}setExpanded(t){this.setAttribute("aria-expanded",String(t)),document.body.toggleAttribute("data-mobile-menu-expanded",t)}toggleExpanded(){this.setExpanded(this.getAttribute("aria-expanded")!=="true")}closeOnEscape(t){t.code==="Escape"&&(this.setExpanded(!1),this.btn.focus())}}customElements.define("starlight-menu-button",s);</script>   <div id="starlight__sidebar" class="sidebar-pane astro-vrdttmbt"> <div class="sidebar-content sl-flex astro-vrdttmbt"> <sl-sidebar-state-persist data-hash="1ngezmu" class="astro-kku4brbg"> <script aria-hidden="true">
+		(() => {
+			try {
+				if (!matchMedia('(min-width: 50em)').matches) return;
+				/** @type {HTMLElement | null} */
+				const target = document.querySelector('sl-sidebar-state-persist');
+				const state = JSON.parse(sessionStorage.getItem('sl-sidebar-state') || '0');
+				if (!target || !state || target.dataset.hash !== state.hash) return;
+				window._starlightScrollRestore = state.scroll;
+				customElements.define(
+					'sl-sidebar-restore',
+					class SidebarRestore extends HTMLElement {
+						connectedCallback() {
+							try {
+								const idx = parseInt(this.dataset.index || '');
+								const details = this.closest('details');
+								if (details && typeof state.open[idx] === 'boolean') details.open = state.open[idx];
+							} catch {}
+						}
+					}
+				);
+			} catch {}
+		})();
+	</script>  <ul class="top-level astro-3ii7xxms"> <li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">Site Info</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="0"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/generics/about/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">About</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/generics/contact/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Contact</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/generics/license/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">License</span>  </a> </li> </ul>  </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">Web Services &amp; HTTPS</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="1"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/guides/apache/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Apache Web Server</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/nginx/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Nginx Web Server</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/certbot/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Certbot</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/lamp/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">LAMP Stack</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/lapp/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">LAPP Stack</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/wordpress/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">WordPress</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/adminer/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Adminer Tool</span>  </a> </li> </ul>  </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">Database Management</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="2"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/guides/mariadb/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">MariaDB</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/mariadbcluster/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">MariaDB Cluster</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/postgresdebian/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">PostgreSQL (Debian)</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/postgresubuntu/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">PostgreSQL (Ubuntu)</span>  </a> </li> </ul>  </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">Networking</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="3"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/guides/networkdebian/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Debian Network Configuration</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/networkubuntu/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Ubuntu Network Configuration</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/ufw/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">UFW (Uncomplicated Firewall)</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/shvpn/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Self-Hosted VPN</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/s2svpn/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Site-to-Site VPN</span>  </a> </li> </ul>  </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">Infrastructure &amp; Virtualization</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="4"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/guides/kvm1/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">KVM Virtualization (Beginner)</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/kvm2/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">KVM Virtualization (Networking)</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/keepalived/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Keepalived</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/haproxy/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">HAProxy</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/ansible/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Ansible</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/lvm/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">LVM (Logical Volume Management)</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/dns/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">DNS</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/ad/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Active Directory</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/nodejs/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Node.js</span>  </a> </li> </ul>  </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">System Administration Guides</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="5"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/guides/useradministration/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">User and Group Administration</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/etcfolder/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">/etc Folder Contents</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/regex/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Regular Expressions</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/filecompression/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">File Compression</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/fhs/" aria-current="page" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">FHS (Filesystem Hierarchy Standard)</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/systemd/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Systemd Basics</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/systemd2/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Systemd Additional</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/debpackaging/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Debian Packaging</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/guides/otherlinuxes/" aria-current="false" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Other Linux Distributions</span>  </a> </li> </ul>  </details> </li> </ul>   <script aria-hidden="true">
+		(() => {
+			const scroller = document.getElementById('starlight__sidebar');
+			if (!window._starlightScrollRestore || !scroller) return;
+			scroller.scrollTop = window._starlightScrollRestore;
+			delete window._starlightScrollRestore;
+		})();
+	</script> </sl-sidebar-state-persist>  <div class="md:sl-hidden"> <div class="mobile-preferences sl-flex astro-wu23bvmt"> <div class="social-icons astro-wu23bvmt"> <a href="https://github.com/enatsek/" rel="me" class="sl-flex astro-wy4te6ga"><span class="sr-only astro-wy4te6ga">GitHub</span><svg aria-hidden="true" class="astro-wy4te6ga astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.08 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0 0 12 .3Z"/></svg></a> </div> <starlight-theme-select>  <label style="--sl-select-width: 6.25em" class="astro-4yphtoen"> <span class="sr-only astro-4yphtoen">Select theme</span> <svg aria-hidden="true" class="icon label-icon astro-4yphtoen astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M21 14h-1V7a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v7H3a1 1 0 0 0-1 1v2a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-2a1 1 0 0 0-1-1ZM6 7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v7H6V7Zm14 10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-1h16v1Z"/></svg> <select autocomplete="off" class="astro-4yphtoen"> <option value="dark" class="astro-4yphtoen">Dark</option><option value="light" class="astro-4yphtoen">Light</option><option value="auto" selected class="astro-4yphtoen">Auto</option> </select> <svg aria-hidden="true" class="icon caret astro-4yphtoen astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M17 9.17a1 1 0 0 0-1.41 0L12 12.71 8.46 9.17a1 1 0 1 0-1.41 1.42l4.24 4.24a1.002 1.002 0 0 0 1.42 0L17 10.59a1.002 1.002 0 0 0 0-1.42Z"/></svg> </label>  </starlight-theme-select>  <script>
+	StarlightThemeProvider.updatePickers();
+</script>   </div>  </div> </div> </div> </nav> <div class="main-frame astro-vrdttmbt">  <script type="module">const a=document.getElementById("starlight__sidebar"),n=a?.querySelector("sl-sidebar-state-persist"),o="sl-sidebar-state",i=()=>{let t=[];const e=n?.dataset.hash||"";try{const s=sessionStorage.getItem(o),r=JSON.parse(s||"{}");Array.isArray(r.open)&&r.hash===e&&(t=r.open)}catch{}return{hash:e,open:t,scroll:a?.scrollTop||0}},c=t=>{try{sessionStorage.setItem(o,JSON.stringify(t))}catch{}},d=()=>c(i()),l=(t,e)=>{const s=i();s.open[e]=t,c(s)};n?.addEventListener("click",t=>{if(!(t.target instanceof Element))return;const e=t.target.closest("summary")?.closest("details");if(!e)return;const s=e.querySelector("sl-sidebar-restore"),r=parseInt(s?.dataset.index||"");isNaN(r)||l(!e.open,r)});addEventListener("visibilitychange",()=>{document.visibilityState==="hidden"&&d()});addEventListener("pageHide",d);</script> <div class="lg:sl-flex astro-67yu43on"> <aside class="right-sidebar-container print:hidden astro-67yu43on"> <div class="right-sidebar astro-67yu43on"> <div class="lg:sl-hidden astro-pb3aqygn"><mobile-starlight-toc data-min-h="2" data-max-h="3" class="astro-doynk5tl"><nav aria-labelledby="starlight__on-this-page--mobile" class="astro-doynk5tl"><details id="starlight__mobile-toc" class="astro-doynk5tl"><summary id="starlight__on-this-page--mobile" class="sl-flex astro-doynk5tl"><span class="toggle sl-flex astro-doynk5tl">On this page<svg aria-hidden="true" class="caret astro-doynk5tl astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg></span><span class="display-current astro-doynk5tl"></span></summary><div class="dropdown astro-doynk5tl"><ul class="isMobile astro-g2bywc46" style="--depth: 0;"> <li class="astro-g2bywc46" style="--depth: 0;"> <a href="#_top" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">Overview</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#0-specs" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">0. Specs</span> </a> <ul class="isMobile astro-g2bywc46" style="--depth: 1;"> <li class="astro-g2bywc46" style="--depth: 1;"> <a href="#01-introduction" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">0.1. Introduction</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#02-quick-reference" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">0.2. Quick Reference</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#03-sources" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">0.3. Sources:</span> </a>  </li> </ul>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#1-bin---essential-command-binaries" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">1. /bin - Essential Command Binaries</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#2-boot---static-files-of-the-boot-loader" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">2. /boot - Static Files of the Boot Loader</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#3-dev---device-files" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">3. /dev - Device Files</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#4-etc---host-specific-system-configuration" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">4. /etc - Host-specific System Configuration</span> </a> <ul class="isMobile astro-g2bywc46" style="--depth: 1;"> <li class="astro-g2bywc46" style="--depth: 1;"> <a href="#41-etcopt---configuration-for-opt" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">4.1. /etc/opt - Configuration for /opt</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#42-etcx11---configuration-for-the-x-window-system" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">4.2. /etc/X11 - Configuration for the X Window System</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#43-etcsgml---configuration-for-sgml" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">4.3. /etc/sgml - Configuration for SGML</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#44-etcxml---configuration-for-xml" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">4.4. /etc/xml - Configuration for XML</span> </a>  </li> </ul>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#5-home---user-home-directories" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">5. /home - User Home Directories</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#6-lib---essential-shared-libraries-and-kernel-modules" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">6. /lib - Essential Shared Libraries and Kernel Modules</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#7-lib---alternate-format-essential-shared-libraries" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">7. /lib* - Alternate format essential shared libraries</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#8-media---mount-point-for-removable-media" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">8. /media - Mount Point for Removable Media</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#9-mnt---mount-point-for-mounting-a-filesystem-temporarily" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">9. /mnt - Mount Point for Mounting a Filesystem Temporarily</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#10-opt---add-on-application-software-packages" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">10. /opt - Add-on Application Software Packages</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#11-root---home-directory-for-the-root-user" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">11. /root - Home directory for the root user</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#12-run---data-relevant-to-running-processes" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">12. /run - Data Relevant to Running Processes</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#13-sbin---essential-system-binaries" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">13. /sbin - Essential System Binaries</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#14-srv---data-for-services-provided-by-this-system" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">14. /srv - Data for Services Provided by This System</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#15-tmp---temporary-files" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">15. /tmp - Temporary Files</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#16-usr---secondary-hierarchy" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">16. /usr - Secondary hierarchy</span> </a> <ul class="isMobile astro-g2bywc46" style="--depth: 1;"> <li class="astro-g2bywc46" style="--depth: 1;"> <a href="#161-usrbin---most-user-commands" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">16.1. /usr/bin - Most User Commands</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#162-usrinclude---header-files-included-by-c-programs" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">16.2. /usr/include - Header Files Included by C Programs</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#163-usrlib---libraries" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">16.3. /usr/lib - Libraries</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#164-usrlibexec---binaries-run-by-other-programs" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">16.4. /usr/libexec - Binaries Run by Other Programs</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#165-usrlib---alternate-format-libraries" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">16.5. /usr/lib* - Alternate Format Libraries</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#166-usrlocal---local-hierarchy" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">16.6. /usr/local - Local Hierarchy</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#167-usrsbin---non-vital-system-binaries" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">16.7. /usr/sbin - Non-vital System Binaries</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#168-usrshare---architecture-independent-data" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">16.8. /usr/share - Architecture-Independent Data</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#169-usrsrc---source-code" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">16.9. /usr/src - Source Code</span> </a>  </li> </ul>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#17-var---variable-data" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">17. /var - Variable Data</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#18-special-to-linux" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">18. Special to Linux</span> </a> <ul class="isMobile astro-g2bywc46" style="--depth: 1;"> <li class="astro-g2bywc46" style="--depth: 1;"> <a href="#181-proc---kernel-and-process-information-virtual-filesystem" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">18.1. /proc - Kernel and Process Information Virtual Filesystem</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#182-sys---kernel-and-system-information-virtual-filesystem" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">18.2. /sys - Kernel and System Information Virtual Filesystem</span> </a>  </li> </ul>  </li> </ul> </div></details></nav></mobile-starlight-toc><script type="module" src="/_astro/MobileTableOfContents.astro_astro_type_script_index_0_lang.C181hMzK.js"></script></div><div class="right-sidebar-panel sl-hidden lg:sl-block astro-pb3aqygn"><div class="sl-container astro-pb3aqygn"><starlight-toc data-min-h="2" data-max-h="3"><nav aria-labelledby="starlight__on-this-page"><h2 id="starlight__on-this-page">On this page</h2><ul class="astro-g2bywc46" style="--depth: 0;"> <li class="astro-g2bywc46" style="--depth: 0;"> <a href="#_top" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">Overview</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#0-specs" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">0. Specs</span> </a> <ul class="astro-g2bywc46" style="--depth: 1;"> <li class="astro-g2bywc46" style="--depth: 1;"> <a href="#01-introduction" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">0.1. Introduction</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#02-quick-reference" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">0.2. Quick Reference</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#03-sources" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">0.3. Sources:</span> </a>  </li> </ul>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#1-bin---essential-command-binaries" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">1. /bin - Essential Command Binaries</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#2-boot---static-files-of-the-boot-loader" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">2. /boot - Static Files of the Boot Loader</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#3-dev---device-files" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">3. /dev - Device Files</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#4-etc---host-specific-system-configuration" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">4. /etc - Host-specific System Configuration</span> </a> <ul class="astro-g2bywc46" style="--depth: 1;"> <li class="astro-g2bywc46" style="--depth: 1;"> <a href="#41-etcopt---configuration-for-opt" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">4.1. /etc/opt - Configuration for /opt</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#42-etcx11---configuration-for-the-x-window-system" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">4.2. /etc/X11 - Configuration for the X Window System</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#43-etcsgml---configuration-for-sgml" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">4.3. /etc/sgml - Configuration for SGML</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#44-etcxml---configuration-for-xml" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">4.4. /etc/xml - Configuration for XML</span> </a>  </li> </ul>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#5-home---user-home-directories" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">5. /home - User Home Directories</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#6-lib---essential-shared-libraries-and-kernel-modules" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">6. /lib - Essential Shared Libraries and Kernel Modules</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#7-lib---alternate-format-essential-shared-libraries" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">7. /lib* - Alternate format essential shared libraries</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#8-media---mount-point-for-removable-media" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">8. /media - Mount Point for Removable Media</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#9-mnt---mount-point-for-mounting-a-filesystem-temporarily" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">9. /mnt - Mount Point for Mounting a Filesystem Temporarily</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#10-opt---add-on-application-software-packages" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">10. /opt - Add-on Application Software Packages</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#11-root---home-directory-for-the-root-user" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">11. /root - Home directory for the root user</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#12-run---data-relevant-to-running-processes" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">12. /run - Data Relevant to Running Processes</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#13-sbin---essential-system-binaries" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">13. /sbin - Essential System Binaries</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#14-srv---data-for-services-provided-by-this-system" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">14. /srv - Data for Services Provided by This System</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#15-tmp---temporary-files" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">15. /tmp - Temporary Files</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#16-usr---secondary-hierarchy" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">16. /usr - Secondary hierarchy</span> </a> <ul class="astro-g2bywc46" style="--depth: 1;"> <li class="astro-g2bywc46" style="--depth: 1;"> <a href="#161-usrbin---most-user-commands" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">16.1. /usr/bin - Most User Commands</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#162-usrinclude---header-files-included-by-c-programs" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">16.2. /usr/include - Header Files Included by C Programs</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#163-usrlib---libraries" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">16.3. /usr/lib - Libraries</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#164-usrlibexec---binaries-run-by-other-programs" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">16.4. /usr/libexec - Binaries Run by Other Programs</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#165-usrlib---alternate-format-libraries" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">16.5. /usr/lib* - Alternate Format Libraries</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#166-usrlocal---local-hierarchy" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">16.6. /usr/local - Local Hierarchy</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#167-usrsbin---non-vital-system-binaries" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">16.7. /usr/sbin - Non-vital System Binaries</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#168-usrshare---architecture-independent-data" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">16.8. /usr/share - Architecture-Independent Data</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#169-usrsrc---source-code" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">16.9. /usr/src - Source Code</span> </a>  </li> </ul>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#17-var---variable-data" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">17. /var - Variable Data</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 0;"> <a href="#18-special-to-linux" class="astro-g2bywc46" style="--depth: 0;"> <span class="astro-g2bywc46" style="--depth: 0;">18. Special to Linux</span> </a> <ul class="astro-g2bywc46" style="--depth: 1;"> <li class="astro-g2bywc46" style="--depth: 1;"> <a href="#181-proc---kernel-and-process-information-virtual-filesystem" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">18.1. /proc - Kernel and Process Information Virtual Filesystem</span> </a>  </li><li class="astro-g2bywc46" style="--depth: 1;"> <a href="#182-sys---kernel-and-system-information-virtual-filesystem" class="astro-g2bywc46" style="--depth: 1;"> <span class="astro-g2bywc46" style="--depth: 1;">18.2. /sys - Kernel and System Information Virtual Filesystem</span> </a>  </li> </ul>  </li> </ul> </nav></starlight-toc><script type="module" src="/_astro/TableOfContents.astro_astro_type_script_index_0_lang.CKWWgpjV.js"></script></div></div> </div> </aside> <div class="main-pane astro-67yu43on">  <main data-pagefind-body class="astro-bguv2lll" lang="en" dir="ltr">    <div class="content-panel astro-7nkwcw3z"> <div class="sl-container astro-7nkwcw3z"> <h1 id="_top" class="astro-j6tvhyss">FHS (Filesystem Hierarchy Standard)</h1>  </div> </div>  <div class="content-panel astro-7nkwcw3z"> <div class="sl-container astro-7nkwcw3z"> <div class="sl-markdown-content"> <div class="sl-heading-wrapper level-h5"><h5 id="linux-filesystem-structure-specifications">Linux filesystem structure specifications</h5><a class="sl-anchor-link" href="#linux-filesystem-structure-specifications"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “Linux filesystem structure specifications”</span></a></div>
+<div class="sl-heading-wrapper level-h2"><h2 id="0-specs">0. Specs</h2><a class="sl-anchor-link" href="#0-specs"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “0. Specs”</span></a></div>
+<hr>
+<div class="sl-heading-wrapper level-h3"><h3 id="01-introduction">0.1. Introduction</h3><a class="sl-anchor-link" href="#01-introduction"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “0.1. Introduction”</span></a></div>
+<p>The Filesystem Hierarchy Standard (FHS) is a set of guidelines and specifications for organizing the directory structure in Unix-like operating systems.</p>
+<p>The goal of the FHS is to establish a consistent and predictable directory layout across different Unix and Unix-like systems. This consistency makes it easier for software developers, system administrators, and users to locate files and understand the system’s organization.</p>
+<p><strong>Required Directories:</strong></p>
+<ul>
+<li><code dir="auto">/bin</code>: Essential command binaries</li>
+<li><code dir="auto">/boot</code>: Static files of the boot loader</li>
+<li><code dir="auto">/dev</code>: Device files</li>
+<li><code dir="auto">/etc</code>: Host-specific system configuration</li>
+<li><code dir="auto">/lib</code>: Essential shared libraries and kernel modules</li>
+<li><code dir="auto">/media</code>: Mount point for removable media</li>
+<li><code dir="auto">/mnt</code>: Mount point for mounting a filesystem temporarily</li>
+<li><code dir="auto">/opt</code>: Add-on application software packages</li>
+<li><code dir="auto">/run</code>: Data relevant to running processes</li>
+<li><code dir="auto">/sbin</code>: Essential system binaries</li>
+<li><code dir="auto">/srv</code>: Data for services provided by this system</li>
+<li><code dir="auto">/tmp</code>: Temporary files</li>
+<li><code dir="auto">/usr</code>: Secondary hierarchy</li>
+<li><code dir="auto">/var</code>: Variable data</li>
+</ul>
+<p><strong>Optional Directories:</strong></p>
+<ul>
+<li><code dir="auto">/home</code>: User home directories</li>
+<li><code dir="auto">/lib*</code>: Alternate format essential shared libraries</li>
+<li><code dir="auto">/root</code>: Home directory for the root user</li>
+</ul>
+<p><strong>Linux Specific Directories:</strong></p>
+<ul>
+<li><code dir="auto">/proc</code>: Kernel and process information virtual filesystem</li>
+<li><code dir="auto">/sys</code>: Kernel and system information virtual filesystem</li>
+</ul>
+<p><strong>Debian-Specific Directory:</strong></p>
+<ul>
+<li><code dir="auto">/lost+found</code>: File fragments recovered during previous <code dir="auto">fsck</code> operations</li>
+</ul>
+<div class="sl-heading-wrapper level-h3"><h3 id="02-quick-reference">0.2. Quick Reference</h3><a class="sl-anchor-link" href="#02-quick-reference"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “0.2. Quick Reference”</span></a></div>
+<ul>
+<li><strong><code dir="auto">/bin</code></strong>: Essential command binaries</li>
+<li><strong><code dir="auto">/boot</code></strong>: Static files of the boot loader</li>
+<li><strong><code dir="auto">/dev</code></strong>: Device files</li>
+<li><strong><code dir="auto">/etc</code></strong>: Host-specific system configuration</li>
+<li><strong><code dir="auto">/etc/opt</code></strong>: Configuration for <code dir="auto">/opt</code></li>
+<li><strong><code dir="auto">/etc/X11</code></strong>: Configuration for the X Window system (Optional)</li>
+<li><strong><code dir="auto">/etc/sgml</code></strong>: Configuration for SGML (Optional)</li>
+<li><strong><code dir="auto">/etc/xml</code></strong>: Configuration for XML (Optional)</li>
+<li><strong><code dir="auto">/home</code></strong>: User home directories</li>
+<li><strong><code dir="auto">/lib</code></strong>: Essential shared libraries and kernel modules</li>
+<li><strong><code dir="auto">/lib/modules</code></strong>: Loadable kernel modules (Optional)</li>
+<li><strong><code dir="auto">/lib*</code></strong>: Alternate format essential shared libraries</li>
+<li><strong><code dir="auto">/media</code></strong>: Mount point for removable media</li>
+<li><strong><code dir="auto">/media/floppy</code></strong>: Floppy drive (Optional)</li>
+<li><strong><code dir="auto">/media/cdrom</code></strong>: CD-ROM drive (Optional)</li>
+<li><strong><code dir="auto">/media/cdrecorder</code></strong>: CD writer (Optional)</li>
+<li><strong><code dir="auto">/media/zip</code></strong>: Zip drive (Optional)</li>
+<li><strong><code dir="auto">/mnt</code></strong>: Mount point for mounting a filesystem temporarily</li>
+<li><strong><code dir="auto">/opt</code></strong>: Add-on application software packages</li>
+<li><strong><code dir="auto">/proc</code></strong>: Kernel and process information virtual filesystem</li>
+<li><strong><code dir="auto">/root</code></strong>: Home directory for the root user</li>
+<li><strong><code dir="auto">/run</code></strong>: Data relevant to running processes</li>
+<li><strong><code dir="auto">/sbin</code></strong>: Essential system binaries</li>
+<li><strong><code dir="auto">/srv</code></strong>: Data for services provided by this system</li>
+<li><strong><code dir="auto">/sys</code></strong>: Kernel and system information virtual filesystem</li>
+<li><strong><code dir="auto">/tmp</code></strong>: Temporary files</li>
+<li><strong><code dir="auto">/usr</code></strong>: Secondary hierarchy</li>
+<li><strong><code dir="auto">/usr/bin</code></strong>: Most user commands</li>
+<li><strong><code dir="auto">/usr/games</code></strong>: Games and educational binaries (Optional)</li>
+<li><strong><code dir="auto">/usr/include</code></strong>: Header files included by C programs</li>
+<li><strong><code dir="auto">/usr/lib</code></strong>: Libraries</li>
+<li><strong><code dir="auto">/usr/libexec</code></strong>: Binaries run by other programs (Optional)</li>
+<li><strong><code dir="auto">/usr/lib*</code></strong>: Alternate Format Libraries (Optional)</li>
+<li><strong><code dir="auto">/usr/local</code></strong>: Local hierarchy (empty after main installation)</li>
+<li><strong><code dir="auto">/usr/local/bin</code></strong>: Local binaries</li>
+<li><strong><code dir="auto">/usr/local/etc</code></strong>: Host-specific system configuration for local binaries</li>
+<li><strong><code dir="auto">/usr/local/games</code></strong>: Local game binaries</li>
+<li><strong><code dir="auto">/usr/local/include</code></strong>: Local C header files</li>
+<li><strong><code dir="auto">/usr/local/lib</code></strong>: Local libraries</li>
+<li><strong><code dir="auto">/usr/local/man</code></strong>: Local online manuals</li>
+<li><strong><code dir="auto">/usr/local/sbin</code></strong>: Local system binaries</li>
+<li><strong><code dir="auto">/usr/local/share</code></strong>: Local architecture-independent hierarchy</li>
+<li><strong><code dir="auto">/usr/local/src</code></strong>: Local source code</li>
+<li><strong><code dir="auto">/usr/sbin</code></strong>: Non-vital system binaries</li>
+<li><strong><code dir="auto">/usr/share</code></strong>: Architecture-independent data</li>
+<li><strong><code dir="auto">/usr/share/color</code></strong>: Color management information</li>
+<li><strong><code dir="auto">/usr/share/dict</code></strong>: Word lists</li>
+<li><strong><code dir="auto">/usr/share/doc</code></strong>: Miscellaneous documentation</li>
+<li><strong><code dir="auto">/usr/share/games</code></strong>: Static data files for <code dir="auto">/usr/games</code></li>
+<li><strong><code dir="auto">/usr/share/info</code></strong>: Primary directory for GNU Info system</li>
+<li><strong><code dir="auto">/usr/share/locale</code></strong>: Locale information</li>
+<li><strong><code dir="auto">/usr/share/man</code></strong>: Online manuals</li>
+<li><strong><code dir="auto">/usr/share/misc</code></strong>: Miscellaneous architecture-independent data</li>
+<li><strong><code dir="auto">/usr/share/nls</code></strong>: Message catalogs for Native Language Support</li>
+<li><strong><code dir="auto">/usr/share/ppd</code></strong>: Printer definitions</li>
+<li><strong><code dir="auto">/usr/share/sgml</code></strong>: SGML data</li>
+<li><strong><code dir="auto">/usr/share/terminfo</code></strong>: Directories for terminfo database</li>
+<li><strong><code dir="auto">/usr/share/tmac</code></strong>: Troff macros not distributed with groff</li>
+<li><strong><code dir="auto">/usr/share/xml</code></strong>: XML data</li>
+<li><strong><code dir="auto">/usr/share/zoneinfo</code></strong>: Timezone information and configuration</li>
+<li><strong><code dir="auto">/usr/src</code></strong>: Source code (Optional)</li>
+<li><strong><code dir="auto">/var</code></strong>: Variable data</li>
+<li><strong><code dir="auto">/var/account</code></strong>: Process accounting logs (Optional)</li>
+<li><strong><code dir="auto">/var/cache</code></strong>: Application cache data</li>
+<li><strong><code dir="auto">/var/crash</code></strong>: System crash dumps (Optional)</li>
+<li><strong><code dir="auto">/var/games</code></strong>: Variable game data (Optional)</li>
+<li><strong><code dir="auto">/var/lib</code></strong>: Variable state information</li>
+<li><strong><code dir="auto">/var/local</code></strong>: Variable data for <code dir="auto">/usr/local</code></li>
+<li><strong><code dir="auto">/var/lock</code></strong>: Lock files</li>
+<li><strong><code dir="auto">/var/log</code></strong>: Log files and directories</li>
+<li><strong><code dir="auto">/var/mail</code></strong>: User mailbox files (Optional)</li>
+<li><strong><code dir="auto">/var/opt</code></strong>: Variable data for <code dir="auto">/opt</code></li>
+<li><strong><code dir="auto">/var/run</code></strong>: Data relevant to running processes</li>
+<li><strong><code dir="auto">/var/spool</code></strong>: Application spool data</li>
+<li><strong><code dir="auto">/var/tmp</code></strong>: Temporary files preserved between system reboots</li>
+<li><strong><code dir="auto">/var/yp</code></strong>: Network Information Service (NIS) database files</li>
+</ul>
+<div class="sl-heading-wrapper level-h3"><h3 id="03-sources">0.3. Sources:</h3><a class="sl-anchor-link" href="#03-sources"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “0.3. Sources:”</span></a></div>
+<ul>
+<li><strong>Filesystem Hierarchy Standard</strong> by LSB Workgroup, The Linux Foundation.</li>
+<li><a href="https://www.deepseek.com/">Deepseek</a></li>
+<li><a href="https://chatgpt.com/">ChatGPT</a></li>
+</ul>
+<br>
+<div class="sl-heading-wrapper level-h2"><h2 id="1-bin---essential-command-binaries">1. /bin - Essential Command Binaries</h2><a class="sl-anchor-link" href="#1-bin---essential-command-binaries"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “1. /bin - Essential Command Binaries”</span></a></div>
+<hr>
+<p>Contains essential command binaries for both system administrators and users. These commands must be available when no other filesystems are mounted (e.g., in single-user mode). It may also contain commands used indirectly by scripts.</p>
+<p>In Debian 13 and Ubuntu 24.04, <code dir="auto">/bin</code> is a symbolic link to <code dir="auto">/usr/bin</code>.</p>
+<p><strong>Rule:</strong> There must be no subdirectories in <code dir="auto">/bin</code>.</p>
+<p>Command binaries that are not essential enough to reside in <code dir="auto">/bin</code> should be placed in <code dir="auto">/usr/bin</code> instead.</p>
+<p><strong>Example commands:</strong> <code dir="auto">cat</code>, <code dir="auto">chgrp</code>, <code dir="auto">chmod</code>, <code dir="auto">chown</code>, <code dir="auto">cp</code>, <code dir="auto">date</code>, <code dir="auto">dd</code>, <code dir="auto">df</code>, <code dir="auto">dmesg</code>, <code dir="auto">echo</code>, <code dir="auto">false</code>, <code dir="auto">hostname</code>, <code dir="auto">kill</code>, <code dir="auto">ln</code>, <code dir="auto">login</code>, <code dir="auto">ls</code>, <code dir="auto">mkdir</code>, <code dir="auto">mknod</code>, <code dir="auto">more</code>, <code dir="auto">mount</code>, <code dir="auto">mv</code>, <code dir="auto">ps</code>, <code dir="auto">pwd</code>, <code dir="auto">rm</code>, <code dir="auto">rmdir</code>, <code dir="auto">sed</code>, <code dir="auto">sh</code>, <code dir="auto">stty</code>, <code dir="auto">su</code>, <code dir="auto">sync</code>, <code dir="auto">true</code>, <code dir="auto">umount</code>, <code dir="auto">uname</code>.</p>
+<br>
+<div class="sl-heading-wrapper level-h2"><h2 id="2-boot---static-files-of-the-boot-loader">2. /boot - Static Files of the Boot Loader</h2><a class="sl-anchor-link" href="#2-boot---static-files-of-the-boot-loader"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “2. /boot - Static Files of the Boot Loader”</span></a></div>
+<hr>
+<p>Contains all files required for the boot process, except for configuration files not needed at boot time and the map installer. It stores data used before the kernel begins executing user-mode programs, which may include saved master boot sectors and sector map files.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li>Programs necessary to enable the boot loader to boot a file must be placed in <code dir="auto">/sbin</code>.</li>
+<li>Configuration files for boot loaders that are not required at boot time must be placed in <code dir="auto">/etc</code>.</li>
+<li>The operating system kernel must be located in either <code dir="auto">/</code> or <code dir="auto">/boot</code>.</li>
+</ul>
+<p><strong>Note:</strong> Certain architectures may have additional requirements for <code dir="auto">/boot</code> due to limitations or expectations specific to that architecture.</p>
+<br>
+<div class="sl-heading-wrapper level-h2"><h2 id="3-dev---device-files">3. /dev - Device Files</h2><a class="sl-anchor-link" href="#3-dev---device-files"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “3. /dev - Device Files”</span></a></div>
+<hr>
+<p>The /dev directory is the location of special or device files.</p>
+<p>The devices in the /dev directory are created dynamically during the boot process or when new hardware is detected.</p>
+<p><strong>Examples:</strong></p>
+<ul>
+<li><code dir="auto">/dev/tty0</code> – Terminal device</li>
+<li><code dir="auto">/dev/sda</code> – First SCSI/SATA disk</li>
+<li><code dir="auto">/dev/null</code> – Null device (discards all data written to it)</li>
+</ul>
+<br>
+<div class="sl-heading-wrapper level-h2"><h2 id="4-etc---host-specific-system-configuration">4. /etc - Host-specific System Configuration</h2><a class="sl-anchor-link" href="#4-etc---host-specific-system-configuration"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “4. /etc - Host-specific System Configuration”</span></a></div>
+<hr>
+<p>The <code dir="auto">/etc</code> hierarchy contains configuration files.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li>It is recommended that files be stored in subdirectories of <code dir="auto">/etc</code> rather than directly in <code dir="auto">/etc</code>.</li>
+<li>No binaries may be located under <code dir="auto">/etc</code>.</li>
+</ul>
+<p><strong>Required directory (or symbolic link):</strong></p>
+<ul>
+<li><code dir="auto">/etc/opt</code>: Configuration for <code dir="auto">/opt</code></li>
+</ul>
+<p><strong>Required directories (if the corresponding subsystem is installed):</strong></p>
+<ul>
+<li><code dir="auto">/etc/X11</code>: Configuration for the X Window System</li>
+<li><code dir="auto">/etc/sgml</code>: Configuration for SGML</li>
+<li><code dir="auto">/etc/xml</code>: Configuration for XML</li>
+</ul>
+<p><strong>Required files (if the corresponding subsystem is installed):</strong></p>
+<ul>
+<li><code dir="auto">/etc/csh.login</code>: Systemwide initialization file for C shell logins</li>
+<li><code dir="auto">/etc/exports</code>: NFS filesystem access control list</li>
+<li><code dir="auto">/etc/fstab</code>: Static information about filesystems</li>
+<li><code dir="auto">/etc/ftpusers</code>: FTP daemon user access control list</li>
+<li><code dir="auto">/etc/gateways</code>: File listing gateways for <code dir="auto">routed</code></li>
+<li><code dir="auto">/etc/gettydefs</code>: Speed and terminal settings used by <code dir="auto">getty</code></li>
+<li><code dir="auto">/etc/group</code>: User group file</li>
+<li><code dir="auto">/etc/host.conf</code>: Resolver configuration file</li>
+<li><code dir="auto">/etc/hosts</code>: Static information about hostnames</li>
+<li><code dir="auto">/etc/hosts.allow</code>: Host access file for TCP wrappers</li>
+<li><code dir="auto">/etc/hosts.deny</code>: Host access file for TCP wrappers</li>
+<li><code dir="auto">/etc/hosts.equiv</code>: List of trusted hosts for <code dir="auto">rlogin</code>, <code dir="auto">rsh</code>, <code dir="auto">rcp</code></li>
+<li><code dir="auto">/etc/hosts.lpd</code>: List of trusted hosts for <code dir="auto">lpd</code></li>
+<li><code dir="auto">/etc/inetd.conf</code>: Configuration file for <code dir="auto">inetd</code></li>
+<li><code dir="auto">/etc/inittab</code>: Configuration file for <code dir="auto">init</code></li>
+<li><code dir="auto">/etc/issue</code>: Pre-login message and identification file</li>
+<li><code dir="auto">/etc/ld.so.conf</code>: List of extra directories to search for shared libraries</li>
+<li><code dir="auto">/etc/motd</code>: Post-login message of the day file</li>
+<li><code dir="auto">/etc/mtab</code>: Dynamic information about filesystems</li>
+<li><code dir="auto">/etc/mtools.conf</code>: Configuration file for <code dir="auto">mtools</code></li>
+<li><code dir="auto">/etc/networks</code>: Static information about network names</li>
+<li><code dir="auto">/etc/passwd</code>: Password file</li>
+<li><code dir="auto">/etc/printcap</code>: LPD printer capability database</li>
+<li><code dir="auto">/etc/profile</code>: Systemwide initialization file for <code dir="auto">sh</code> shell logins</li>
+<li><code dir="auto">/etc/protocols</code>: IP protocol listing</li>
+<li><code dir="auto">/etc/resolv.conf</code>: Resolver configuration file</li>
+<li><code dir="auto">/etc/rpc</code>: RPC protocol listing</li>
+<li><code dir="auto">/etc/securetty</code>: TTY access control for root login</li>
+<li><code dir="auto">/etc/services</code>: Port names for network services</li>
+<li><code dir="auto">/etc/shells</code>: Pathnames of valid login shells</li>
+<li><code dir="auto">/etc/syslog.conf</code>: Configuration file for <code dir="auto">syslogd</code></li>
+</ul>
+<div class="sl-heading-wrapper level-h3"><h3 id="41-etcopt---configuration-for-opt">4.1. /etc/opt - Configuration for /opt</h3><a class="sl-anchor-link" href="#41-etcopt---configuration-for-opt"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “4.1. /etc/opt - Configuration for /opt”</span></a></div>
+<p>Host-specific configuration files for add-on application software packages must be installed in <code dir="auto">/etc/opt/&#x3C;subdir></code>, where <code dir="auto">&#x3C;subdir></code> matches the package’s subtree in <code dir="auto">/opt</code> where its static data resides.</p>
+<p>No specific structure is imposed on <code dir="auto">/etc/opt/&#x3C;subdir></code>.</p>
+<p>If a configuration file must reside elsewhere for the package or system to function correctly, it may be placed outside <code dir="auto">/etc/opt/&#x3C;subdir></code>.</p>
+<div class="sl-heading-wrapper level-h3"><h3 id="42-etcx11---configuration-for-the-x-window-system">4.2. /etc/X11 - Configuration for the X Window System</h3><a class="sl-anchor-link" href="#42-etcx11---configuration-for-the-x-window-system"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “4.2. /etc/X11 - Configuration for the X Window System”</span></a></div>
+<p>Location for all X11 host-specific configuration. This directory ensures local control when <code dir="auto">/usr</code> is mounted read-only.</p>
+<p><strong>Required files (if installed):</strong></p>
+<ul>
+<li><code dir="auto">/etc/X11/xorg.conf</code>: Configuration file for X.org</li>
+<li><code dir="auto">/etc/X11/Xmodmap</code>: Global X11 keyboard modification file</li>
+</ul>
+<div class="sl-heading-wrapper level-h3"><h3 id="43-etcsgml---configuration-for-sgml">4.3. /etc/sgml - Configuration for SGML</h3><a class="sl-anchor-link" href="#43-etcsgml---configuration-for-sgml"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “4.3. /etc/sgml - Configuration for SGML”</span></a></div>
+<p>Contains generic configuration files defining high-level parameters of SGML systems.</p>
+<p><strong>File naming conventions:</strong></p>
+<ul>
+<li><code dir="auto">*.conf</code>: Generic configuration files</li>
+<li><code dir="auto">*.cat</code>: DTD-specific centralized catalogs containing references to other catalogs needed for a given DTD</li>
+</ul>
+<div class="sl-heading-wrapper level-h3"><h3 id="44-etcxml---configuration-for-xml">4.4. /etc/xml - Configuration for XML</h3><a class="sl-anchor-link" href="#44-etcxml---configuration-for-xml"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “4.4. /etc/xml - Configuration for XML”</span></a></div>
+<p>Contains generic configuration files defining high-level parameters of XML systems.</p>
+<p><strong>File naming convention:</strong></p>
+<ul>
+<li><code dir="auto">*.conf</code>: Generic configuration files</li>
+</ul>
+<br>
+<div class="sl-heading-wrapper level-h2"><h2 id="5-home---user-home-directories">5. /home - User Home Directories</h2><a class="sl-anchor-link" href="#5-home---user-home-directories"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “5. /home - User Home Directories”</span></a></div>
+<hr>
+<p>User home directories are stored here.</p>
+<p><strong>Configuration files:</strong></p>
+<ul>
+<li>User-specific application configuration files are stored as “dot files” (starting with <code dir="auto">.</code>) in the user’s home directory.</li>
+<li>If an application requires multiple configuration files, they should be placed in a “dot directory” (starting with <code dir="auto">.</code>). Within such a directory, configuration files should not start with <code dir="auto">.</code>.</li>
+</ul>
+<p><strong>Finding home directories:</strong></p>
+<ul>
+<li>Use library functions (<code dir="auto">getpwent</code>, <code dir="auto">getpwent_r</code>, <code dir="auto">fgetpwent</code>) rather than parsing <code dir="auto">/etc/passwd</code>, as user information may be stored remotely (e.g., via NIS).</li>
+</ul>
+<p><strong>Best practices:</strong></p>
+<ul>
+<li>Apart from autosave and lock files, programs should avoid creating non-dot files or directories in a home directory without user consent.</li>
+</ul>
+<br>
+<div class="sl-heading-wrapper level-h2"><h2 id="6-lib---essential-shared-libraries-and-kernel-modules">6. /lib - Essential Shared Libraries and Kernel Modules</h2><a class="sl-anchor-link" href="#6-lib---essential-shared-libraries-and-kernel-modules"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “6. /lib - Essential Shared Libraries and Kernel Modules”</span></a></div>
+<hr>
+<p>In Debian 13 and Ubuntu 24.04, <code dir="auto">/lib</code> is a symbolic link to <code dir="auto">/usr/lib</code>.</p>
+<p>Contains shared library images required to boot the system and run commands in <code dir="auto">/bin</code> and <code dir="auto">/sbin</code>.</p>
+<p><strong>Required files (or symbolic links):</strong></p>
+<ul>
+<li><code dir="auto">/lib/libc.so.*</code>: Dynamically-linked C library</li>
+<li><code dir="auto">/lib/ld*</code>: Execution-time linker/loader</li>
+</ul>
+<p><strong>Historical requirement:</strong></p>
+<ul>
+<li>If a C preprocessor is installed, <code dir="auto">/lib/cpp</code> must reference it.</li>
+</ul>
+<p><strong>Required directory (if installed):</strong></p>
+<ul>
+<li><code dir="auto">/lib/modules</code>: Loadable kernel modules</li>
+</ul>
+<br>
+<div class="sl-heading-wrapper level-h2"><h2 id="7-lib---alternate-format-essential-shared-libraries">7. /lib* - Alternate format essential shared libraries</h2><a class="sl-anchor-link" href="#7-lib---alternate-format-essential-shared-libraries"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “7. /lib* - Alternate format essential shared libraries”</span></a></div>
+<hr>
+<p>Systems supporting multiple binary formats requiring separate libraries may have one or more variants of <code dir="auto">/lib</code>, such as <code dir="auto">/lib64</code>.</p>
+<p><strong>Example:</strong></p>
+<ul>
+<li>Debian 13 and Ubuntu 24.04 include <code dir="auto">/lib64</code>, which is a symbolic link to <code dir="auto">/usr/lib64</code>.</li>
+</ul>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>The contents of these directories must meet the same requirements as <code dir="auto">/lib</code>, except <code dir="auto">/lib*/cpp</code> is not required.</li>
+</ul>
+<br>
+<div class="sl-heading-wrapper level-h2"><h2 id="8-media---mount-point-for-removable-media">8. /media - Mount Point for Removable Media</h2><a class="sl-anchor-link" href="#8-media---mount-point-for-removable-media"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “8. /media - Mount Point for Removable Media”</span></a></div>
+<hr>
+<p>Contains subdirectories used as mount points for removable media such as floppy disks, CD-ROMs, and ZIP drives.</p>
+<p><strong>Required directories (if installed):</strong></p>
+<ul>
+<li><code dir="auto">/media/floppy</code>: Floppy drive</li>
+<li><code dir="auto">/media/cdrom</code>: CD-ROM drive</li>
+<li><code dir="auto">/media/cdrecorder</code>: CD writer</li>
+<li><code dir="auto">/media/zip</code>: ZIP drive</li>
+</ul>
+<p><strong>Multiple devices:</strong></p>
+<ul>
+<li>If multiple devices of the same type exist, mount directories can be created by appending a digit (starting with <code dir="auto">0</code>) to the base name, but the unqualified name must also exist (e.g., <code dir="auto">/media/cdrom0</code>, <code dir="auto">/media/cdrom</code>).</li>
+</ul>
+<br>
+<div class="sl-heading-wrapper level-h2"><h2 id="9-mnt---mount-point-for-mounting-a-filesystem-temporarily">9. /mnt - Mount Point for Mounting a Filesystem Temporarily</h2><a class="sl-anchor-link" href="#9-mnt---mount-point-for-mounting-a-filesystem-temporarily"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “9. /mnt - Mount Point for Mounting a Filesystem Temporarily”</span></a></div>
+<hr>
+<p>System administrators may temporarily mount filesystems here.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li>The contents of this directory are a local issue and should not affect program execution.</li>
+<li>Installation programs must not use this directory; they should use a suitable temporary directory not in use by the system.</li>
+</ul>
+<br>
+<div class="sl-heading-wrapper level-h2"><h2 id="10-opt---add-on-application-software-packages">10. /opt - Add-on Application Software Packages</h2><a class="sl-anchor-link" href="#10-opt---add-on-application-software-packages"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “10. /opt - Add-on Application Software Packages”</span></a></div>
+<hr>
+<p>This directory is empty in default Debian 13 and Ubuntu 24.04 installations.</p>
+<p>Reserved for the installation of add-on application software packages. Its purpose is to provide a location where software vendors can install and organize their software separately from the core system’s directory structure.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li>
+<p>A package in <code dir="auto">/opt</code> must locate its static files in a separate directory tree: either <code dir="auto">/opt/&#x3C;package></code> or <code dir="auto">/opt/&#x3C;provider></code>, where:</p>
+<ul>
+<li><code dir="auto">&#x3C;package></code> is a descriptive name for the software package.</li>
+<li><code dir="auto">&#x3C;provider></code> is the LANANA-registered name of the provider.</li>
+</ul>
+</li>
+<li>
+<p>The following directories are reserved for local system administrator use:</p>
+<ul>
+<li><code dir="auto">/opt/bin</code></li>
+<li><code dir="auto">/opt/doc</code></li>
+<li><code dir="auto">/opt/include</code></li>
+<li><code dir="auto">/opt/info</code></li>
+<li><code dir="auto">/opt/lib</code></li>
+<li><code dir="auto">/opt/man</code></li>
+</ul>
+</li>
+<li>
+<p>Variable package files (those that change during normal operation) must be installed in <code dir="auto">/var/opt</code>.</p>
+</li>
+<li>
+<p>Host-specific configuration files must be installed in <code dir="auto">/etc/opt</code>.</p>
+</li>
+</ul>
+<br>
+<div class="sl-heading-wrapper level-h2"><h2 id="11-root---home-directory-for-the-root-user">11. /root - Home directory for the root user</h2><a class="sl-anchor-link" href="#11-root---home-directory-for-the-root-user"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “11. /root - Home directory for the root user”</span></a></div>
+<hr>
+<p>Recommended home directory for the root user.</p>
+<p><strong>Guidelines:</strong></p>
+<ul>
+<li>While the root account’s home directory may be determined by developer or local preference, this is the recommended default location.</li>
+<li>The root account should not be used for tasks that can be performed by an unprivileged user; it should be reserved for system administration only.</li>
+<li>For this reason, subdirectories for mail and other user applications are not recommended in <code dir="auto">/root</code>.</li>
+</ul>
+<br>
+<div class="sl-heading-wrapper level-h2"><h2 id="12-run---data-relevant-to-running-processes">12. /run - Data Relevant to Running Processes</h2><a class="sl-anchor-link" href="#12-run---data-relevant-to-running-processes"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “12. /run - Data Relevant to Running Processes”</span></a></div>
+<hr>
+<p>Contains system information describing the system since it was booted.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li>Files under this directory must be cleared (removed or truncated as appropriate) at the beginning of the boot process.</li>
+<li>This directory replaces the functionality previously served by <code dir="auto">/var/run</code>. Programs may continue to use <code dir="auto">/var/run</code> for backward compatibility.</li>
+<li>Programs are encouraged to create subdirectories in <code dir="auto">/run</code> if they use multiple runtime files.</li>
+</ul>
+<p><strong>Process Identifier (PID) files:</strong></p>
+<ul>
+<li>PID files, originally placed in <code dir="auto">/etc</code>, must now be placed in <code dir="auto">/run</code>.</li>
+<li>Naming convention: <code dir="auto">{program-name}.pid</code> (e.g., <code dir="auto">/run/crond.pid</code>).</li>
+</ul>
+<br>
+<div class="sl-heading-wrapper level-h2"><h2 id="13-sbin---essential-system-binaries">13. /sbin - Essential System Binaries</h2><a class="sl-anchor-link" href="#13-sbin---essential-system-binaries"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “13. /sbin - Essential System Binaries”</span></a></div>
+<hr>
+<p>In Debian 13 and Ubuntu 24.04, <code dir="auto">/sbin</code> is a symbolic link to <code dir="auto">/usr/sbin</code>.</p>
+<p><strong>Purpose:</strong> Stores utilities used for system administration (root-only commands), including binaries essential for booting, restoring, recovering, or repairing the system.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li>There must be no subdirectories in <code dir="auto">/sbin</code>.</li>
+<li>If a normal user will ever run a command directly, it must be placed in one of the “bin” directories (<code dir="auto">/bin</code>, <code dir="auto">/usr/bin</code>, <code dir="auto">/usr/local/bin</code>).</li>
+<li>Ordinary users should not need <code dir="auto">/sbin</code> directories in their <code dir="auto">PATH</code>.</li>
+</ul>
+<p><strong>Required command:</strong></p>
+<ul>
+<li><code dir="auto">/sbin/shutdown</code>: Command to bring the system down.</li>
+</ul>
+<p><strong>Required files (if corresponding subsystem is installed):</strong></p>
+<ul>
+<li><code dir="auto">/sbin/fastboot</code>: Reboot without checking disks</li>
+<li><code dir="auto">/sbin/fasthalt</code>: Stop system without checking disks</li>
+<li><code dir="auto">/sbin/fdisk</code>: Partition table manipulator</li>
+<li><code dir="auto">/sbin/fsck</code>: Filesystem check and repair utility</li>
+<li><code dir="auto">/sbin/fsck.*</code>: Filesystem-specific check and repair utility</li>
+<li><code dir="auto">/sbin/getty</code>: Getty program</li>
+<li><code dir="auto">/sbin/halt</code>: Command to stop the system</li>
+<li><code dir="auto">/sbin/ifconfig</code>: Configure a network interface</li>
+<li><code dir="auto">/sbin/init</code>: Initial process</li>
+<li><code dir="auto">/sbin/mkfs</code>: Command to build a filesystem</li>
+<li><code dir="auto">/sbin/mkfs.*</code>: Command to build a specific filesystem</li>
+<li><code dir="auto">/sbin/mkswap</code>: Command to set up a swap area</li>
+<li><code dir="auto">/sbin/reboot</code>: Command to reboot the system</li>
+<li><code dir="auto">/sbin/route</code>: IP routing table utility</li>
+<li><code dir="auto">/sbin/swapon</code>: Enable paging and swapping</li>
+<li><code dir="auto">/sbin/swapoff</code>: Disable paging and swapping</li>
+<li><code dir="auto">/sbin/update</code>: Daemon to periodically flush filesystem buffers</li>
+</ul>
+<br>
+<div class="sl-heading-wrapper level-h2"><h2 id="14-srv---data-for-services-provided-by-this-system">14. /srv - Data for Services Provided by This System</h2><a class="sl-anchor-link" href="#14-srv---data-for-services-provided-by-this-system"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “14. /srv - Data for Services Provided by This System”</span></a></div>
+<hr>
+<p>This directory is empty in default Debian 13 and Ubuntu 24.04 installations.</p>
+<p><strong>Purpose:</strong> Contains site-specific data served by the system. It provides a location for service-specific data separate from operating system files.</p>
+<p><strong>Key points:</strong></p>
+<ul>
+<li>Unlike <code dir="auto">/usr</code> or <code dir="auto">/var</code>, which may contain data related to distribution packages, <code dir="auto">/srv</code> is not intended for package-managed data.</li>
+<li>It is reserved for locally administered data associated with specific services (e.g., web content, FTP files, version control repositories).</li>
+</ul>
+<br>
+<div class="sl-heading-wrapper level-h2"><h2 id="15-tmp---temporary-files">15. /tmp - Temporary Files</h2><a class="sl-anchor-link" href="#15-tmp---temporary-files"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “15. /tmp - Temporary Files”</span></a></div>
+<hr>
+<p>Provides a location for temporary files used by programs and users during their activities.</p>
+<p><strong>Guidelines:</strong></p>
+<ul>
+<li>It is recommended that files and directories in <code dir="auto">/tmp</code> be deleted when the system boots.</li>
+<li>Many applications and system processes use <code dir="auto">/tmp</code> for temporary storage (e.g., package managers, installers, user sessions).</li>
+<li>The directory is typically world-writable, allowing any user to create, modify, or delete files, facilitating sharing of temporary data.</li>
+</ul>
+<br>
+<div class="sl-heading-wrapper level-h2"><h2 id="16-usr---secondary-hierarchy">16. /usr - Secondary hierarchy</h2><a class="sl-anchor-link" href="#16-usr---secondary-hierarchy"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “16. /usr - Secondary hierarchy”</span></a></div>
+<hr>
+<p>Stands for “Unix System Resources”.</p>
+<p>Contains user-related programs, libraries, documentation, and other resources. Typically mounted as a separate partition and may be shared among multiple machines in a networked environment.</p>
+<p><strong>Required directories (or symbolic links):</strong></p>
+<ul>
+<li><code dir="auto">/usr/bin</code>: Most user commands</li>
+<li><code dir="auto">/usr/lib</code>: Libraries</li>
+<li><code dir="auto">/usr/local</code>: Local hierarchy (empty after main installation)</li>
+<li><code dir="auto">/usr/sbin</code>: Non-vital system binaries</li>
+<li><code dir="auto">/usr/share</code>: Architecture-independent data</li>
+</ul>
+<p><strong>Optional directories (or symbolic links):</strong></p>
+<ul>
+<li><code dir="auto">/usr/games</code>: Games and educational binaries</li>
+<li><code dir="auto">/usr/include</code>: Header files included by C programs</li>
+<li><code dir="auto">/usr/libexec</code>: Binaries run by other programs</li>
+<li><code dir="auto">/usr/lib*</code>: Alternate Format Libraries</li>
+<li><code dir="auto">/usr/src</code>: Source code</li>
+</ul>
+<div class="sl-heading-wrapper level-h3"><h3 id="161-usrbin---most-user-commands">16.1. /usr/bin - Most User Commands</h3><a class="sl-anchor-link" href="#161-usrbin---most-user-commands"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “16.1. /usr/bin - Most User Commands”</span></a></div>
+<p>Primary directory for executable commands.</p>
+<p><strong>Rule:</strong> No subdirectories in <code dir="auto">/usr/bin</code>.</p>
+<p><strong>Required files (if corresponding subsystem installed):</strong></p>
+<ul>
+<li><code dir="auto">/usr/bin/perl</code>: Practical Extraction and Report Language</li>
+<li><code dir="auto">/usr/bin/python</code>: Python interpreted language</li>
+<li><code dir="auto">/usr/bin/tclsh</code>: Simple shell containing Tcl interpreter</li>
+<li><code dir="auto">/usr/bin/wish</code>: Simple Tcl/Tk windowing shell</li>
+<li><code dir="auto">/usr/bin/expect</code>: Program for interactive dialog</li>
+</ul>
+<div class="sl-heading-wrapper level-h3"><h3 id="162-usrinclude---header-files-included-by-c-programs">16.2. /usr/include - Header Files Included by C Programs</h3><a class="sl-anchor-link" href="#162-usrinclude---header-files-included-by-c-programs"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “16.2. /usr/include - Header Files Included by C Programs”</span></a></div>
+<p>Contains general-use C programming language include files.</p>
+<p><strong>Required directory (if installed):</strong></p>
+<ul>
+<li><code dir="auto">/usr/include/bsd</code>: BSD compatibility include files (optional)</li>
+</ul>
+<div class="sl-heading-wrapper level-h3"><h3 id="163-usrlib---libraries">16.3. /usr/lib - Libraries</h3><a class="sl-anchor-link" href="#163-usrlib---libraries"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “16.3. /usr/lib - Libraries”</span></a></div>
+<p>Contains object files and libraries. May also include internal binaries not intended for direct execution.</p>
+<p><strong>Guidelines:</strong></p>
+<ul>
+<li>Applications may use a single subdirectory under <code dir="auto">/usr/lib</code>. All architecture-dependent data exclusive to the application must reside there.</li>
+<li>For historical reasons, <code dir="auto">/usr/lib/sendmail</code> must be a symbolic link to the system’s sendmail-compatible command, if present.</li>
+</ul>
+<div class="sl-heading-wrapper level-h3"><h3 id="164-usrlibexec---binaries-run-by-other-programs">16.4. /usr/libexec - Binaries Run by Other Programs</h3><a class="sl-anchor-link" href="#164-usrlibexec---binaries-run-by-other-programs"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “16.4. /usr/libexec - Binaries Run by Other Programs”</span></a></div>
+<p>Contains internal binaries not intended for direct execution by users or shell scripts.</p>
+<p><strong>Guidelines:</strong></p>
+<ul>
+<li>Applications may use a single subdirectory under <code dir="auto">/usr/libexec</code>.</li>
+<li>Applications using <code dir="auto">/usr/libexec</code> must not use <code dir="auto">/usr/lib</code> for internal binaries (though they may use <code dir="auto">/usr/lib</code> for other purposes).</li>
+</ul>
+<div class="sl-heading-wrapper level-h3"><h3 id="165-usrlib---alternate-format-libraries">16.5. /usr/lib* - Alternate Format Libraries</h3><a class="sl-anchor-link" href="#165-usrlib---alternate-format-libraries"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “16.5. /usr/lib* - Alternate Format Libraries”</span></a></div>
+<p>Serves the same role as <code dir="auto">/usr/lib</code> for alternate binary formats, except:</p>
+<ul>
+<li>Symbolic links <code dir="auto">/usr/lib*/sendmail</code> and <code dir="auto">/usr/lib*/X11</code> are not required.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<ul>
+<li>Debian 13 and Ubuntu 24.04 include <code dir="auto">/usr/lib64</code> (symbolic link to <code dir="auto">/usr/lib64</code>).</li>
+</ul>
+<p><strong>Note:</strong> If <code dir="auto">/usr/lib</code> and <code dir="auto">/usr/lib&#x3C;qual></code> are the same (via symbolic link), per-application subdirectories may exist in both.</p>
+<div class="sl-heading-wrapper level-h3"><h3 id="166-usrlocal---local-hierarchy">16.6. /usr/local - Local Hierarchy</h3><a class="sl-anchor-link" href="#166-usrlocal---local-hierarchy"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “16.6. /usr/local - Local Hierarchy”</span></a></div>
+<p>Reserved for locally installed software by the system administrator. Should be safe from overwriting during system updates.</p>
+<p><strong>Required directories:</strong></p>
+<ul>
+<li><code dir="auto">/usr/local/bin</code>: Local binaries</li>
+<li><code dir="auto">/usr/local/etc</code>: Host-specific configuration for local binaries</li>
+<li><code dir="auto">/usr/local/games</code>: Local game binaries</li>
+<li><code dir="auto">/usr/local/include</code>: Local C header files</li>
+<li><code dir="auto">/usr/local/lib</code>: Local libraries</li>
+<li><code dir="auto">/usr/local/man</code>: Local online manuals</li>
+<li><code dir="auto">/usr/local/sbin</code>: Local system binaries</li>
+<li><code dir="auto">/usr/local/share</code>: Local architecture-independent hierarchy</li>
+<li><code dir="auto">/usr/local/src</code>: Local source code</li>
+</ul>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>If <code dir="auto">/lib*</code> or <code dir="auto">/usr/lib*</code> exist, equivalent directories must exist in <code dir="auto">/usr/local</code>.</li>
+<li><code dir="auto">/usr/local/etc</code> may be a symbolic link to <code dir="auto">/etc/local</code>.</li>
+</ul>
+<div class="sl-heading-wrapper level-h3"><h3 id="167-usrsbin---non-vital-system-binaries">16.7. /usr/sbin - Non-vital System Binaries</h3><a class="sl-anchor-link" href="#167-usrsbin---non-vital-system-binaries"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “16.7. /usr/sbin - Non-vital System Binaries”</span></a></div>
+<p>Contains non-essential binaries used exclusively by the system administrator.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li>System administration programs required for repair, recovery, mounting <code dir="auto">/usr</code>, or other essential functions must be in <code dir="auto">/sbin</code>.</li>
+<li>No subdirectories in <code dir="auto">/usr/sbin</code>.</li>
+</ul>
+<div class="sl-heading-wrapper level-h3"><h3 id="168-usrshare---architecture-independent-data">16.8. /usr/share - Architecture-Independent Data</h3><a class="sl-anchor-link" href="#168-usrshare---architecture-independent-data"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “16.8. /usr/share - Architecture-Independent Data”</span></a></div>
+<p>Contains all read-only, architecture-independent data files. Intended to be shareable across all architecture platforms of a given OS.</p>
+<p><strong>Required directories:</strong></p>
+<ul>
+<li><code dir="auto">/usr/share/man</code>: Online manuals</li>
+<li><code dir="auto">/usr/share/misc</code>: Miscellaneous architecture-independent data</li>
+</ul>
+<p><strong>Required directories (if corresponding subsystem installed):</strong></p>
+<ul>
+<li><code dir="auto">/usr/share/color</code>: Color management information</li>
+<li><code dir="auto">/usr/share/dict</code>: Word lists</li>
+<li><code dir="auto">/usr/share/doc</code>: Miscellaneous documentation</li>
+<li><code dir="auto">/usr/share/games</code>: Static data files for <code dir="auto">/usr/games</code></li>
+<li><code dir="auto">/usr/share/info</code>: Primary directory for GNU Info system</li>
+<li><code dir="auto">/usr/share/locale</code>: Locale information</li>
+<li><code dir="auto">/usr/share/nls</code>: Message catalogs for Native Language Support</li>
+<li><code dir="auto">/usr/share/ppd</code>: Printer definitions</li>
+<li><code dir="auto">/usr/share/sgml</code>: SGML data</li>
+<li><code dir="auto">/usr/share/terminfo</code>: Directories for terminfo database</li>
+<li><code dir="auto">/usr/share/tmac</code>: Troff macros not distributed with groff</li>
+<li><code dir="auto">/usr/share/xml</code>: XML data</li>
+<li><code dir="auto">/usr/share/zoneinfo</code>: Timezone information and configuration</li>
+</ul>
+<p><strong>Game data note:</strong> Data in <code dir="auto">/usr/share/games</code> must be static. Modifiable files (e.g., score files, logs) belong in <code dir="auto">/var/games</code>.</p>
+<div class="sl-heading-wrapper level-h4"><h4 id="1681-usrsharecolor---color-management-information">16.8.1. /usr/share/color - Color Management Information</h4><a class="sl-anchor-link" href="#1681-usrsharecolor---color-management-information"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “16.8.1. /usr/share/color - Color Management Information”</span></a></div>
+<p>Home for ICC color management files. No files at the top level; all files must be in subdirectories.</p>
+<p><strong>Required directory (if installed):</strong></p>
+<ul>
+<li><code dir="auto">/usr/share/color/icc</code>: ICC color profiles (optional)</li>
+</ul>
+<div class="sl-heading-wrapper level-h4"><h4 id="1682-usrsharedict---word-lists">16.8.2. /usr/share/dict - Word Lists</h4><a class="sl-anchor-link" href="#1682-usrsharedict---word-lists"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “16.8.2. /usr/share/dict - Word Lists”</span></a></div>
+<p>Home for word lists, traditionally containing only the English words file.</p>
+<p><strong>Required file:</strong></p>
+<ul>
+<li><code dir="auto">/usr/share/dict/words</code>: List of English words</li>
+</ul>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>Sites needing both American and British spelling may link <code dir="auto">words</code> to <code dir="auto">american-english</code> or <code dir="auto">british-english</code>.</li>
+<li>Word lists for other languages use the English name (e.g., <code dir="auto">/usr/share/dict/french</code>).</li>
+</ul>
+<div class="sl-heading-wrapper level-h4"><h4 id="1683-usrshareman---online-manuals">16.8.3. /usr/share/man - Online Manuals</h4><a class="sl-anchor-link" href="#1683-usrshareman---online-manuals"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “16.8.3. /usr/share/man - Online Manuals”</span></a></div>
+<p>Primary <code dir="auto">mandir</code> for manual information related to commands and data under <code dir="auto">/</code> and <code dir="auto">/usr</code>.</p>
+<div class="sl-heading-wrapper level-h4"><h4 id="1684-usrsharemisc---miscellaneous-architecture-independent-data">16.8.4. /usr/share/misc - Miscellaneous Architecture-independent Data</h4><a class="sl-anchor-link" href="#1684-usrsharemisc---miscellaneous-architecture-independent-data"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “16.8.4. /usr/share/misc - Miscellaneous Architecture-independent Data”</span></a></div>
+<p>Contains miscellaneous files that do not require separate subdirectories.</p>
+<p><strong>Required files (if installed):</strong></p>
+<ul>
+<li><code dir="auto">/usr/share/misc/ascii</code>: ASCII character set table</li>
+<li><code dir="auto">/usr/share/misc/termcap</code>: Terminal capability database</li>
+<li><code dir="auto">/usr/share/misc/termcap.db</code>: Terminal capability database</li>
+</ul>
+<div class="sl-heading-wrapper level-h4"><h4 id="1685-usrshareppd---printer-definitions">16.8.5. /usr/share/ppd - Printer Definitions</h4><a class="sl-anchor-link" href="#1685-usrshareppd---printer-definitions"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “16.8.5. /usr/share/ppd - Printer Definitions”</span></a></div>
+<p>Contains PostScript Printer Definition (PPD) files used by print systems. Files may be placed directly here or in subdirectories.</p>
+<div class="sl-heading-wrapper level-h4"><h4 id="1686-usrsharesgml---sgml-data">16.8.6. /usr/share/sgml - SGML Data</h4><a class="sl-anchor-link" href="#1686-usrsharesgml---sgml-data"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “16.8.6. /usr/share/sgml - SGML Data”</span></a></div>
+<p>Contains architecture-independent files for SGML applications (catalogs, DTDs, entities, style sheets).</p>
+<p><strong>Required directories (if installed):</strong></p>
+<ul>
+<li><code dir="auto">/usr/share/sgml/docbook</code>: DocBook DTD</li>
+<li><code dir="auto">/usr/share/sgml/tei</code>: TEI DTD</li>
+<li><code dir="auto">/usr/share/sgml/html</code>: HTML DTD</li>
+<li><code dir="auto">/usr/share/sgml/mathml</code>: MathML DTD</li>
+</ul>
+<p><strong>Note:</strong> Files not specific to a DTD may reside in their own subdirectory.</p>
+<div class="sl-heading-wrapper level-h4"><h4 id="1687-usrsharexml---xml-data">16.8.7. /usr/share/xml - XML Data</h4><a class="sl-anchor-link" href="#1687-usrsharexml---xml-data"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “16.8.7. /usr/share/xml - XML Data”</span></a></div>
+<p>Contains architecture-independent files for XML applications.</p>
+<p><strong>Required directories (if installed):</strong></p>
+<ul>
+<li><code dir="auto">/usr/share/xml/docbook</code>: DocBook XML DTD</li>
+<li><code dir="auto">/usr/share/xml/xhtml</code>: XHTML DTD</li>
+<li><code dir="auto">/usr/share/xml/mathml</code>: MathML DTD</li>
+</ul>
+<div class="sl-heading-wrapper level-h3"><h3 id="169-usrsrc---source-code">16.9. /usr/src - Source Code</h3><a class="sl-anchor-link" href="#169-usrsrc---source-code"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “16.9. /usr/src - Source Code”</span></a></div>
+<p>May contain source code for reference purposes. Source should generally not be built within this hierarchy.</p>
+<br>
+<div class="sl-heading-wrapper level-h2"><h2 id="17-var---variable-data">17. /var - Variable Data</h2><a class="sl-anchor-link" href="#17-var---variable-data"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “17. /var - Variable Data”</span></a></div>
+<hr>
+<p>Contains variable data files: spool directories, administrative and logging data, and transient/temporary files.</p>
+<p><strong>Guideline:</strong> Applications must generally not add directories to the top level of <code dir="auto">/var</code>.</p>
+<p><strong>Required directories:</strong></p>
+<ul>
+<li><code dir="auto">/var/cache</code>: Application cache data</li>
+<li><code dir="auto">/var/lib</code>: Variable state information</li>
+<li><code dir="auto">/var/local</code>: Variable data for <code dir="auto">/usr/local</code></li>
+<li><code dir="auto">/var/lock</code>: Lock files</li>
+<li><code dir="auto">/var/log</code>: Log files and directories</li>
+<li><code dir="auto">/var/opt</code>: Variable data for <code dir="auto">/opt</code></li>
+<li><code dir="auto">/var/run</code>: Data relevant to running processes</li>
+<li><code dir="auto">/var/spool</code>: Application spool data</li>
+<li><code dir="auto">/var/tmp</code>: Temporary files preserved between system reboots</li>
+</ul>
+<p><strong>Reserved directories (must not be used arbitrarily by new applications):</strong></p>
+<ul>
+<li><code dir="auto">/var/backups</code></li>
+<li><code dir="auto">/var/cron</code></li>
+<li><code dir="auto">/var/msgs</code></li>
+<li><code dir="auto">/var/preserve</code></li>
+</ul>
+<p><strong>Required directories (if corresponding subsystem installed):</strong></p>
+<ul>
+<li><code dir="auto">/var/account</code>: Process accounting logs</li>
+<li><code dir="auto">/var/crash</code>: System crash dumps</li>
+<li><code dir="auto">/var/games</code>: Variable game data</li>
+<li><code dir="auto">/var/mail</code>: User mailbox files</li>
+<li><code dir="auto">/var/yp</code>: Network Information Service (NIS) database files</li>
+</ul>
+<br>
+<div class="sl-heading-wrapper level-h2"><h2 id="18-special-to-linux">18. Special to Linux</h2><a class="sl-anchor-link" href="#18-special-to-linux"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “18. Special to Linux”</span></a></div>
+<hr>
+<p>Two additional directory standards specific to Linux:</p>
+<div class="sl-heading-wrapper level-h3"><h3 id="181-proc---kernel-and-process-information-virtual-filesystem">18.1. /proc - Kernel and Process Information Virtual Filesystem</h3><a class="sl-anchor-link" href="#181-proc---kernel-and-process-information-virtual-filesystem"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “18.1. /proc - Kernel and Process Information Virtual Filesystem”</span></a></div>
+<p>The de-facto standard for handling process and system information in Linux.</p>
+<ul>
+<li>A virtual filesystem dynamically generated by the kernel.</li>
+<li>Provides a window into the current state of the running kernel and system.</li>
+</ul>
+<div class="sl-heading-wrapper level-h3"><h3 id="182-sys---kernel-and-system-information-virtual-filesystem">18.2. /sys - Kernel and System Information Virtual Filesystem</h3><a class="sl-anchor-link" href="#182-sys---kernel-and-system-information-virtual-filesystem"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only">Section titled “18.2. /sys - Kernel and System Information Virtual Filesystem”</span></a></div>
+<p>Exposes information about devices, drivers, and kernel features.</p>
+<ul>
+<li>A virtual filesystem.</li>
+<li>Allows reading and modifying certain kernel parameters through its files.</li>
+</ul> </div> <footer class="sl-flex astro-3yyafb3n"> <div class="meta sl-flex astro-3yyafb3n">   </div> <div class="pagination-links print:hidden astro-u2l5gyhi" dir="ltr">   </div>   </footer>  </div> </div>   </main> </div> </div>  </div> </div>  </body></html>
